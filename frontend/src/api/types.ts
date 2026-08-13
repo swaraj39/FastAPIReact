@@ -75,6 +75,8 @@ export interface OwnerSummary {
 
 // Product mirrors ProductResponse: the many-to-one `owner` object is
 // included because the backend eager-loads it with selectinload.
+// `is_favorited` is the MANY-TO-MANY side: whether the CURRENT logged-in
+// user has favorited this product (server stamps it per user).
 export interface Product {
   id: number
   name: string
@@ -82,6 +84,13 @@ export interface Product {
   price: number
   owner_id: number
   owner: OwnerSummary | null
+  is_favorited: boolean
+}
+
+// POST/DELETE /products/:id/favorite -> the new state after toggling.
+export interface FavoriteResponse {
+  product_id: number
+  favorited: boolean
 }
 
 // Payload for creating/updating a product.

@@ -5,6 +5,7 @@ from fastapi import FastAPI
 # that `Base.metadata.create_all` below knows to create all of them.
 # Each model is one table: users (one-to-many + one-to-one parent),
 # profiles (one-to-one child), products (one-to-many child).
+import app.models.associations  # noqa: F401
 import app.models.product  # noqa: F401
 import app.models.profile  # noqa: F401
 import app.models.user  # noqa: F401

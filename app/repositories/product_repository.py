@@ -1,5 +1,6 @@
 from sqlalchemy.orm import Session, selectinload
 
+from app.models.associations import user_favorites
 from app.models.product import Product
 
 
@@ -68,3 +69,42 @@ class ProductRepository:
         # Delete the row and commit immediately.
         self.db.delete(product)
         self.db.commit()
+
+    # ------------------------------------------------------------------
+    # MANY-TO-MANY: User <-> Product favorites
+    # ------------------------------------------------------------------
+
+    def get_favorite_ids(self, user_id: int) -> set[int]:
+        """
+        Return the set of product ids a user has favorited, used to
+        stamp `is_favorited` on every product in list/get responses.
+        """
+        rows = (
+            self.db.query(user_favorites.c.product_id)
+            .filter(user_favorites.c.user_id == user_id)
+            .all()
+        )
+        return {row[0] for row in rows}
+
+    def get_favorites(
+        self, user_id: int, skip: int = 0, limit: int = 100
+    ) -> list[Product]:
+        # Join Product through the association table and filter to one
+        # user's rows (the MANY-TO-MANY direction in a query).
+        return (
+            self.db.query(Product)
+            .join(user_favorites, user_favorites.c.product_id == Product.id)
+            .filter(user_favorites.c.user_id == user_id)
+            .options(selectinload(Product.owner))
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+
+    def count_favorites(self, user_id: int) -> int:
+        # Count the user's favorite rows without loading any products.
+        return (
+            self.db.query(user_favorites)
+            .filter(user_favorites.c.user_id == user_id)
+            .count()
+        )

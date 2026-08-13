@@ -65,6 +65,10 @@ class ProductResponse(BaseModel):
     price: float
     owner_id: int
     owner: Optional[OwnerSummary] = None
+    # MANY-TO-MANY: whether the CURRENT authenticated user has favorited
+    # this product. Defaults to False when not set (e.g. the owner-less
+    # create response); the list/get endpoints stamp it per user.
+    is_favorited: bool = False
     # usually the pydantic reads or wants the dict by this it will get the object 
     model_config = ConfigDict(from_attributes=True)
 
@@ -82,3 +86,15 @@ class PaginatedProducts(BaseModel):
     page: int
     limit: int
     pages: int
+
+
+class FavoriteResponse(BaseModel):
+    """
+    Response for the favorite/unfavorite endpoints.
+
+    `favorited` tells the client the NEW state after the call, so the
+    UI can flip its heart icon without a separate GET.
+    """
+
+    product_id: int
+    favorited: bool

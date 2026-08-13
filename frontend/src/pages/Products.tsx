@@ -24,6 +24,10 @@ export default function Products() {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
 
+  // MANY-TO-MANY: when true, load only the current user's favorites
+  // (GET /products/favorites) instead of the full catalog.
+  const [onlyFavorites, setOnlyFavorites] = useState(false)
+
   // Form state. `editing` is null for "create" mode, or a Product while
   // editing that product.
   const [editing, setEditing] = useState<Product | null>(null)
@@ -37,7 +41,9 @@ export default function Products() {
     setLoading(true)
     setError('')
     try {
-      const res = await api.listProducts(undefined, targetPage, 5)
+      const res = onlyFavorites
+        ? await api.listFavorites(targetPage, 5)
+        : await api.listProducts(undefined, targetPage, 5)
       setProducts(res.items)
       setTotal(res.total)
       setPage(res.page)
@@ -47,12 +53,34 @@ export default function Products() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [onlyFavorites])
 
-  // Fetch products whenever the page number changes.
+  // Fetch products whenever the page number or the favorites filter changes.
   useEffect(() => {
     load(page)
   }, [load, page])
+
+  // Flip the favorites filter: jump back to page 1 and reload.
+  function toggleFilter() {
+    const next = !onlyFavorites
+    setOnlyFavorites(next)
+    setPage(1)
+    setProducts([])
+    if (!next) resetForm()
+  }
+
+  // MANY-TO-MANY: add/remove the current user <-> product link, then
+  // reload so the backend re-stamps is_favorited on every product.
+  async function toggleFavorite(p: Product) {
+    setError('')
+    try {
+      if (p.is_favorited) await api.unfavoriteProduct(p.id)
+      else await api.favoriteProduct(p.id)
+      await load(page)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update favorite')
+    }
+  }
 
   // Jump to a page (clamped so it never goes past the last page).
   function goToPage(target: number) {
@@ -146,12 +174,24 @@ export default function Products() {
         </div>
       </form>
 
-      {/* List BELOW the form: only 5 products per page */}
-      <h2>All products</h2>
+      {/* List BELOW the form: only 5 products per page.
+          The filter button switches between the full catalog and the
+          current user's favorites (MANY-TO-MANY). */}
+      <div className="row">
+        <h2>{onlyFavorites ? 'My favorites' : 'All products'}</h2>
+        <button
+          type="button"
+          className="secondary"
+          onClick={toggleFilter}
+          disabled={loading}
+        >
+          {onlyFavorites ? 'Show all products' : '♥ My favorites'}
+        </button>
+      </div>
       {loading ? (
         <p className="muted">Loading...</p>
       ) : products.length === 0 ? (
-        <p className="muted">No products yet.</p>
+        <p className="muted">{onlyFavorites ? 'No favorites yet.' : 'No products yet.'}</p>
       ) : (
         <>
           <ul className="list">
@@ -160,6 +200,16 @@ export default function Products() {
                 <div>
                   <strong>{p.name}</strong> — ${p.price.toFixed(2)}
                   {p.description && <p className="muted">{p.description}</p>}
+                  {/* MANY-TO-MANY: heart shows the current user's favorite
+                      state; clicking calls POST/DELETE /products/:id/favorite. */}
+                  <button
+                    type="button"
+                    onClick={() => toggleFavorite(p)}
+                    className={p.is_favorited ? 'favorite active' : 'favorite'}
+                    title={p.is_favorited ? 'Remove from favorites' : 'Add to favorites'}
+                  >
+                    {p.is_favorited ? '♥' : '♡'} Favorite
+                  </button>
                   {/* MANY-TO-ONE: show which user owns this product.
                       p.owner is pre-loaded server-side via selectinload. */}
                   <p className="muted">
@@ -180,6 +230,7 @@ export default function Products() {
             ))}
           </ul>
 
+          <br></br>
           {/* Page controls */}
           <div className="row">
             <button

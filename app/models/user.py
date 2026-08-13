@@ -2,6 +2,7 @@ from sqlalchemy import Column, Enum, Integer, String
 from sqlalchemy.orm import relationship
 
 from app.db.base import Base
+from app.models.associations import user_favorites
 from app.models.role import Role
 
 
@@ -72,4 +73,21 @@ class User(Base):
         back_populates="user",
         uselist=False,
         cascade="all, delete-orphan",
+    )
+
+    # ------------------------------------------------------------------
+    # MANY-TO-MANY relationship (User <-> Product favorites)
+    # ------------------------------------------------------------------
+    # `secondary=user_favorites` tells SQLAlchemy: don't look for a
+    # `favorite_products_id` column on either table - instead read the
+    # join through the user_favorites association table.
+    #
+    # `back_populates="favorited_by"` mirrors Product.favorited_by so
+    # both sides stay in sync automatically:
+    #   user.favorite_products.append(product)  -> adds a row
+    #   user.favorite_products.remove(product)  -> removes a row
+    favorite_products = relationship(
+        "Product",
+        secondary=user_favorites,
+        back_populates="favorited_by",
     )

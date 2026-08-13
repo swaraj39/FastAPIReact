@@ -5,6 +5,7 @@
 // are wrapped in <ProtectedRoute> which may also require a role.
 // ============================================================
 
+import { useState } from 'react'
 import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -18,6 +19,10 @@ import Admin from './pages/Admin'
 
 export default function App() {
   const { user, loading } = useAuth()
+  const [menuOpen, setMenuOpen] = useState(false)
+
+  // Close the mobile menu after a link is tapped.
+  const closeMenu = () => setMenuOpen(false)
 
   // While AuthProvider restores the session, show a placeholder instead
   // of rendering the login page for a user who is actually logged in.
@@ -26,22 +31,30 @@ export default function App() {
   return (
     <div className="app">
       {/* Navbar switches links depending on auth state + role. */}
-      <nav className="navbar">
+      <nav className={menuOpen ? 'navbar open' : 'navbar'}>
         <span className="brand">FastAPI App</span>
+        <button
+          className="nav-toggle"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
         <div className="links">
           {user ? (
             <>
-              <NavLink to="/dashboard">Dashboard</NavLink>
-              <NavLink to="/products">Products</NavLink>
-              <NavLink to="/profile">Profile</NavLink>
-              <NavLink to="/forgot-password">Forgot</NavLink>
+              <NavLink to="/dashboard" onClick={closeMenu}>Dashboard</NavLink>
+              <NavLink to="/products" onClick={closeMenu}>Products</NavLink>
+              <NavLink to="/profile" onClick={closeMenu}>Profile</NavLink>
+              <NavLink to="/forgot-password" onClick={closeMenu}>Forgot</NavLink>
               {/* Admin link only for the ADMIN role. */}
-              {user.role === 'ADMIN' && <NavLink to="/admin">Admin</NavLink>}
+              {user.role === 'ADMIN' && <NavLink to="/admin" onClick={closeMenu}>Admin</NavLink>}
             </>
           ) : (
             <>
-              <NavLink to="/login">Sign in</NavLink>
-              <NavLink to="/register">Register</NavLink>
+              <NavLink to="/login" onClick={closeMenu}>Sign in</NavLink>
+              <NavLink to="/register" onClick={closeMenu}>Register</NavLink>
             </>
           )}
         </div>

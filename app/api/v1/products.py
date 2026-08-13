@@ -4,9 +4,11 @@ from fastapi import APIRouter, Depends, Query, status
 from sqlalchemy.orm import Session
 
 from app.api.dependencies import get_current_user
+from app.core.rate_limiting import check_rate_limit
 from app.db.session import get_db
 from app.models.user import User
 from app.schemas.product import (
+    FavoriteResponse,
     PaginatedProducts,
     ProductCreate,
     ProductResponse,
@@ -54,6 +56,30 @@ def list_products(
     """
     items, total = product_service.list_products(db, owner_id=owner_id, page=page, limit=limit)
     return {
+        "items": product_service.stamp_favorites(db, current_user, items),
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": math.ceil(total / limit),
+    }
+
+
+@router.get("/favorites", response_model=PaginatedProducts)
+def list_favorites(
+    # NOTE: registered BEFORE `/{product_id}` on purpose - FastAPI
+    # matches routes top to bottom, so "/favorites" must win over the
+    # path-parameter route that would otherwise swallow "favorites" as id.
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=5, ge=1, le=100),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    MANY-TO-MANY: list the current user's favorite products, one page
+    at a time (same pagination shape as GET /products).
+    """
+    items, total = product_service.list_favorites(db, current_user, page=page, limit=limit)
+    return {
         "items": items,
         "total": total,
         "page": page,
@@ -62,13 +88,45 @@ def list_products(
     }
 
 
+@router.post("/{product_id}/favorite", response_model=FavoriteResponse)
+def favorite_product(
+    product_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    MANY-TO-MANY: add a link row between the current user and product.
+    Returns the new state (True) so the UI can flip its icon.
+    """
+    product = product_service.get_product(db, product_id)
+    product_service.add_favorite(db, current_user, product)
+    return {"product_id": product_id, "favorited": True}
+
+
+@router.delete("/{product_id}/favorite", response_model=FavoriteResponse)
+def unfavorite_product(
+    product_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    MANY-TO-MANY: remove the link row between the current user and
+    product (idempotent - unfavoriting twice is fine).
+    """
+    product = product_service.get_product(db, product_id)
+    product_service.remove_favorite(db, current_user, product)
+    return {"product_id": product_id, "favorited": False}
+
+
 @router.get("/{product_id}", response_model=ProductResponse)
 def get_product(
     product_id: int,  # path parameter -> /products/5
     db: Session = Depends(get_db),
     current_user: User = Depends(get_current_user),
+    _: None = Depends(check_rate_limit),  # rate-limited by username
 ):
-    return product_service.get_product(db, product_id)
+    product = product_service.get_product(db, product_id)
+    return product_service.stamp_favorites(db, current_user, [product])[0]
 
 
 @router.put("/{product_id}", response_model=ProductResponse)

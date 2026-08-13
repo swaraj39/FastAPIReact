@@ -71,3 +71,51 @@ def can_manage_product(product: Product, user: User) -> None:
     """
     if product.owner_id != user.id and user.role != Role.ADMIN:
         raise PermissionDeniedError()
+
+
+def stamp_favorites(db: Session, user: User, products: list[Product]) -> list[Product]:
+    """
+    Set the transient `is_favorited` attribute on each product based on
+    the current user's favorites. Pydantic picks it up when serializing
+    ProductResponse (many-to-many). This is NOT persisted.
+    """
+    favorite_ids = ProductRepository(db).get_favorite_ids(user.id)
+    for product in products:
+        product.is_favorited = product.id in favorite_ids
+    return products
+
+
+def add_favorite(db: Session, user: User, product: Product) -> None:
+    """
+    MANY-TO-MANY: link this user to this product in the association
+    table. `product in user.favorite_products` is an idempotent guard -
+    adding twice does nothing.
+    """
+    if product not in user.favorite_products:
+        user.favorite_products.append(product)
+        db.commit()
+
+
+def remove_favorite(db: Session, user: User, product: Product) -> None:
+    """
+    Unlink the user from the product. Removing a product that was never
+    favorited is harmless.
+    """
+    if product in user.favorite_products:
+        user.favorite_products.remove(product)
+        db.commit()
+
+
+def list_favorites(
+    db: Session, user: User, page: int = 1, limit: int = 5
+) -> tuple[list[Product], int]:
+    """
+    One page of the user's favorited products (all stamped is_favorited
+    = True) plus the total, mirroring list_products.
+    """
+    repo = ProductRepository(db)
+    total = repo.count_favorites(user.id)
+    items = repo.get_favorites(user.id, skip=(page - 1) * limit, limit=limit)
+    for product in items:
+        product.is_favorited = True
+    return items, total

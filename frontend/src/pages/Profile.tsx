@@ -16,7 +16,7 @@ export default function Profile() {
   const { user } = useAuth()
 
   // Local form state for every editable field.
-  const [username, setUsername] = useState('')
+  // const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
@@ -33,7 +33,7 @@ export default function Profile() {
   // `?.` safely handles a null profile (e.g. legacy users).
   useEffect(() => {
     if (user) {
-      setUsername(user.username)
+      // setUsername(user.username)
       setEmail(user.email)
       setFullName(user.profile?.full_name ?? '')
       setPhone(user.profile?.phone ?? '')
@@ -52,7 +52,7 @@ export default function Profile() {
     try {
       // One flattened body; the backend splits account vs profile fields.
       await api.updateProfile({
-        username,
+        // username,
         email,
         full_name: fullName || undefined,
         phone: phone || undefined,
@@ -75,10 +75,10 @@ export default function Profile() {
       <form onSubmit={handleSubmit} className="panel">
         <div className="form-grid">
           {/* Account fields */}
-          <label>
+          {/*<label>
             Username
             <input value={username} onChange={(e) => setUsername(e.target.value)} required />
-          </label>
+          </label>*/}
           <label>
             Email
             <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />

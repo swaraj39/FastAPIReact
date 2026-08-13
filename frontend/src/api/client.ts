@@ -8,6 +8,7 @@
 
 import type {
   DashboardInfo,
+  FavoriteResponse,
   Forgot,
   PaginatedProducts,
   Product,
@@ -151,6 +152,23 @@ export const api = {
   // DELETE /products/:id
   deleteProduct(id: number): Promise<{ message: string }> {
     return request(`/products/${id}`, { method: 'DELETE' })
+  },
+
+  // ---- MANY-TO-MANY favorites ----------------------------------------
+
+  // GET /products/favorites - one page of the current user's favorites.
+  listFavorites(page = 1, limit = 5): Promise<PaginatedProducts> {
+    return request(`/products/favorites?page=${page}&limit=${limit}`)
+  },
+
+  // POST /products/:id/favorite - add a link row (user <-> product).
+  favoriteProduct(id: number): Promise<FavoriteResponse> {
+    return request(`/products/${id}/favorite`, { method: 'POST' })
+  },
+
+  // DELETE /products/:id/favorite - remove the link row.
+  unfavoriteProduct(id: number): Promise<FavoriteResponse> {
+    return request(`/products/${id}/favorite`, { method: 'DELETE' })
   },
 
   // GET /admin/users - list all users (admin only).

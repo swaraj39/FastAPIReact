@@ -2,6 +2,7 @@ from sqlalchemy import Column, Float, ForeignKey, Integer, String, Text
 from sqlalchemy.orm import relationship
 
 from app.db.base import Base
+from app.models.associations import user_favorites
 
 
 class Product(Base):
@@ -55,3 +56,17 @@ class Product(Base):
     # side (User.products), because a child Product must never delete
     # its parent User.
     owner = relationship("User", back_populates="products")
+
+    # ------------------------------------------------------------------
+    # MANY-TO-MANY relationship (Product <-> User favorites)
+    # ------------------------------------------------------------------
+    # The other half of User.favorite_products. `secondary` points at
+    # the same user_favorites table so SQLAlchemy joins through it:
+    #   product.favorited_by  -> [User, User, ...] who favorited it.
+    # Database-level CASCADE (ondelete) keeps the association rows tidy
+    # when either side of the link is deleted.
+    favorited_by = relationship(
+        "User",
+        secondary=user_favorites,
+        back_populates="favorite_products",
+    )
