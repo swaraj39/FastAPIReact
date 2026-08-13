@@ -91,3 +91,7 @@ class User(Base):
         secondary=user_favorites,
         back_populates="favorited_by",
     )
+
+
+    users_order = relationship("Orders", back_populates="order_user", cascade="all, delete-orphan")
+

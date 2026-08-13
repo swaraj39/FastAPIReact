@@ -18,7 +18,7 @@ class ProductCreate(BaseModel):
     name: str = Field(...)
     description: Optional[str] = None 
     # or write str | none = none 
-    price: float
+    price: float 
 
 
 class ProductUpdate(BaseModel):

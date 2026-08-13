@@ -70,3 +70,6 @@ class Product(Base):
         secondary=user_favorites,
         back_populates="favorite_products",
     )
+
+
+    product_order = relationship("Orders", back_populates="order_product", cascade="all, delete-orphan")
