@@ -1,24 +1,45 @@
 from datetime import datetime, timezone
-import uuid
 
-from sqlalchemy import Boolean, Column, DateTime, ForeignKey, Integer, String
-
-from app.db.base import Base
+from sqlalchemy import Column, DateTime, ForeignKey, Integer
 from sqlalchemy.orm import relationship
 
-class Cart(Base):
-    __tablename__ = "cart"
+from app.db.base import Base
 
-    id = Column("order_id", String, primary_key=True, default=lambda: str(uuid.uuid4()))
-    product = Column("product_id", Integer, ForeignKey("products.id"), nullable=False,
-                index=True)
-    user = Column("user_id", Integer, ForeignKey("users.id"),nullable=False,
-                index=True)
+
+class CartItem(Base):
+    """
+    A single line in a user's shopping cart.
+
+    The cart is the PENDING state: clicking "Buy"/"Add to cart" inserts a
+    row here. Only when the user approves (checkout) are these converted
+    into rows in the `orders` table.
+    """
+
+    __tablename__ = "cart_items"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True,
+    )
+    product_id = Column(
+        Integer,
+        ForeignKey("products.id"),
+        nullable=False,
+        index=True,
+    )
+    quantity = Column(Integer, nullable=False, default=1)
+
     created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
-    buyed = Column("ordered",Boolean, nullable=False)
-    quantity = Column("quantity", Integer, default=1)
+    updated_at = Column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+    )
 
-
-    # making the relations with actual table 
-    order_product = relationship("Product", back_populates="product_order")
-    order_user = relationship("User", back_populates="users_order")
+    # Relationships mirror the User and Product sides so we can show the
+    # product name/price inside the cart without extra queries.
+    cart_user = relationship("User", back_populates="user_cart")
+    cart_product = relationship("Product", back_populates="product_cart")

@@ -73,3 +73,6 @@ class Product(Base):
 
 
     product_order = relationship("Orders", back_populates="order_product", cascade="all, delete-orphan")
+
+    # ONE-TO-MANY: a Product appears in many users' carts.
+    product_cart = relationship("CartItem", back_populates="cart_product", cascade="all, delete-orphan")

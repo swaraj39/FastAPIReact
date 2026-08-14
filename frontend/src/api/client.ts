@@ -7,6 +7,8 @@
 // ============================================================
 
 import type {
+  CartItem,
+  CartItemCreate,
   DashboardInfo,
   FavoriteResponse,
   Forgot,
@@ -162,6 +164,34 @@ export const api = {
   buyproduct(data: OrderCreate): Promise<{ message: string }> {
     return request(`/orders`, { method: 'POST' , body: JSON.stringify(data)})
   },
+  // ---- Cart (pending items, approved via checkout -> orders) -------
+
+  // POST /cart - add an item to the current user's cart.
+  addToCart(data: CartItemCreate): Promise<CartItem> {
+    return request('/cart', { method: 'POST', body: JSON.stringify(data) })
+  },
+
+  // GET /cart - every line currently in the user's cart.
+  listCart(): Promise<CartItem[]> {
+    return request('/cart')
+  },
+
+  // PUT /cart/:id - change the quantity of a cart line.
+  updateCartItem(id: number, quantity: number): Promise<CartItem> {
+    return request(`/cart/${id}`, { method: 'PUT', body: JSON.stringify({ quantity }) })
+  },
+
+  // DELETE /cart/:id - remove a line from the cart.
+  removeCartItem(id: number): Promise<void> {
+    return request(`/cart/${id}`, { method: 'DELETE' })
+  },
+
+  // POST /cart/checkout - approve: convert every cart line into an order
+  // and empty the cart.
+  checkoutCart(): Promise<{ message: string; orders: number }> {
+    return request('/cart/checkout', { method: 'POST' })
+  },
+
   // GET /orders - every order placed by the logged-in user.
   listOrders(): Promise<Order[]> {
     return request('/orders')

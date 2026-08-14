@@ -22,11 +22,15 @@ def client():
 @pytest.fixture(autouse=True)
 def clean_tables():
     from app.db.session import SessionLocal
+    from app.models.cart import CartItem
+    from app.models.orders import Orders
     from app.models.product import Product
     from app.models.profile import Profile
     from app.models.user import User
 
     db = SessionLocal()
+    db.query(CartItem).delete()
+    db.query(Orders).delete()
     db.query(Product).delete()
     db.query(Profile).delete()
     db.query(User).delete()

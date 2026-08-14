@@ -95,3 +95,6 @@ class User(Base):
 
     users_order = relationship("Orders", back_populates="order_user", cascade="all, delete-orphan")
 
+    # ONE-TO-MANY: a User has many CartItems (the pending cart).
+    user_cart = relationship("CartItem", back_populates="cart_user", cascade="all, delete-orphan")
+

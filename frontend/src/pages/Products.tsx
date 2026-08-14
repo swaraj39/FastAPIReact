@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { api } from '../api/client'
-import type { Order, Product } from '../api/types'
+import type { CartItem, Order, Product } from '../api/types'
 import { useAuth } from '../context/AuthContext'
 
 export default function Products() {
@@ -33,6 +33,13 @@ export default function Products() {
   const [ordersOpen, setOrdersOpen] = useState(false)
   const [ordersLoading, setOrdersLoading] = useState(false)
   const [ordersError, setOrdersError] = useState('')
+
+  // Cart lines (PENDING items, GET /cart). Checkout approves them into
+  // orders.
+  const [cart, setCart] = useState<CartItem[]>([])
+  const [cartOpen, setCartOpen] = useState(false)
+  const [cartLoading, setCartLoading] = useState(false)
+  const [cartError, setCartError] = useState('')
 
   // Form state. `editing` is null for "create" mode, or a Product while
   // editing that product.
@@ -140,19 +147,62 @@ export default function Products() {
     }
   }
 
-  async function buyProduct(p: Product) {
-    // TODO
+  // "Buy" now adds to the CART (pending); it only becomes an order after
+  // the user approves via checkout.
+  async function addToCart(p: Product) {
     setError('')
-    try{
-      const data = {
-        product_id: p.id,
-        quantity: 1
-      }
-    await api.buyproduct(data)
-    await load(page)
+    try {
+      await api.addToCart({ product_id: p.id, quantity: 1 })
+      // Refresh the cart panel if it is open so the new line shows up.
+      if (cartOpen) await loadCart()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to add to cart')
     }
-    catch (err) {
-      setError(err instanceof Error ? err.message : 'Order failed')
+  }
+
+  async function loadCart() {
+    setCartError('')
+    setCartLoading(true)
+    try {
+      setCart(await api.listCart())
+    } catch (err) {
+      setCartError(err instanceof Error ? err.message : 'Failed to load cart')
+    } finally {
+      setCartLoading(false)
+    }
+  }
+
+  // Toggle the "My Cart" panel: opening it fetches the cart (GET /cart),
+  // closing it hides the panel.
+  async function toggleCart() {
+    if (cartOpen) {
+      setCartOpen(false)
+      return
+    }
+    await loadCart()
+    setCartOpen(true)
+  }
+
+  async function removeFromCart(id: number) {
+    try {
+      await api.removeCartItem(id)
+      await loadCart()
+    } catch (err) {
+      setCartError(err instanceof Error ? err.message : 'Failed to remove item')
+    }
+  }
+
+  // Approve: convert every cart line into an order, then refresh both the
+  // cart (now empty) and the orders panel.
+  async function checkout() {
+    setCartError('')
+    try {
+      await api.checkoutCart()
+      await loadCart()
+      setOrders(await api.listOrders())
+      if (!ordersOpen) setOrdersOpen(true)
+    } catch (err) {
+      setCartError(err instanceof Error ? err.message : 'Checkout failed')
     }
   }
 
@@ -236,7 +286,53 @@ export default function Products() {
         >
           {ordersLoading ? 'Loading...' : ordersOpen ? 'Hide orders' : 'My Orders'}
         </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={toggleCart}
+          disabled={cartLoading}
+        >
+          {cartLoading ? 'Loading...' : cartOpen ? 'Hide cart' : `My Cart (${cart.length})`}
+        </button>
       </div>
+
+      {/* My Cart panel: PENDING items. Checkout approves them -> orders. */}
+      {cartError && <p className="error">{cartError}</p>}
+      {cartOpen && (
+        <div className="panel">
+          <div className="row">
+            <h2>My Cart</h2>
+            <button
+              type="button"
+              onClick={checkout}
+              disabled={cart.length === 0 || cartLoading}
+            >
+              Approve & Checkout
+            </button>
+          </div>
+          {cart.length === 0 ? (
+            <p className="muted">Your cart is empty.</p>
+          ) : (
+            <ul className="list">
+              {cart.map((c) => (
+                <li key={c.id} className="panel">
+                  <div>
+                    <strong>{c.product.name}</strong> — ${c.product.price.toFixed(2)}
+                    <p className="muted">Qty: {c.quantity}</p>
+                  </div>
+                  <button
+                    className="secondary"
+                    type="button"
+                    onClick={() => removeFromCart(c.id)}
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
 
       {/* My Orders panel: every order placed by the logged-in user. */}
       {ordersError && <p className="error">{ordersError}</p>}
@@ -285,8 +381,8 @@ export default function Products() {
                     {p.is_favorited ? '♥' : '♡'} Favorite
                   </button>
               
-                  <button type="button" onClick={() => buyProduct(p)}>
-                    Buy
+                  <button type="button" onClick={() => addToCart(p)}>
+                    Add to cart
                   </button>
                   {/* MANY-TO-ONE: show which user owns this product.
                       p.owner is pre-loaded server-side via selectinload. */}

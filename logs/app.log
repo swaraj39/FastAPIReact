@@ -1528,3 +1528,184 @@ TypeError: 'product_id' is an invalid keyword argument for Orders
 2026-08-14 15:01:55 | INFO | fastapi_app | Application Started
 2026-08-14 15:02:01 | INFO | fastapi_app | Application Started
 2026-08-14 15:02:05 | INFO | fastapi_app | Application Started
+2026-08-14 15:02:42 | INFO | fastapi_app | Application Started
+2026-08-14 16:48:53 | INFO | fastapi_app | Application Started
+2026-08-14 16:49:16 | INFO | fastapi_app | GET /user/profile -> 401 (56.74 ms)
+2026-08-14 16:49:16 | INFO | fastapi_app | GET /user/profile -> 401 (3.58 ms)
+2026-08-14 16:50:39 | INFO | fastapi_app | Application Started
+2026-08-14 16:50:59 | INFO | fastapi_app | Application Started
+2026-08-14 16:50:59 | INFO | fastapi_app | POST /auth/register -> 201 (324.45 ms)
+2026-08-14 16:51:00 | INFO | fastapi_app | POST /auth/register -> 201 (282.81 ms)
+2026-08-14 16:51:00 | INFO | fastapi_app | POST /auth/register -> 409 (2.16 ms)
+2026-08-14 16:51:00 | INFO | fastapi_app | POST /auth/register -> 201 (292.04 ms)
+2026-08-14 16:51:00 | INFO | fastapi_app | POST /auth/register -> 409 (3.02 ms)
+2026-08-14 16:51:00 | INFO | fastapi_app | POST /auth/register -> 201 (428.77 ms)
+2026-08-14 16:51:01 | INFO | fastapi_app | POST /auth/login -> 200 (626.46 ms)
+2026-08-14 16:51:02 | INFO | fastapi_app | POST /auth/register -> 201 (697.82 ms)
+2026-08-14 16:51:02 | INFO | fastapi_app | POST /auth/login -> 401 (576.81 ms)
+2026-08-14 16:51:02 | INFO | fastapi_app | GET /user/profile -> 401 (11.84 ms)
+2026-08-14 16:51:03 | INFO | fastapi_app | POST /auth/register -> 201 (544.26 ms)
+2026-08-14 16:51:03 | INFO | fastapi_app | POST /auth/login -> 200 (629.42 ms)
+2026-08-14 16:51:04 | INFO | fastapi_app | GET /user/profile -> 200 (13.94 ms)
+2026-08-14 16:51:04 | INFO | fastapi_app | POST /auth/register -> 201 (681.40 ms)
+2026-08-14 16:51:05 | INFO | fastapi_app | Application Started
+2026-08-14 16:51:05 | INFO | fastapi_app | POST /auth/login -> 200 (620.20 ms)
+2026-08-14 16:51:05 | INFO | fastapi_app | GET /user/dashboard -> 200 (5.64 ms)
+2026-08-14 16:51:05 | INFO | fastapi_app | POST /auth/register -> 201 (464.32 ms)
+2026-08-14 16:51:06 | INFO | fastapi_app | POST /auth/register -> 201 (683.88 ms)
+2026-08-14 16:51:06 | INFO | fastapi_app | POST /auth/login -> 200 (346.15 ms)
+2026-08-14 16:51:06 | INFO | fastapi_app | POST /products -> 201 (44.45 ms)
+2026-08-14 16:51:06 | INFO | fastapi_app | POST /products -> 201 (24.04 ms)
+2026-08-14 16:51:06 | ERROR | fastapi_app | Unhandled error: 1 validation error:
+  {'type': 'missing', 'loc': ('response', 'product'), 'msg': 'Field required', 'input': <app.models.cart.CartItem object at 0x000002436923BE00>}
+
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\api\v1\cart.py", line 16, in add_to_cart
+    POST /cart
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 727, in app
+    content = await serialize_response(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<11 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 324, in serialize_response
+    raise ResponseValidationError(
+    ...<3 lines>...
+    )
+fastapi.exceptions.ResponseValidationError: 1 validation error:
+  {'type': 'missing', 'loc': ('response', 'product'), 'msg': 'Field required', 'input': <app.models.cart.CartItem object at 0x000002436923BE00>}
+
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\api\v1\cart.py", line 16, in add_to_cart
+    POST /cart
+2026-08-14 16:51:06 | INFO | fastapi_app | POST /auth/login -> 200 (650.49 ms)
+2026-08-14 16:51:06 | INFO | fastapi_app | PUT /user/update -> 200 (30.45 ms)
+2026-08-14 16:51:07 | INFO | fastapi_app | POST /auth/register -> 201 (630.29 ms)
+2026-08-14 16:51:08 | INFO | fastapi_app | POST /auth/login -> 200 (659.92 ms)
+2026-08-14 16:51:08 | INFO | fastapi_app | GET /admin/users -> 403 (15.57 ms)
+2026-08-14 16:51:08 | INFO | fastapi_app | POST /auth/register -> 201 (524.34 ms)
+2026-08-14 16:51:09 | INFO | fastapi_app | POST /auth/login -> 200 (597.73 ms)
+2026-08-14 16:51:09 | INFO | fastapi_app | POST /products -> 201 (43.03 ms)
+2026-08-14 16:51:09 | INFO | fastapi_app | GET /products -> 200 (21.51 ms)
+2026-08-14 16:51:09 | INFO | fastapi_app | GET /products/1 -> 200 (10.95 ms)
+2026-08-14 16:51:09 | INFO | fastapi_app | PUT /products/1 -> 200 (19.70 ms)
+2026-08-14 16:51:09 | INFO | fastapi_app | DELETE /products/1 -> 200 (27.55 ms)
+2026-08-14 16:51:09 | INFO | fastapi_app | GET /products/1 -> 404 (6.51 ms)
+2026-08-14 16:51:09 | INFO | fastapi_app | POST /auth/register -> 201 (585.76 ms)
+2026-08-14 16:51:10 | INFO | fastapi_app | POST /auth/login -> 200 (540.80 ms)
+2026-08-14 16:51:11 | INFO | fastapi_app | POST /auth/register -> 201 (592.25 ms)
+2026-08-14 16:51:11 | INFO | fastapi_app | POST /auth/login -> 200 (619.66 ms)
+2026-08-14 16:51:11 | INFO | fastapi_app | POST /products -> 201 (24.43 ms)
+2026-08-14 16:51:11 | INFO | fastapi_app | PUT /products/1 -> 403 (10.39 ms)
+2026-08-14 16:51:12 | INFO | fastapi_app | POST /auth/register -> 201 (563.68 ms)
+2026-08-14 16:51:12 | INFO | fastapi_app | POST /auth/login -> 200 (609.69 ms)
+2026-08-14 16:51:12 | INFO | fastapi_app | POST /products -> 201 (16.98 ms)
+2026-08-14 16:51:14 | INFO | fastapi_app | POST /auth/login -> 200 (623.84 ms)
+2026-08-14 16:51:14 | INFO | fastapi_app | GET /admin/users -> 200 (11.62 ms)
+2026-08-14 16:51:14 | INFO | fastapi_app | GET /admin/users/1 -> 200 (17.65 ms)
+2026-08-14 16:51:14 | INFO | fastapi_app | GET /admin/users/1 -> 401 (1.48 ms)
+2026-08-14 16:51:32 | INFO | fastapi_app | Application Started
+2026-08-14 16:51:40 | INFO | fastapi_app | Application Started
+2026-08-14 16:51:47 | INFO | fastapi_app | Application Started
+2026-08-14 16:51:48 | INFO | fastapi_app | POST /auth/register -> 201 (387.23 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | POST /auth/login -> 200 (284.14 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | POST /products -> 201 (39.33 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | POST /products -> 201 (17.02 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | POST /cart -> 201 (28.24 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | POST /cart -> 201 (18.96 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | POST /cart -> 201 (19.73 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | GET /cart -> 200 (10.91 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | POST /cart/checkout -> 200 (47.09 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | GET /cart -> 200 (6.31 ms)
+2026-08-14 16:51:48 | INFO | fastapi_app | GET /orders -> 200 (17.85 ms)
+2026-08-14 16:52:09 | INFO | fastapi_app | Application Started
+2026-08-14 16:52:15 | INFO | fastapi_app | Application Started
+2026-08-14 16:52:16 | INFO | fastapi_app | POST /auth/register -> 201 (389.83 ms)
+2026-08-14 16:52:16 | INFO | fastapi_app | POST /auth/register -> 201 (313.04 ms)
+2026-08-14 16:52:16 | INFO | fastapi_app | POST /auth/register -> 409 (2.53 ms)
+2026-08-14 16:52:16 | INFO | fastapi_app | POST /auth/register -> 201 (434.97 ms)
+2026-08-14 16:52:16 | INFO | fastapi_app | POST /auth/register -> 409 (5.80 ms)
+2026-08-14 16:52:17 | INFO | fastapi_app | POST /auth/register -> 201 (594.93 ms)
+2026-08-14 16:52:18 | INFO | fastapi_app | POST /auth/login -> 200 (605.74 ms)
+2026-08-14 16:52:18 | INFO | fastapi_app | POST /auth/register -> 201 (643.75 ms)
+2026-08-14 16:52:19 | INFO | fastapi_app | POST /auth/login -> 401 (613.08 ms)
+2026-08-14 16:52:19 | INFO | fastapi_app | GET /user/profile -> 401 (11.84 ms)
+2026-08-14 16:52:20 | INFO | fastapi_app | POST /auth/register -> 201 (606.92 ms)
+2026-08-14 16:52:20 | INFO | fastapi_app | POST /auth/login -> 200 (629.11 ms)
+2026-08-14 16:52:20 | INFO | fastapi_app | GET /user/profile -> 200 (7.65 ms)
+2026-08-14 16:52:21 | INFO | fastapi_app | POST /auth/register -> 201 (557.27 ms)
+2026-08-14 16:52:21 | INFO | fastapi_app | POST /auth/login -> 200 (566.66 ms)
+2026-08-14 16:52:21 | INFO | fastapi_app | GET /user/dashboard -> 200 (4.02 ms)
+2026-08-14 16:52:22 | INFO | fastapi_app | POST /auth/register -> 201 (651.15 ms)
+2026-08-14 16:52:23 | INFO | fastapi_app | POST /auth/login -> 200 (559.59 ms)
+2026-08-14 16:52:23 | INFO | fastapi_app | PUT /user/update -> 200 (26.71 ms)
+2026-08-14 16:52:23 | INFO | fastapi_app | POST /auth/register -> 201 (600.42 ms)
+2026-08-14 16:52:24 | INFO | fastapi_app | POST /auth/login -> 200 (551.81 ms)
+2026-08-14 16:52:24 | INFO | fastapi_app | GET /admin/users -> 403 (9.36 ms)
+2026-08-14 16:52:24 | INFO | fastapi_app | POST /auth/register -> 201 (600.22 ms)
+2026-08-14 16:52:25 | INFO | fastapi_app | POST /auth/login -> 200 (566.14 ms)
+2026-08-14 16:52:25 | INFO | fastapi_app | POST /products -> 201 (51.30 ms)
+2026-08-14 16:52:25 | INFO | fastapi_app | GET /products -> 200 (27.22 ms)
+2026-08-14 16:52:25 | INFO | fastapi_app | GET /products/1 -> 200 (13.11 ms)
+2026-08-14 16:52:25 | INFO | fastapi_app | PUT /products/1 -> 200 (24.18 ms)
+2026-08-14 16:52:25 | INFO | fastapi_app | DELETE /products/1 -> 200 (23.98 ms)
+2026-08-14 16:52:25 | INFO | fastapi_app | GET /products/1 -> 404 (7.22 ms)
+2026-08-14 16:52:26 | INFO | fastapi_app | POST /auth/register -> 201 (597.49 ms)
+2026-08-14 16:52:26 | INFO | fastapi_app | POST /auth/login -> 200 (557.05 ms)
+2026-08-14 16:52:27 | INFO | fastapi_app | POST /auth/register -> 201 (535.95 ms)
+2026-08-14 16:52:27 | INFO | fastapi_app | POST /auth/login -> 200 (573.68 ms)
+2026-08-14 16:52:28 | INFO | fastapi_app | POST /products -> 201 (19.85 ms)
+2026-08-14 16:52:28 | INFO | fastapi_app | PUT /products/1 -> 403 (8.96 ms)
+2026-08-14 16:52:28 | INFO | fastapi_app | POST /auth/register -> 201 (553.70 ms)
+2026-08-14 16:52:29 | INFO | fastapi_app | POST /auth/login -> 200 (492.00 ms)
+2026-08-14 16:52:29 | INFO | fastapi_app | POST /products -> 201 (24.54 ms)
+2026-08-14 16:52:30 | INFO | fastapi_app | POST /auth/login -> 200 (555.16 ms)
+2026-08-14 16:52:30 | INFO | fastapi_app | GET /admin/users -> 200 (8.88 ms)
+2026-08-14 16:52:30 | INFO | fastapi_app | GET /admin/users/1 -> 200 (18.79 ms)
+2026-08-14 16:52:30 | INFO | fastapi_app | GET /admin/users/1 -> 401 (1.50 ms)

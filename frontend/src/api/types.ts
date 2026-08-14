@@ -92,6 +92,24 @@ export interface OrderCreate{
   quantity: number
 }
 
+// Cart line mirrors CartItemResponse: the nested `product` carries the
+// item's name/price for display.
+export interface CartItem {
+  id: number
+  quantity: number
+  created_at: string
+  product: {
+    id: number
+    name: string
+    price: number
+  }
+}
+
+export interface CartItemCreate {
+  product_id: number
+  quantity: number
+}
+
 // Order mirrors OrderResponse: the nested `product` carries the
 // purchased item's name/price for display.
 export interface Order {
