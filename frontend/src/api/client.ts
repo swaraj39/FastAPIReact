@@ -10,6 +10,8 @@ import type {
   DashboardInfo,
   FavoriteResponse,
   Forgot,
+  Order,
+  OrderCreate,
   PaginatedProducts,
   Product,
   ProductInput,
@@ -67,7 +69,10 @@ async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
   // OAuth2PasswordBearer dependency reads it on protected routes.
   if (token) headers['Authorization'] = `Bearer ${token}`
 
-  const res = await fetch(path, { ...options, headers })
+  // All API calls live under /api so the dev proxy only forwards those
+  // requests to the backend, leaving SPA page routes like /products
+  // to Vite's fallback (fixes 401 on a hard page refresh).
+  const res = await fetch(`/api${path}`, { ...options, headers })
 
   if (!res.ok) {
     // Parse the error body. FastAPI returns `{"detail": "..."}` or a
@@ -153,7 +158,14 @@ export const api = {
   deleteProduct(id: number): Promise<{ message: string }> {
     return request(`/products/${id}`, { method: 'DELETE' })
   },
-
+  
+  buyproduct(data: OrderCreate): Promise<{ message: string }> {
+    return request(`/orders`, { method: 'POST' , body: JSON.stringify(data)})
+  },
+  // GET /orders - every order placed by the logged-in user.
+  listOrders(): Promise<Order[]> {
+    return request('/orders')
+  },
   // ---- MANY-TO-MANY favorites ----------------------------------------
 
   // GET /products/favorites - one page of the current user's favorites.

@@ -87,6 +87,23 @@ export interface Product {
   is_favorited: boolean
 }
 
+export interface OrderCreate{
+  product_id: number
+  quantity: number
+}
+
+// Order mirrors OrderResponse: the nested `product` carries the
+// purchased item's name/price for display.
+export interface Order {
+  id: string
+  quantity: number
+  created_at: string
+  product: {
+    id: number
+    name: string
+    price: number
+  }
+}
 // POST/DELETE /products/:id/favorite -> the new state after toggling.
 export interface FavoriteResponse {
   product_id: number

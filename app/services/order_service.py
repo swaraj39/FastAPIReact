@@ -23,3 +23,22 @@ def create_order(data: OrderCreate,
         quantity=data.quantity
     )
     return OrderRepository(db).createOrder(orders)
+
+
+def list_orders(db: Session, current_user: User):
+    orders = OrderRepository(db).list_by_user(current_user.id)
+    # Shape each order for the API: the product details come from the
+    # nested order_product relationship (product name + price).
+    return [
+        {
+            "id": order.id,
+            "quantity": order.quantity,
+            "created_at": order.created_at,
+            "product": {
+                "id": order.order_product.id,
+                "name": order.order_product.name,
+                "price": order.order_product.price,
+            },
+        }
+        for order in orders
+    ]

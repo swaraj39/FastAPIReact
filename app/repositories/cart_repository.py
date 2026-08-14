@@ -1,19 +1,15 @@
-
-
 from sqlalchemy.orm import Session
-from app.models.orders import Orders
 
+from app.models.cart import Cart
 
-class OrderRepository:
+class CartRepository:
 
-
+    
     def __init__(self, db: Session):
         # Keep a reference to the database session for every method.
         self.db = db
 
-    
-    
-    def createOrder(self, data: Orders):
+    def createCart(self, data: Cart):
         # Stage the new row for insertion...
         self.db.add(data)
         # ...and commit the transaction so it is actually written.
@@ -21,12 +17,3 @@ class OrderRepository:
         # Refresh the object so it reflects the DB (gets its `id` etc.).
         self.db.refresh(data)
         return data 
-
-    def list_by_user(self, user_id: int):
-        # All orders placed by one user, newest first.
-        return (
-            self.db.query(Orders)
-            .filter(Orders.user == user_id)
-            .order_by(Orders.created_at.desc())
-            .all()
-        ) 

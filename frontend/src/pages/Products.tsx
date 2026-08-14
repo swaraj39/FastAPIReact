@@ -9,7 +9,7 @@
 import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { api } from '../api/client'
-import type { Product } from '../api/types'
+import type { Order, Product } from '../api/types'
 import { useAuth } from '../context/AuthContext'
 
 export default function Products() {
@@ -27,6 +27,12 @@ export default function Products() {
   // MANY-TO-MANY: when true, load only the current user's favorites
   // (GET /products/favorites) instead of the full catalog.
   const [onlyFavorites, setOnlyFavorites] = useState(false)
+
+  // Orders placed by the logged-in user (GET /orders), fetched on demand.
+  const [orders, setOrders] = useState<Order[]>([])
+  const [ordersOpen, setOrdersOpen] = useState(false)
+  const [ordersLoading, setOrdersLoading] = useState(false)
+  const [ordersError, setOrdersError] = useState('')
 
   // Form state. `editing` is null for "create" mode, or a Product while
   // editing that product.
@@ -134,8 +140,43 @@ export default function Products() {
     }
   }
 
+  async function buyProduct(p: Product) {
+    // TODO
+    setError('')
+    try{
+      const data = {
+        product_id: p.id,
+        quantity: 1
+      }
+    await api.buyproduct(data)
+    await load(page)
+    }
+    catch (err) {
+      setError(err instanceof Error ? err.message : 'Order failed')
+    }
+  }
+
   // Permission rule mirroring the backend: owner or ADMIN may manage.
   const canManage = (p: Product) => user?.role === 'ADMIN' || user?.id === p.owner_id
+
+  // Toggle the "My Orders" panel: opening it fetches every order the
+  // logged-in user has placed (GET /orders), closing it hides them.
+  async function toggleOrders() {
+    if (ordersOpen) {
+      setOrdersOpen(false)
+      return
+    }
+    setOrdersError('')
+    setOrdersLoading(true)
+    try {
+      setOrders(await api.listOrders())
+      setOrdersOpen(true)
+    } catch (err) {
+      setOrdersError(err instanceof Error ? err.message : 'Failed to load orders')
+    } finally {
+      setOrdersLoading(false)
+    }
+  }
 
   return (
     <div>
@@ -187,7 +228,40 @@ export default function Products() {
         >
           {onlyFavorites ? 'Show all products' : '♥ My favorites'}
         </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={toggleOrders}
+          disabled={ordersLoading}
+        >
+          {ordersLoading ? 'Loading...' : ordersOpen ? 'Hide orders' : 'My Orders'}
+        </button>
       </div>
+
+      {/* My Orders panel: every order placed by the logged-in user. */}
+      {ordersError && <p className="error">{ordersError}</p>}
+      {ordersOpen && (
+        <div className="panel">
+          <h2>My Orders</h2>
+          {orders.length === 0 ? (
+            <p className="muted">No orders yet.</p>
+          ) : (
+            <ul className="list">
+              {orders.map((o) => (
+                <li key={o.id} className="panel">
+                  <div>
+                    <strong>{o.product.name}</strong> — ${o.product.price.toFixed(2)}
+                    <p className="muted">
+                      Qty: {o.quantity} ·{' '}
+                      {new Date(o.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
       {loading ? (
         <p className="muted">Loading...</p>
       ) : products.length === 0 ? (
@@ -209,6 +283,10 @@ export default function Products() {
                     title={p.is_favorited ? 'Remove from favorites' : 'Add to favorites'}
                   >
                     {p.is_favorited ? '♥' : '♡'} Favorite
+                  </button>
+              
+                  <button type="button" onClick={() => buyProduct(p)}>
+                    Buy
                   </button>
                   {/* MANY-TO-ONE: show which user owns this product.
                       p.owner is pre-loaded server-side via selectinload. */}
