@@ -1,8 +1,8 @@
-// Avatar: a colored circle with the person's initials. The background
-// color is derived deterministically from the name, so the same name
-// always gets the same color without needing an image or a table.
+// Avatar: a circle with the person's initials. The background tone
+// is derived deterministically from the name, so the same name always
+// gets the same grayscale shade without needing an image or a table.
 
-const PALETTE = ['#2563eb', '#7c3aed', '#db2777', '#b45309', '#059669', '#0d9488']
+const PALETTE = ['#111111', '#2b2b2b', '#404040', '#555555', '#6b6b6b', '#7d7d7d']
 
 function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -26,9 +26,15 @@ interface AvatarProps {
 }
 
 export default function Avatar({ name, size = 'md' }: AvatarProps) {
-  const cls = size === 'lg' ? 'avatar avatar--lg' : size === 'sm' ? 'avatar avatar--sm' : 'avatar'
+  // Size variants (the shared circle styling sits on the base class).
+  const sizeCls =
+    size === 'lg' ? 'h-16 w-16 text-[1.4rem]' : size === 'sm' ? 'h-7 w-7 text-[0.7rem]' : 'h-9 w-9 text-[0.85rem]'
   return (
-    <span className={cls} style={{ background: colorFrom(name) }} aria-hidden="true">
+    <span
+      className={`inline-flex shrink-0 select-none items-center justify-center rounded-full font-semibold text-white ${sizeCls}`}
+      style={{ background: colorFrom(name) }}
+      aria-hidden="true"
+    >
       {initials(name)}
     </span>
   )

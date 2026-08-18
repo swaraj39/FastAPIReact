@@ -10,13 +10,15 @@ import { useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
 import { api } from '../api/client'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../components/Toast'
+import PageHeader from '../components/PageHeader'
 
 export default function Profile() {
   // Read the current user from context to pre-fill the form.
   const { user } = useAuth()
+  const toast = useToast()
 
   // Local form state for every editable field.
-  // const [username, setUsername] = useState('')
   const [email, setEmail] = useState('')
   const [fullName, setFullName] = useState('')
   const [phone, setPhone] = useState('')
@@ -26,14 +28,12 @@ export default function Profile() {
   const [dateOfBirth, setDateOfBirth] = useState('')
 
   const [error, setError] = useState('')
-  const [saved, setSaved] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
   // Whenever `user` becomes available, copy its values into the form.
   // `?.` safely handles a null profile (e.g. legacy users).
   useEffect(() => {
     if (user) {
-      // setUsername(user.username)
       setEmail(user.email)
       setFullName(user.profile?.full_name ?? '')
       setPhone(user.profile?.phone ?? '')
@@ -47,12 +47,10 @@ export default function Profile() {
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
     setError('')
-    setSaved(false)
     setSubmitting(true)
     try {
       // One flattened body; the backend splits account vs profile fields.
       await api.updateProfile({
-        // username,
         email,
         full_name: fullName || undefined,
         phone: phone || undefined,
@@ -61,7 +59,7 @@ export default function Profile() {
         age: age ? parseInt(age, 10) : undefined,
         date_of_birth: dateOfBirth || undefined,
       })
-      setSaved(true)
+      toast.success('Profile updated')
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Update failed')
     } finally {
@@ -70,18 +68,21 @@ export default function Profile() {
   }
 
   return (
-    <div>
-      <h1>Profile</h1>
+    <div className="animate-page-in">
+      <PageHeader
+        title="Profile"
+        subtitle="Update your account and personal information"
+      />
       <form onSubmit={handleSubmit} className="panel">
-        <div className="form-grid">
-          {/* Account fields */}
-          {/*<label>
-            Username
-            <input value={username} onChange={(e) => setUsername(e.target.value)} required />
-          </label>*/}
+        <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-x-5">
           <label>
             Email
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <input
+              type="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
           </label>
 
           {/* Profile fields (one-to-one) */}
@@ -101,7 +102,7 @@ export default function Profile() {
             Age
             <input type="number" min="0" value={age} onChange={(e) => setAge(e.target.value)} />
           </label>
-          <label className="full">
+          <label className="col-span-full">
             Date of birth
             <input
               type="date"
@@ -109,15 +110,14 @@ export default function Profile() {
               onChange={(e) => setDateOfBirth(e.target.value)}
             />
           </label>
-          <label className="full">
+          <label className="col-span-full">
             Bio
             <textarea value={bio} onChange={(e) => setBio(e.target.value)} />
           </label>
         </div>
         {error && <p className="error">{error}</p>}
-        {saved && <p className="success">Profile updated.</p>}
         <button type="submit" disabled={submitting}>
-          {submitting ? 'Saving...' : 'Save changes'}
+          {submitting ? 'Saving…' : 'Save changes'}
         </button>
       </form>
     </div>

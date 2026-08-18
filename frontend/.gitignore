@@ -3,3 +3,8 @@ dist
 dist-ssr
 *.local
 .DS_Store
+
+# Vite env files (keep the .env.example template tracked)
+.env
+.env.*
+!.env.example

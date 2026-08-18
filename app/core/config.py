@@ -30,6 +30,15 @@ class Settings(BaseSettings):
 
     LOG_DIR: str = "logs"
 
+    # Comma-separated list of allowed browser origins for CORS.
+    # In production set this to your deployed frontend URL(s), e.g.
+    # CORS_ORIGINS="https://myapp.example.com,https://admin.example.com"
+    CORS_ORIGINS: str = "http://localhost:5173"
+
+    @property
+    def cors_origins_list(self) -> list[str]:
+        return [o.strip() for o in self.CORS_ORIGINS.split(",") if o.strip()]
+
 
 @lru_cache
 def get_settings() -> Settings:

@@ -9,7 +9,16 @@
 import { useState } from 'react'
 import type { FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
+import { Lock, Mail, UserRound } from 'lucide-react'
 import { api } from '../api/client'
+
+// Shared auth-card styling (the old `.auth-card` class, as utilities).
+const AUTH_CARD_CLS =
+  'mx-auto my-[clamp(2rem,8vh,5rem)] w-full max-w-[720px] animate-page-in rounded-lg border border-line bg-surface p-9 shadow-sm'
+
+// Icon-inside-input wrapper (the old `.input-icon` pattern).
+const INPUT_ICON_CLS =
+  'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted peer-focus:text-ink'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -61,35 +70,63 @@ export default function Register() {
   }
 
   return (
-    <div className="auth-card wide">
-      <h1>Create account</h1>
+    <div className={AUTH_CARD_CLS}>
+      <h1 className="text-center">Create account</h1>
+      <p className="mb-6 text-center text-[0.92rem] text-muted">Register to manage products, favorites and orders</p>
       <form onSubmit={handleSubmit}>
         {/* Account section: goes to the users table. */}
         <fieldset>
           <legend>Account</legend>
           <label>
             Username
-            <input value={username} onChange={(e) => setUsername(e.target.value)} required />
+            <span className="relative block">
+              <input
+                className="peer pl-[2.4rem]"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="e.g. jane.doe"
+                autoComplete="username"
+                required
+              />
+              <UserRound size={16} aria-hidden="true" className={INPUT_ICON_CLS} />
+            </span>
           </label>
           <label>
             Email
-            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+            <span className="relative block">
+              <input
+                className="peer pl-[2.4rem]"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="name@example.com"
+                autoComplete="email"
+                required
+              />
+              <Mail size={16} aria-hidden="true" className={INPUT_ICON_CLS} />
+            </span>
           </label>
           <label>
             Password
-            <input
-              type="password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
+            <span className="relative block">
+              <input
+                className="peer pl-[2.4rem]"
+                type="password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="••••••••"
+                autoComplete="new-password"
+                required
+              />
+              <Lock size={16} aria-hidden="true" className={INPUT_ICON_CLS} />
+            </span>
           </label>
         </fieldset>
 
         {/* Profile section: goes to the profiles table (one-to-one). */}
         <fieldset>
           <legend>Profile</legend>
-          <div className="form-grid">
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-x-5">
             <label>
               Full name
               <input value={fullName} onChange={(e) => setFullName(e.target.value)} required />
@@ -106,7 +143,7 @@ export default function Register() {
               Age
               <input type="number" min="0" value={age} onChange={(e) => setAge(e.target.value)} />
             </label>
-            <label className="full">
+            <label className="col-span-full">
               Date of birth
               <input
                 type="date"
@@ -114,7 +151,7 @@ export default function Register() {
                 onChange={(e) => setDateOfBirth(e.target.value)}
               />
             </label>
-            <label className="full">
+            <label className="col-span-full">
               Bio
               <textarea value={bio} onChange={(e) => setBio(e.target.value)} />
             </label>
@@ -123,10 +160,10 @@ export default function Register() {
 
         {error && <p className="error">{error}</p>}
         <button type="submit" disabled={submitting}>
-          {submitting ? 'Registering...' : 'Register'}
+          {submitting ? 'Registering…' : 'Register'}
         </button>
       </form>
-      <p className="muted">
+      <p className="text-muted">
         Already have an account? <Link to="/login">Sign in</Link>
       </p>
     </div>

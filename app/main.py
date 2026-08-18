@@ -1,4 +1,5 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 # Importing the model modules is REQUIRED even though we don't use them
 # directly: it registers every table with SQLAlchemy's Base.metadata so
@@ -33,6 +34,17 @@ app = FastAPI(
 # Middleware runs on EVERY request (logging here). Order matters: the
 # last added runs first.
 app.add_middleware(RequestLoggingMiddleware)
+
+# CORS must be the OUTERMOST middleware so it can answer browser
+# preflight (OPTIONS) requests before anything else runs, and so every
+# response gets the Access-Control-* headers. Added last = runs first.
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 # Register custom exception handlers so our AppException subclasses
 # (409, 401, 404, 403) return clean JSON error bodies.

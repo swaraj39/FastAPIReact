@@ -52,13 +52,21 @@ export function ToastProvider({ children }: { children: ReactNode }) {
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div className="toast-stack">
+      <div className="fixed bottom-5 right-5 z-[100] flex max-w-[min(92vw,380px)] flex-col gap-[0.6rem]">
         {toasts.map((t) => (
-          <div key={t.id} className={`toast toast--${t.type}`}>
+          // Success keeps the light treatment; errors invert to a black block.
+          <div
+            key={t.id}
+            className={`flex animate-toast-in items-center gap-[0.6rem] rounded-lg border border-line border-l-[3px] p-[0.7rem_0.9rem] text-[0.9rem] shadow-md ${
+              t.type === 'error'
+                ? 'border-ink border-l-white bg-ink text-white'
+                : 'border-l-ink bg-surface text-ink'
+            }`}
+          >
             {t.type === 'success' ? <CheckCircle2 size={18} /> : <XCircle size={18} />}
             <span>{t.message}</span>
             <button
-              className="toast-close"
+              className="ml-auto inline-flex cursor-pointer border-none bg-transparent p-[0.15rem] text-current opacity-70 shadow-none hover:bg-transparent hover:opacity-100 hover:shadow-none"
               onClick={() => remove(t.id)}
               aria-label="Dismiss notification"
             >

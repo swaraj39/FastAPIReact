@@ -8,13 +8,39 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
+import {
+  ChevronLeft,
+  ChevronRight,
+  Heart,
+  Package,
+  Pencil,
+  Plus,
+  Receipt,
+  ShoppingCart,
+  Trash2,
+} from 'lucide-react'
 import { api } from '../api/client'
 import type { CartItem, Order, Product } from '../api/types'
 import { useAuth } from '../context/AuthContext'
+import { useToast } from '../components/Toast'
+import PageHeader from '../components/PageHeader'
+import EmptyState from '../components/EmptyState'
+import Skeleton from '../components/Skeleton'
+import ConfirmDialog from '../components/ConfirmDialog'
+
+// Shared button variants (the old `button.secondary` / `button.danger`
+// / `button.favorite`).
+const BTN_SECONDARY_CLS =
+  'border-line-strong bg-surface text-ink hover:border-line-strong hover:bg-surface-2 hover:shadow-none'
+const BTN_DANGER_CLS =
+  'border-line-strong bg-surface text-ink hover:border-ink hover:bg-ink hover:text-white hover:shadow-none'
+const FAVORITE_CLS =
+  'border-line-strong bg-surface px-3 py-[0.35rem] text-[0.85rem] text-muted shadow-none hover:border-ink hover:bg-favorite-soft hover:text-ink hover:shadow-none'
 
 export default function Products() {
   // `user` comes from AuthContext; used to decide Edit/Delete rights.
   const { user } = useAuth()
+  const toast = useToast()
 
   // Server data + UI state.
   const [products, setProducts] = useState<Product[]>([])
@@ -48,25 +74,31 @@ export default function Products() {
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
 
+  // The product awaiting a delete confirmation (null = dialog closed).
+  const [confirmProduct, setConfirmProduct] = useState<Product | null>(null)
+
   // `useCallback` keeps a stable reference so the useEffect below
   // doesn't refire on every render.
-  const load = useCallback(async (targetPage: number) => {
-    setLoading(true)
-    setError('')
-    try {
-      const res = onlyFavorites
-        ? await api.listFavorites(targetPage, 5)
-        : await api.listProducts(undefined, targetPage, 5)
-      setProducts(res.items)
-      setTotal(res.total)
-      setPage(res.page)
-      setPages(res.pages)
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to load products')
-    } finally {
-      setLoading(false)
-    }
-  }, [onlyFavorites])
+  const load = useCallback(
+    async (targetPage: number) => {
+      setLoading(true)
+      setError('')
+      try {
+        const res = onlyFavorites
+          ? await api.listFavorites(targetPage, 5)
+          : await api.listProducts(undefined, targetPage, 5)
+        setProducts(res.items)
+        setTotal(res.total)
+        setPage(res.page)
+        setPages(res.pages)
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Failed to load products')
+      } finally {
+        setLoading(false)
+      }
+    },
+    [onlyFavorites],
+  )
 
   // Fetch products whenever the page number or the favorites filter changes.
   useEffect(() => {
@@ -87,8 +119,13 @@ export default function Products() {
   async function toggleFavorite(p: Product) {
     setError('')
     try {
-      if (p.is_favorited) await api.unfavoriteProduct(p.id)
-      else await api.favoriteProduct(p.id)
+      if (p.is_favorited) {
+        await api.unfavoriteProduct(p.id)
+        toast.success('Removed from favorites')
+      } else {
+        await api.favoriteProduct(p.id)
+        toast.success('Added to favorites')
+      }
       await load(page)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to update favorite')
@@ -120,8 +157,13 @@ export default function Products() {
         description: description || null,
         price: parseFloat(price), // convert the string input to a number
       }
-      if (editing) await api.updateProduct(editing.id, data)
-      else await api.createProduct(data)
+      if (editing) {
+        await api.updateProduct(editing.id, data)
+        toast.success('Product updated')
+      } else {
+        await api.createProduct(data)
+        toast.success('Product created')
+      }
       resetForm()
       await load(page) // refresh the current page after saving
     } catch (err) {
@@ -138,9 +180,9 @@ export default function Products() {
   }
 
   async function handleDelete(id: number) {
-    if (!window.confirm('Delete this product?')) return
     try {
       await api.deleteProduct(id)
+      toast.success('Product deleted')
       await load(page)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Delete failed')
@@ -153,8 +195,9 @@ export default function Products() {
     setError('')
     try {
       await api.addToCart({ product_id: p.id, quantity: 1 })
+      toast.success(`Added "${p.name}" to cart`)
       // Refresh the cart panel if it is open so the new line shows up.
-      if (cartOpen) await loadCart()
+      await loadCart()
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to add to cart')
     }
@@ -164,7 +207,8 @@ export default function Products() {
     setCartError('')
     setCartLoading(true)
     try {
-      setCart(await api.listCart())
+      const newCart = await api.listCart()
+      setCart(newCart)
     } catch (err) {
       setCartError(err instanceof Error ? err.message : 'Failed to load cart')
     } finally {
@@ -197,7 +241,8 @@ export default function Products() {
   async function checkout() {
     setCartError('')
     try {
-      await api.checkoutCart()
+      const res = await api.checkoutCart()
+      toast.success(`${res.orders} order${res.orders === 1 ? '' : 's'} placed`)
       await loadCart()
       setOrders(await api.listOrders())
       if (!ordersOpen) setOrdersOpen(true)
@@ -228,108 +273,139 @@ export default function Products() {
     }
   }
 
+  const cartSubtotal = cart.reduce((sum, c) => sum + c.product.price * c.quantity, 0)
+
   return (
-    <div>
-      <h1>Products</h1>
+    <div className="animate-page-in">
+      <PageHeader
+        title="Products"
+        subtitle={
+          onlyFavorites
+            ? `Your favorite products — ${total} total`
+            : `Catalog of ${total} product${total === 1 ? '' : 's'}`
+        }
+        actions={
+          <>
+            <button
+              type="button"
+              className={BTN_SECONDARY_CLS}
+              onClick={toggleFilter}
+              disabled={loading}
+            >
+              <Heart size={16} aria-hidden="true" />
+              {onlyFavorites ? 'All products' : 'Favorites'}
+            </button>
+            <button
+              type="button"
+              className={BTN_SECONDARY_CLS}
+              onClick={toggleCart}
+              disabled={cartLoading}
+            >
+              <ShoppingCart size={16} aria-hidden="true" />
+              {cartOpen ? 'Hide cart' : `My cart (${cart.length})`}
+            </button>
+            <button
+              type="button"
+              className={BTN_SECONDARY_CLS}
+              onClick={toggleOrders}
+              disabled={ordersLoading}
+            >
+              <Receipt size={16} aria-hidden="true" />
+              {ordersLoading ? 'Loading…' : ordersOpen ? 'Hide orders' : 'My orders'}
+            </button>
+          </>
+        }
+      />
+
       {error && <p className="error">{error}</p>}
 
       {/* Form ON TOP: create/edit a product */}
-      <h2>{editing ? `Edit product #${editing.id}` : 'New product'}</h2>
-      <form onSubmit={handleSubmit} className="panel">
-        <label>
-          Name
-          <input value={name} onChange={(e) => setName(e.target.value)} required />
-        </label>
-        <label>
-          Description
-          <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
-        </label>
-        <label>
-          Price
-          <input
-            type="number"
-            step="0.01"
-            min="0"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </label>
-        <div className="row">
-          <button type="submit">{editing ? 'Save changes' : 'Create'}</button>
-          {editing && (
-            <button type="button" className="secondary" onClick={resetForm}>
-              Cancel
-            </button>
-          )}
-        </div>
-      </form>
-
-      {/* List BELOW the form: only 5 products per page.
-          The filter button switches between the full catalog and the
-          current user's favorites (MANY-TO-MANY). */}
-      <div className="row">
-        <h2>{onlyFavorites ? 'My favorites' : 'All products'}</h2>
-        <button
-          type="button"
-          className="secondary"
-          onClick={toggleFilter}
-          disabled={loading}
-        >
-          {onlyFavorites ? 'Show all products' : '♥ My favorites'}
-        </button>
-        <button
-          type="button"
-          className="secondary"
-          onClick={toggleOrders}
-          disabled={ordersLoading}
-        >
-          {ordersLoading ? 'Loading...' : ordersOpen ? 'Hide orders' : 'My Orders'}
-        </button>
-        <button
-          type="button"
-          className="secondary"
-          onClick={toggleCart}
-          disabled={cartLoading}
-        >
-          {cartLoading ? 'Loading...' : cartOpen ? 'Hide cart' : `My Cart (${cart.length})`}
-        </button>
-      </div>
+      {user?.role === 'ADMIN' && (
+        <>
+          <div className="panel">
+            <h2 className="mt-0">
+              {editing ? `Edit product #${editing.id}` : 'New product'}
+            </h2>
+            <form onSubmit={handleSubmit}>
+              <label>
+                Name
+                <input value={name} onChange={(e) => setName(e.target.value)} required />
+              </label>
+              <label>
+                Description
+                <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+              </label>
+              <label>
+                Price
+                <input
+                  type="number"
+                  step="0.01"
+                  min="0"
+                  value={price}
+                  onChange={(e) => setPrice(e.target.value)}
+                  required
+                />
+              </label>
+              <div className="row">
+                <button type="submit">
+                  <Plus size={16} aria-hidden="true" />
+                  {editing ? 'Save changes' : 'Create'}
+                </button>
+                {editing && (
+                  <button type="button" className={BTN_SECONDARY_CLS} onClick={resetForm}>
+                    Cancel
+                  </button>
+                )}
+              </div>
+            </form>
+          </div>
+        </>
+      )}
 
       {/* My Cart panel: PENDING items. Checkout approves them -> orders. */}
       {cartError && <p className="error">{cartError}</p>}
       {cartOpen && (
         <div className="panel">
-          <div className="row">
-            <h2>My Cart</h2>
+          <div className="row justify-between">
+            <h2 className="m-0">
+              <ShoppingCart size={18} aria-hidden="true" /> My Cart
+            </h2>
             <button
               type="button"
               onClick={checkout}
               disabled={cart.length === 0 || cartLoading}
             >
-              Approve & Checkout
+              Approve &amp; Checkout
             </button>
           </div>
           {cart.length === 0 ? (
-            <p className="muted">Your cart is empty.</p>
+            <p className="text-muted">Your cart is empty.</p>
           ) : (
-            <ul className="list">
-              {cart.map((c) => (
-                <li key={c.id} className="panel">
-                  <div>
-                    <strong>{c.product.name}</strong> — ${c.product.price.toFixed(2)}
-                    <p className="muted">Qty: {c.quantity}</p>
-                  </div>
-                  <button
-                    className="secondary"
-                    type="button"
-                    onClick={() => removeFromCart(c.id)}
+            <>
+              <ul className="m-0 flex list-none flex-col gap-[0.85rem] p-0">
+                {cart.map((c) => (
+                  <li
+                    key={c.id}
+                    className="panel mb-0 flex items-center justify-between gap-4 max-[640px]:flex-col max-[640px]:items-start"
                   >
-                    Remove
-                  </button>
-                </li>
-              ))}
-            </ul>
+                    <div className="min-w-0">
+                      <strong>{c.product.name}</strong> — ${c.product.price.toFixed(2)}
+                      <p className="text-muted">Qty: {c.quantity}</p>
+                    </div>
+                    <button
+                      className={BTN_SECONDARY_CLS}
+                      type="button"
+                      onClick={() => removeFromCart(c.id)}
+                    >
+                      <Trash2 size={14} aria-hidden="true" /> Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+              <p className="m-0 text-right text-muted">
+                Subtotal: <strong>${cartSubtotal.toFixed(2)}</strong>
+              </p>
+            </>
           )}
         </div>
       )}
@@ -338,18 +414,19 @@ export default function Products() {
       {ordersError && <p className="error">{ordersError}</p>}
       {ordersOpen && (
         <div className="panel">
-          <h2>My Orders</h2>
+          <h2 className="mt-0">
+            <Receipt size={18} aria-hidden="true" /> My Orders
+          </h2>
           {orders.length === 0 ? (
-            <p className="muted">No orders yet.</p>
+            <p className="text-muted">No orders yet.</p>
           ) : (
-            <ul className="list">
+            <ul className="m-0 flex list-none flex-col gap-[0.85rem] p-0">
               {orders.map((o) => (
-                <li key={o.id} className="panel">
-                  <div>
+                <li key={o.id} className="panel mb-0">
+                  <div className="min-w-0">
                     <strong>{o.product.name}</strong> — ${o.product.price.toFixed(2)}
-                    <p className="muted">
-                      Qty: {o.quantity} ·{' '}
-                      {new Date(o.created_at).toLocaleString()}
+                    <p className="text-muted">
+                      Qty: {o.quantity} · {new Date(o.created_at).toLocaleString()}
                     </p>
                   </div>
                 </li>
@@ -358,75 +435,121 @@ export default function Products() {
           )}
         </div>
       )}
+
+      {/* List BELOW the form: only 5 products per page. */}
       {loading ? (
-        <p className="muted">Loading...</p>
+        <div className="mb-4 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4">
+          <Skeleton className="skeleton--card" />
+          <Skeleton className="skeleton--card" />
+          <Skeleton className="skeleton--card" />
+        </div>
       ) : products.length === 0 ? (
-        <p className="muted">{onlyFavorites ? 'No favorites yet.' : 'No products yet.'}</p>
+        <EmptyState
+          icon={Package}
+          title={onlyFavorites ? 'No favorites yet' : 'No products yet'}
+          message={
+            onlyFavorites
+              ? 'Tap the heart on any product to keep it here.'
+              : 'Create the first product using the form above.'
+          }
+        />
       ) : (
         <>
-          <ul className="list">
+          <ul className="m-0 flex list-none flex-col gap-[0.85rem] p-0">
             {products.map((p) => (
-              <li key={p.id} className="panel">
-                <div>
-                  <strong>{p.name}</strong> — ${p.price.toFixed(2)}
-                  {p.description && <p className="muted">{p.description}</p>}
-                  {/* MANY-TO-MANY: heart shows the current user's favorite
-                      state; clicking calls POST/DELETE /products/:id/favorite. */}
-                  <button
-                    type="button"
-                    onClick={() => toggleFavorite(p)}
-                    className={p.is_favorited ? 'favorite active' : 'favorite'}
-                    title={p.is_favorited ? 'Remove from favorites' : 'Add to favorites'}
-                  >
-                    {p.is_favorited ? '♥' : '♡'} Favorite
-                  </button>
-              
-                  <button type="button" onClick={() => addToCart(p)}>
-                    Add to cart
-                  </button>
+              <li
+                key={p.id}
+                className="panel mb-0 flex items-center justify-between gap-4 max-[640px]:flex-col max-[640px]:items-start"
+              >
+                <div className="min-w-0 flex-1">
+                  <div className="flex flex-wrap items-baseline justify-between gap-4">
+                    <span className="text-[1.02rem] font-semibold text-ink">{p.name}</span>
+                    <span className="whitespace-nowrap font-mono text-[1.05rem] font-semibold text-ink">
+                      ${p.price.toFixed(2)}
+                    </span>
+                  </div>
+                  {p.description && <p className="text-muted">{p.description}</p>}
                   {/* MANY-TO-ONE: show which user owns this product.
                       p.owner is pre-loaded server-side via selectinload. */}
-                  <p className="muted">
-                    owner: <strong>{p.owner?.username ?? `#${p.owner_id}`}</strong>
+                  <p className="text-muted">
+                    Owner: <strong>{p.owner?.username ?? `#${p.owner_id}`}</strong>
                   </p>
                 </div>
-                {canManage(p) && (
-                  <div className="row">
-                    <button className="secondary" onClick={() => startEdit(p)}>
-                      Edit
+                <div className="flex shrink-0 flex-col items-end gap-2 max-[640px]:w-full max-[640px]:items-stretch">
+                  <div className="row max-[640px]:w-full">
+                    {/* MANY-TO-MANY: heart shows the current user's
+                        favorite state; clicking calls POST/DELETE
+                        /products/:id/favorite. */}
+                    <button
+                      type="button"
+                      onClick={() => toggleFavorite(p)}
+                      className={`${FAVORITE_CLS} max-[640px]:flex-1 ${
+                        p.is_favorited ? 'border-ink bg-ink text-white hover:bg-ink' : ''
+                      }`}
+                      title={p.is_favorited ? 'Remove from favorites' : 'Add to favorites'}
+                    >
+                      <Heart size={16} fill={p.is_favorited ? 'currentColor' : 'none'} />
+                      Favorite
                     </button>
-                    <button className="danger" onClick={() => handleDelete(p.id)}>
-                      Delete
+                    <button type="button" className="max-[640px]:flex-1" onClick={() => addToCart(p)}>
+                      <ShoppingCart size={16} aria-hidden="true" /> Add to cart
                     </button>
                   </div>
-                )}
+                  {canManage(p) && (
+                    <div className="row max-[640px]:w-full">
+                      <button className={`${BTN_SECONDARY_CLS} max-[640px]:flex-1`} onClick={() => startEdit(p)}>
+                        <Pencil size={14} aria-hidden="true" /> Edit
+                      </button>
+                      <button className={`${BTN_DANGER_CLS} max-[640px]:flex-1`} onClick={() => setConfirmProduct(p)}>
+                        <Trash2 size={14} aria-hidden="true" /> Delete
+                      </button>
+                    </div>
+                  )}
+                </div>
               </li>
             ))}
           </ul>
 
-          <br></br>
           {/* Page controls */}
-          <div className="row">
+          <div className="row justify-center">
             <button
-              className="secondary"
+              className={BTN_SECONDARY_CLS}
               disabled={page <= 1 || loading}
               onClick={() => goToPage(page - 1)}
             >
-              Prev
+              <ChevronLeft size={16} aria-hidden="true" /> Prev
             </button>
-            <p className="muted">
-              Page {page} of {pages ?? 1} ({total} products)
+            <p className="text-muted">
+              Page {page} of {pages ?? 1}
             </p>
             <button
-              className="secondary"
+              className={BTN_SECONDARY_CLS}
               disabled={page >= pages || loading}
               onClick={() => goToPage(page + 1)}
             >
-              Next
+              Next <ChevronRight size={16} aria-hidden="true" />
             </button>
           </div>
         </>
       )}
+
+      {/* Delete confirmation replaces the old window.confirm() */}
+      <ConfirmDialog
+        open={confirmProduct !== null}
+        title="Delete product?"
+        message={
+          confirmProduct
+            ? `Delete "${confirmProduct.name}"? This action cannot be undone.`
+            : ''
+        }
+        confirmLabel="Delete"
+        confirmVariant="danger"
+        onConfirm={() => {
+          if (confirmProduct) handleDelete(confirmProduct.id)
+          setConfirmProduct(null)
+        }}
+        onCancel={() => setConfirmProduct(null)}
+      />
     </div>
   )
 }

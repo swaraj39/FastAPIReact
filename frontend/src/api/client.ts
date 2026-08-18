@@ -1,11 +1,16 @@
 // ============================================================
 // Central HTTP layer for talking to the FastAPI backend.
 //
-// A single `request` helper handles: JSON serialization, the Bearer
-// token header, and turning error responses into thrown ApiErrors so
-// pages can show friendly messages. All endpoints are typed.
+// Uses axios. The base URL comes from the VITE_API_BASE_URL env var
+// (see frontend/.env). The frontend calls the backend directly in both
+// dev and production, so the backend CORS settings must allow this
+// origin (see app/core/config.py CORS_ORIGINS).
+//
+// A request interceptor attaches the Bearer token; a response
+// interceptor normalizes FastAPI error bodies into thrown ApiErrors.
 // ============================================================
 
+import axios, { AxiosError } from 'axios'
 import type {
   CartItem,
   CartItemCreate,
@@ -54,82 +59,80 @@ export function clearToken(): void {
   localStorage.removeItem(TOKEN_KEY)
 }
 
-// ---- Generic fetch wrapper ---------------------------------------------
-async function request<T>(path: string, options: RequestInit = {}): Promise<T> {
+// ---- Axios instance -----------------------------------------------------
+// Vite exposes env vars prefixed with VITE_ at build time.
+//   production build:   VITE_API_BASE_URL=https://api.example.com
+//   development:        unset -> "/api" (hits the Vite dev proxy)
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
+
+const http = axios.create({
+  baseURL: BASE_URL,
+})
+
+// Attach the JWT on every request: `Authorization: Bearer <token>`.
+// The backend's OAuth2PasswordBearer dependency reads this header.
+http.interceptors.request.use((config) => {
   const token = getToken()
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
 
-  // Build headers. OAuth2 login sends URLSearchParams (form-encoded);
-  // every other request sends JSON.
-  const headers: Record<string, string> = {
-    ...(options.body instanceof URLSearchParams
-      ? { 'Content-Type': 'application/x-www-form-urlencoded' }
-      : { 'Content-Type': 'application/json' }),
-    ...(options.headers as Record<string, string> | undefined),
-  }
+// Normalize FastAPI error responses into a single ApiError. FastAPI
+// returns `{"detail": "..."}` or a list of validation errors.
+http.interceptors.response.use(
+  (res) => res,
+  (error: AxiosError) => {
+    const status = error.response?.status ?? 0
+    let detail = error.response?.statusText ?? error.message
 
-  // Attach the JWT: `Authorization: Bearer <token>`. The backend's
-  // OAuth2PasswordBearer dependency reads it on protected routes.
-  if (token) headers['Authorization'] = `Bearer ${token}`
+    const body = error.response?.data as
+      | { detail?: string | Array<{ msg: string }> }
+      | undefined
+    if (typeof body?.detail === 'string') detail = body.detail
+    else if (Array.isArray(body?.detail))
+      detail = body.detail.map((e: { msg: string }) => e.msg).join(', ')
 
-  // All API calls live under /api so the dev proxy only forwards those
-  // requests to the backend, leaving SPA page routes like /products
-  // to Vite's fallback (fixes 401 on a hard page refresh).
-  const res = await fetch(`/api${path}`, { ...options, headers })
-
-  if (!res.ok) {
-    // Parse the error body. FastAPI returns `{"detail": "..."}` or a
-    // list of validation errors, so we normalize both into one message.
-    let detail = res.statusText
-    try {
-      const body = await res.json()
-      if (typeof body.detail === 'string') detail = body.detail
-      else if (Array.isArray(body.detail))
-        detail = body.detail.map((e: { msg: string }) => e.msg).join(', ')
-    } catch {
-      /* response had no JSON body - keep the status text */
-    }
-    throw new ApiError(res.status, detail)
-  }
-
-  if (res.status === 204) return undefined as T
-  return (await res.json()) as T
-}
+    return Promise.reject(new ApiError(status, detail))
+  },
+)
 
 // ---- Endpoint methods ---------------------------------------------------
 export const api = {
   // POST /auth/login (form data). Stores the token on success.
   async login(username: string, password: string): Promise<Token> {
-    const body = new URLSearchParams()
-    body.set('username', username)
-    body.set('password', password)
-    const token = await request<Token>('/auth/login', { method: 'POST', body })
-    setToken(token.access_token)
-    return token
+    // OAuth2PasswordRequestForm expects URL-encoded form fields; axios
+    // auto-sets the form content-type for URLSearchParams bodies.
+    const params = new URLSearchParams()
+    params.set('username', username)
+    params.set('password', password)
+    const { data } = await http.post<Token>('/auth/login', params)
+    setToken(data.access_token)
+    return data
   },
 
   // POST /auth/register - sends User + Profile fields together; the
   // backend splits them into the users and profiles tables (one-to-one).
   register(data: RegisterInput): Promise<User> {
-    return request('/auth/register', { method: 'POST', body: JSON.stringify(data) })
+    return http.post('/auth/register', data).then((r) => r.data)
   },
 
   // GET /user/profile - returns the logged-in user (+ profile).
   getProfile(): Promise<User> {
-    return request('/user/profile')
+    return http.get('/user/profile').then((r) => r.data)
   },
-
 
   forgotpassword(data: Forgot): Promise<String> {
-    return request('/user/forgot', { method: 'POST', body: JSON.stringify(data)})
+    return http.post('/user/forgot', data).then((r) => r.data)
   },
+
   // PUT /user/update - update account + profile fields in one call.
   updateProfile(data: ProfileUpdate): Promise<User> {
-    return request('/user/update', { method: 'PUT', body: JSON.stringify(data) })
+    return http.put('/user/update', data).then((r) => r.data)
   },
 
   // GET /user/dashboard
   getDashboard(): Promise<DashboardInfo> {
-    return request('/user/dashboard')
+    return http.get('/user/dashboard').then((r) => r.data)
   },
 
   // GET /products?owner_id=...&page=...&limit=... - one page of products,
@@ -139,95 +142,95 @@ export const api = {
     page = 1,
     limit = 5,
   ): Promise<PaginatedProducts> {
-    const params = new URLSearchParams()
-    if (ownerId !== undefined) params.set('owner_id', String(ownerId))
-    params.set('page', String(page))
-    params.set('limit', String(limit))
-    return request(`/products?${params.toString()}`)
+    return http
+      .get('/products', { params: { owner_id: ownerId, page, limit } })
+      .then((r) => r.data)
   },
 
   // POST /products - create a product owned by the current user.
   createProduct(data: ProductInput): Promise<Product> {
-    return request('/products', { method: 'POST', body: JSON.stringify(data) })
+    return http.post('/products', data).then((r) => r.data)
   },
 
   // PUT /products/:id
   updateProduct(id: number, data: Partial<ProductInput>): Promise<Product> {
-    return request(`/products/${id}`, { method: 'PUT', body: JSON.stringify(data) })
+    return http.put(`/products/${id}`, data).then((r) => r.data)
   },
 
   // DELETE /products/:id
   deleteProduct(id: number): Promise<{ message: string }> {
-    return request(`/products/${id}`, { method: 'DELETE' })
+    return http.delete(`/products/${id}`).then((r) => r.data)
   },
-  
+
   buyproduct(data: OrderCreate): Promise<{ message: string }> {
-    return request(`/orders`, { method: 'POST' , body: JSON.stringify(data)})
+    return http.post('/orders', data).then((r) => r.data)
   },
+
   // ---- Cart (pending items, approved via checkout -> orders) -------
 
   // POST /cart - add an item to the current user's cart.
   addToCart(data: CartItemCreate): Promise<CartItem> {
-    return request('/cart', { method: 'POST', body: JSON.stringify(data) })
+    return http.post('/cart', data).then((r) => r.data)
   },
 
   // GET /cart - every line currently in the user's cart.
   listCart(): Promise<CartItem[]> {
-    return request('/cart')
+    return http.get('/cart').then((r) => r.data)
   },
 
   // PUT /cart/:id - change the quantity of a cart line.
   updateCartItem(id: number, quantity: number): Promise<CartItem> {
-    return request(`/cart/${id}`, { method: 'PUT', body: JSON.stringify({ quantity }) })
+    return http.put(`/cart/${id}`, { quantity }).then((r) => r.data)
   },
 
   // DELETE /cart/:id - remove a line from the cart.
   removeCartItem(id: number): Promise<void> {
-    return request(`/cart/${id}`, { method: 'DELETE' })
+    return http.delete(`/cart/${id}`).then(() => undefined)
   },
 
   // POST /cart/checkout - approve: convert every cart line into an order
   // and empty the cart.
   checkoutCart(): Promise<{ message: string; orders: number }> {
-    return request('/cart/checkout', { method: 'POST' })
+    return http.post('/cart/checkout').then((r) => r.data)
   },
 
   // GET /orders - every order placed by the logged-in user.
   listOrders(): Promise<Order[]> {
-    return request('/orders')
+    return http.get('/orders').then((r) => r.data)
   },
+
   // ---- MANY-TO-MANY favorites ----------------------------------------
 
   // GET /products/favorites - one page of the current user's favorites.
   listFavorites(page = 1, limit = 5): Promise<PaginatedProducts> {
-    return request(`/products/favorites?page=${page}&limit=${limit}`)
+    return http
+      .get('/products/favorites', { params: { page, limit } })
+      .then((r) => r.data)
   },
 
   // POST /products/:id/favorite - add a link row (user <-> product).
   favoriteProduct(id: number): Promise<FavoriteResponse> {
-    return request(`/products/${id}/favorite`, { method: 'POST' })
+    return http.post(`/products/${id}/favorite`).then((r) => r.data)
   },
 
   // DELETE /products/:id/favorite - remove the link row.
   unfavoriteProduct(id: number): Promise<FavoriteResponse> {
-    return request(`/products/${id}/favorite`, { method: 'DELETE' })
+    return http.delete(`/products/${id}/favorite`).then((r) => r.data)
   },
 
   // GET /admin/users - list all users (admin only).
   adminUsers(): Promise<User[]> {
-    return request('/admin/users')
+    return http.get('/admin/users').then((r) => r.data)
   },
 
   // GET /admin/users/:id - ONE-TO-MANY: a single user WITH all their
   // products, eager-loaded via selectinload on the backend.
   adminUserDetail(id: number): Promise<UserWithProducts> {
-    return request(`/admin/users/${id}`)
+    return http.get(`/admin/users/${id}`).then((r) => r.data)
   },
 
   // DELETE /admin/users/:id
   adminDeleteUser(id: number): Promise<{ message: string }> {
-    return request(`/admin/users/${id}`, { method: 'DELETE' })
+    return http.delete(`/admin/users/${id}`).then((r) => r.data)
   },
-
-
 }

@@ -28,7 +28,9 @@ export default function ProtectedRoute({ children, roles }: ProtectedRouteProps)
 
   // While the initial "restore session" call is running, show a loader
   // instead of redirecting an actually-logged-in user to /login.
-  if (loading) return <div className="container">Loading...</div>
+  if (loading) {
+    return <div className="mx-auto w-full max-w-[1100px] flex-1 px-6 py-10">Loading...</div>
+  }
 
   // Not authenticated -> send to /login.
   if (!user) return <Navigate to="/login" state={{ from: location }} replace />

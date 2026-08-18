@@ -1,0 +1,2216 @@
+<directory_structure>
+api/client.ts
+api/types.ts
+App.tsx
+components/Avatar.tsx
+components/Badge.tsx
+components/EmptyState.tsx
+components/PageHeader.tsx
+components/ProtectedRoute.tsx
+components/Skeleton.tsx
+components/Spinner.tsx
+components/Toast.tsx
+context/AuthContext.tsx
+index.css
+main.tsx
+pages/Admin.tsx
+pages/Dashboard.tsx
+pages/Forgot.tsx
+pages/ForgotPassword.tsx
+pages/Login.tsx
+pages/Products.tsx
+pages/Profile.tsx
+pages/Register.tsx
+vite-env.d.ts
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="api/client.ts">
+import axios, { AxiosError } from 'axios'
+import type {
+  CartItem,
+  CartItemCreate,
+  DashboardInfo,
+  FavoriteResponse,
+  Forgot,
+  Order,
+  OrderCreate,
+  PaginatedProducts,
+  Product,
+  ProductInput,
+  ProfileUpdate,
+  RegisterInput,
+  Token,
+  User,
+  UserWithProducts,
+} from './types'
+export class ApiError extends Error {
+  status: number
+  detail: string
+  constructor(status: number, detail: string) {
+    super(detail)
+    this.status = status
+    this.detail = detail
+  }
+}
+const TOKEN_KEY = 'token'
+export function getToken(): string | null {
+  return localStorage.getItem(TOKEN_KEY)
+}
+export function setToken(token: string): void {
+  localStorage.setItem(TOKEN_KEY, token)
+}
+export function clearToken(): void {
+  localStorage.removeItem(TOKEN_KEY)
+}
+const BASE_URL = import.meta.env.VITE_API_BASE_URL
+const http = axios.create({
+  baseURL: BASE_URL,
+})
+http.interceptors.request.use((config) => {
+  const token = getToken()
+  if (token) config.headers.Authorization = `Bearer ${token}`
+  return config
+})
+http.interceptors.response.use(
+  (res) => res,
+  (error: AxiosError) => {
+    const status = error.response?.status ?? 0
+    let detail = error.response?.statusText ?? error.message
+    const body = error.response?.data as
+      | { detail?: string | Array<{ msg: string }> }
+      | undefined
+    if (typeof body?.detail === 'string') detail = body.detail
+    else if (Array.isArray(body?.detail))
+      detail = body.detail.map((e: { msg: string }) => e.msg).join(', ')
+    return Promise.reject(new ApiError(status, detail))
+  },
+)
+export const api = {
+  async login(username: string, password: string): Promise<Token> {
+    const params = new URLSearchParams()
+    params.set('username', username)
+    params.set('password', password)
+    const { data } = await http.post<Token>('/auth/login', params)
+    setToken(data.access_token)
+    return data
+  },
+  register(data: RegisterInput): Promise<User> {
+    return http.post('/auth/register', data).then((r) => r.data)
+  },
+  getProfile(): Promise<User> {
+    return http.get('/user/profile').then((r) => r.data)
+  },
+  forgotpassword(data: Forgot): Promise<String> {
+    return http.post('/user/forgot', data).then((r) => r.data)
+  },
+  updateProfile(data: ProfileUpdate): Promise<User> {
+    return http.put('/user/update', data).then((r) => r.data)
+  },
+  getDashboard(): Promise<DashboardInfo> {
+    return http.get('/user/dashboard').then((r) => r.data)
+  },
+  listProducts(
+    ownerId?: number,
+    page = 1,
+    limit = 5,
+  ): Promise<PaginatedProducts> {
+    return http
+      .get('/products', { params: { owner_id: ownerId, page, limit } })
+      .then((r) => r.data)
+  },
+  createProduct(data: ProductInput): Promise<Product> {
+    return http.post('/products', data).then((r) => r.data)
+  },
+  updateProduct(id: number, data: Partial<ProductInput>): Promise<Product> {
+    return http.put(`/products/${id}`, data).then((r) => r.data)
+  },
+  deleteProduct(id: number): Promise<{ message: string }> {
+    return http.delete(`/products/${id}`).then((r) => r.data)
+  },
+  buyproduct(data: OrderCreate): Promise<{ message: string }> {
+    return http.post('/orders', data).then((r) => r.data)
+  },
+  addToCart(data: CartItemCreate): Promise<CartItem> {
+    return http.post('/cart', data).then((r) => r.data)
+  },
+  listCart(): Promise<CartItem[]> {
+    return http.get('/cart').then((r) => r.data)
+  },
+  updateCartItem(id: number, quantity: number): Promise<CartItem> {
+    return http.put(`/cart/${id}`, { quantity }).then((r) => r.data)
+  },
+  removeCartItem(id: number): Promise<void> {
+    return http.delete(`/cart/${id}`).then(() => undefined)
+  },
+  checkoutCart(): Promise<{ message: string; orders: number }> {
+    return http.post('/cart/checkout').then((r) => r.data)
+  },
+  listOrders(): Promise<Order[]> {
+    return http.get('/orders').then((r) => r.data)
+  },
+  listFavorites(page = 1, limit = 5): Promise<PaginatedProducts> {
+    return http
+      .get('/products/favorites', { params: { page, limit } })
+      .then((r) => r.data)
+  },
+  favoriteProduct(id: number): Promise<FavoriteResponse> {
+    return http.post(`/products/${id}/favorite`).then((r) => r.data)
+  },
+  unfavoriteProduct(id: number): Promise<FavoriteResponse> {
+    return http.delete(`/products/${id}/favorite`).then((r) => r.data)
+  },
+  adminUsers(): Promise<User[]> {
+    return http.get('/admin/users').then((r) => r.data)
+  },
+  adminUserDetail(id: number): Promise<UserWithProducts> {
+    return http.get(`/admin/users/${id}`).then((r) => r.data)
+  },
+  adminDeleteUser(id: number): Promise<{ message: string }> {
+    return http.delete(`/admin/users/${id}`).then((r) => r.data)
+  },
+}
+</file>
+
+<file path="api/types.ts">
+export type Role = 'ADMIN' | 'REVIEWER' | 'USER'
+export interface Profile {
+  id: number
+  full_name: string | null
+  phone: string | null
+  bio: string | null
+  location: string | null
+  age: number | null
+  date_of_birth: string | null
+}
+export interface User {
+  id: number
+  username: string
+  email: string
+  role: Role
+  profile: Profile | null
+}
+export interface RegisterInput {
+  username: string
+  email: string
+  password: string
+  profile: {
+    full_name: string
+    phone?: string
+    bio?: string
+    location?: string
+    age?: number
+    date_of_birth?: string
+  }
+}
+export interface Forgot {
+  username?: string
+  password?: string
+}
+export interface ProfileUpdate {
+  username?: string
+  email?: string
+  full_name?: string
+  phone?: string
+  bio?: string
+  location?: string
+  age?: number
+  date_of_birth?: string
+}
+export interface Token {
+  access_token: string
+  token_type: string
+}
+export interface OwnerSummary {
+  id: number
+  username: string
+}
+export interface Product {
+  id: number
+  name: string
+  description: string | null
+  price: number
+  owner_id: number
+  owner: OwnerSummary | null
+  is_favorited: boolean
+}
+export interface OrderCreate{
+  product_id: number
+  quantity: number
+}
+export interface CartItem {
+  id: number
+  quantity: number
+  created_at: string
+  product: {
+    id: number
+    name: string
+    price: number
+  }
+}
+export interface CartItemCreate {
+  product_id: number
+  quantity: number
+}
+export interface Order {
+  id: string
+  quantity: number
+  created_at: string
+  product: {
+    id: number
+    name: string
+    price: number
+  }
+}
+export interface FavoriteResponse {
+  product_id: number
+  favorited: boolean
+}
+export interface ProductInput {
+  name: string
+  description?: string | null
+  price: number
+}
+export interface PaginatedProducts {
+  items: Product[]
+  total: number
+  page: number
+  limit: number
+  pages: number
+}
+export interface ProductSummary {
+  id: number
+  name: string
+  description: string | null
+  price: number
+  owner_id: number
+}
+export interface UserWithProducts extends User {
+  products: ProductSummary[]
+}
+export interface DashboardInfo {
+  message: string
+  role: Role
+}
+</file>
+
+<file path="App.tsx">
+import { useState } from 'react'
+import { NavLink, Navigate, Route, Routes } from 'react-router-dom'
+import { useAuth } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
+import ForgotPassword from './pages/ForgotPassword'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import Dashboard from './pages/Dashboard'
+import Products from './pages/Products'
+import Profile from './pages/Profile'
+import Admin from './pages/Admin'
+export default function App() {
+  const { user, loading } = useAuth()
+  const [menuOpen, setMenuOpen] = useState(false)
+  const closeMenu = () => setMenuOpen(false)
+  if (loading) return <div className="container">Loading...</div>
+  return (
+    <div className="app">
+      {}
+      <nav className={menuOpen ? 'navbar open' : 'navbar'}>
+        <span className="brand">FastAPI App</span>
+        <button
+          className="nav-toggle"
+          aria-label={menuOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen((v) => !v)}
+        >
+          {menuOpen ? '✕' : '☰'}
+        </button>
+        <div className="links">
+          {user ? (
+            <>
+              <NavLink to="/dashboard" onClick={closeMenu}>Dashboard</NavLink>
+              <NavLink to="/products" onClick={closeMenu}>Products</NavLink>
+              <NavLink to="/profile" onClick={closeMenu}>Profile</NavLink>
+              <NavLink to="/forgot-password" onClick={closeMenu}>Forgot</NavLink>
+              {}
+              {user.role === 'ADMIN' && <NavLink to="/admin" onClick={closeMenu}>Admin</NavLink>}
+            </>
+          ) : (
+            <>
+              <NavLink to="/login" onClick={closeMenu}>Sign in</NavLink>
+              <NavLink to="/register" onClick={closeMenu}>Register</NavLink>
+            </>
+          )}
+        </div>
+      </nav>
+      <main className="container">
+        {}
+        <Routes>
+          {}
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          {}
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <Dashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/products"
+            element={
+              <ProtectedRoute >
+                <Products />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <Profile />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <ProtectedRoute>
+                <ForgotPassword />
+              </ProtectedRoute>
+            }
+          />
+          {}
+          <Route
+            path="/admin"
+            element={
+              <ProtectedRoute roles={['ADMIN']}>
+                <Admin />
+              </ProtectedRoute>
+            }
+          />
+          {}
+          <Route path="/" element={<Navigate to="/dashboard" replace />} />
+          <Route path="*" element={<Navigate to="/dashboard" replace />} />
+        </Routes>
+      </main>
+    </div>
+  )
+}
+</file>
+
+<file path="components/Avatar.tsx">
+const PALETTE = ['#2563eb', '#7c3aed', '#db2777', '#b45309', '#059669', '#0d9488']
+function initials(name: string): string {
+  const parts = name.trim().split(/\s+/).filter(Boolean)
+  if (parts.length === 0) return '?'
+  const first = parts[0][0] ?? ''
+  const last = parts.length > 1 ? (parts[parts.length - 1][0] ?? '') : ''
+  return (first + last).toUpperCase()
+}
+function colorFrom(name: string): string {
+  let hash = 0
+  for (let i = 0; i < name.length; i++) {
+    hash = (hash * 31 + name.charCodeAt(i)) >>> 0
+  }
+  return PALETTE[hash % PALETTE.length]
+}
+interface AvatarProps {
+  name: string
+  size?: 'sm' | 'md' | 'lg'
+}
+export default function Avatar({ name, size = 'md' }: AvatarProps) {
+  const cls = size === 'lg' ? 'avatar avatar--lg' : size === 'sm' ? 'avatar avatar--sm' : 'avatar'
+  return (
+    <span className={cls} style={{ background: colorFrom(name) }} aria-hidden="true">
+      {initials(name)}
+    </span>
+  )
+}
+</file>
+
+<file path="components/Badge.tsx">
+import type { Role } from '../api/types'
+const ROLE_STYLES: Record<Role, string> = {
+  ADMIN: 'badge--admin',
+  REVIEWER: 'badge--reviewer',
+  USER: 'badge--user',
+}
+export default function Badge({ role }: { role: Role }) {
+  return <span className={`badge ${ROLE_STYLES[role] ?? ''}`}>{role}</span>
+}
+</file>
+
+<file path="components/EmptyState.tsx">
+import type { LucideIcon } from 'lucide-react'
+interface EmptyStateProps {
+  icon: LucideIcon
+  title: string
+  message?: string
+}
+export default function EmptyState({ icon: Icon, title, message }: EmptyStateProps) {
+  return (
+    <div className="empty-state">
+      <Icon size={42} strokeWidth={1.5} />
+      <p className="empty-title">{title}</p>
+      {message && <p className="empty-message">{message}</p>}
+    </div>
+  )
+}
+</file>
+
+<file path="components/PageHeader.tsx">
+import type { ReactNode } from 'react'
+interface PageHeaderProps {
+  title: string
+  subtitle?: string
+  actions?: ReactNode
+}
+export default function PageHeader({ title, subtitle, actions }: PageHeaderProps) {
+  return (
+    <div className="page-header">
+      <div>
+        <h1>{title}</h1>
+        {subtitle && <p className="page-subtitle">{subtitle}</p>}
+      </div>
+      {actions && <div className="page-actions">{actions}</div>}
+    </div>
+  )
+}
+</file>
+
+<file path="components/ProtectedRoute.tsx">
+import type { ReactNode } from 'react'
+import { Navigate, useLocation } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+import type { Role } from '../api/types'
+interface ProtectedRouteProps {
+  children: ReactNode
+  roles?: Role[]
+}
+export default function ProtectedRoute({ children, roles }: ProtectedRouteProps) {
+  const { user, loading } = useAuth()
+  const location = useLocation()
+  if (loading) return <div className="container">Loading...</div>
+  if (!user) return <Navigate to="/login" state={{ from: location }} replace />
+  if (roles && !roles.includes(user.role)) return <Navigate to="/dashboard" replace />
+  return <>{children}</>
+}
+</file>
+
+<file path="components/Skeleton.tsx">
+interface SkeletonProps {
+  className?: string
+}
+export default function Skeleton({ className = 'skeleton--text' }: SkeletonProps) {
+  return <div className={`skeleton ${className}`} aria-hidden="true" />
+}
+</file>
+
+<file path="components/Spinner.tsx">
+interface SpinnerProps {
+  label?: string
+}
+export function Spinner() {
+  return <span className="spinner" role="status" aria-label="Loading" />
+}
+export default function Loading({ label = 'Loading...' }: SpinnerProps) {
+  return (
+    <div className="loading-block">
+      <Spinner />
+      <span>{label}</span>
+    </div>
+  )
+}
+</file>
+
+<file path="components/Toast.tsx">
+import { createContext, useCallback, useContext, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
+import { CheckCircle2, X, XCircle } from 'lucide-react'
+type ToastType = 'success' | 'error'
+interface ToastItem {
+  id: number
+  type: ToastType
+  message: string
+}
+interface ToastContextValue {
+  toast: (type: ToastType, message: string) => void
+  success: (message: string) => void
+  error: (message: string) => void
+}
+const ToastContext = createContext<ToastContextValue | undefined>(undefined)
+const AUTO_DISMISS_MS = 4000
+export function ToastProvider({ children }: { children: ReactNode }) {
+  const [toasts, setToasts] = useState<ToastItem[]>([])
+  const remove = useCallback((id: number) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id))
+  }, [])
+  const toast = useCallback(
+    (type: ToastType, message: string) => {
+      const id = Date.now() + Math.random()
+      setToasts((prev) => [...prev, { id, type, message }])
+      setTimeout(() => remove(id), AUTO_DISMISS_MS)
+    },
+    [remove],
+  )
+  const value = useMemo<ToastContextValue>(
+    () => ({
+      toast,
+      success: (message) => toast('success', message),
+      error: (message) => toast('error', message),
+    }),
+    [toast],
+  )
+  return (
+    <ToastContext.Provider value={value}>
+      {children}
+      <div className="toast-stack">
+        {toasts.map((t) => (
+          <div key={t.id} className={`toast toast--${t.type}`}>
+            {t.type === 'success' ? <CheckCircle2 size={18} /> : <XCircle size={18} />}
+            <span>{t.message}</span>
+            <button
+              className="toast-close"
+              onClick={() => remove(t.id)}
+              aria-label="Dismiss notification"
+            >
+              <X size={14} />
+            </button>
+          </div>
+        ))}
+      </div>
+    </ToastContext.Provider>
+  )
+}
+export function useToast(): ToastContextValue {
+  const ctx = useContext(ToastContext)
+  if (!ctx) throw new Error('useToast must be used within ToastProvider')
+  return ctx
+}
+</file>
+
+<file path="context/AuthContext.tsx">
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import type { ReactNode } from 'react'
+import { api, clearToken, getToken } from '../api/client'
+import type { User } from '../api/types'
+interface AuthContextValue {
+  user: User | null
+  loading: boolean
+  login: (username: string, password: string) => Promise<void>
+  logout: () => void
+}
+const AuthContext = createContext<AuthContextValue | undefined>(undefined)
+export function AuthProvider({ children }: { children: ReactNode }) {
+  const [user, setUser] = useState<User | null>(null)
+  const [loading, setLoading] = useState(true)
+  useEffect(() => {
+    if (!getToken()) {
+      setLoading(false)
+      return
+    }
+    api
+      .getProfile()
+      .then(setUser)
+      .catch(() => {
+        clearToken()
+        setUser(null)
+      })
+      .finally(() => setLoading(false))
+  }, [])
+  const login = useCallback(async (username: string, password: string) => {
+    await api.login(username, password)
+    const profile = await api.getProfile()
+    setUser(profile)
+  }, [])
+  const logout = useCallback(() => {
+    clearToken()
+    setUser(null)
+  }, [])
+  const value = useMemo(() => ({ user, loading, login, logout }), [user, loading, login, logout])
+  return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>
+}
+export function useAuth(): AuthContextValue {
+  const ctx = useContext(AuthContext)
+  if (!ctx) throw new Error('useAuth must be used within AuthProvider')
+  return ctx
+}
+</file>
+
+<file path="index.css">
+:root {
+  --bg: #f4f6fb;
+  --surface: #ffffff;
+  --surface-2: #e6ebf5;
+  --border: #d7deea;
+  --text: #1f2937;
+  --muted: #64748b;
+  --accent: #2563eb;
+  --accent-hover: #1d4ed8;
+  --accent-soft: #eff4ff;
+  --danger: #dc2626;
+  --danger-soft: #fef2f2;
+  --success: #16a34a;
+  --success-soft: #f0fdf4;
+  --radius: 0.5rem;
+  --shadow-sm: 0 1px 2px rgba(16, 24, 40, 0.06), 0 1px 3px rgba(16, 24, 40, 0.1);
+  --shadow: 0 4px 6px -2px rgba(16, 24, 40, 0.08), 0 12px 24px -8px rgba(16, 24, 40, 0.12);
+  --warning: #b45309;
+  --warning-soft: #fffbeb;
+  --info: #2563eb;
+  --favorite: #db2777;
+  --favorite-soft: #fdf2f8;
+  --role-admin: #7c3aed;
+  --role-admin-soft: #f3e8ff;
+  --role-reviewer: #b45309;
+  --role-reviewer-soft: #fffbeb;
+  --role-user: #2563eb;
+  --role-user-soft: #eff4ff;
+  --font-sans: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
+  --font-mono: ui-monospace, 'Cascadia Code', 'SF Mono', Menlo, monospace;
+  --skeleton-base: #e6ebf5;
+  --skeleton-glow: #f4f6fb;
+}
+* {
+  box-sizing: border-box;
+}
+html {
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  font-family: var(--font-sans);
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+}
+.app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem;
+  width: 100%;
+  flex: 1;
+}
+.navbar {
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.8rem 1.5rem;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgba(16, 24, 40, 0.05);
+}
+.brand {
+  font-weight: 700;
+  font-size: 1.1rem;
+  letter-spacing: -0.01em;
+  color: var(--text);
+  white-space: nowrap;
+}
+.links {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-wrap: wrap;
+}
+.links a {
+  color: var(--muted);
+  text-decoration: none;
+  padding: 0.45rem 0.9rem;
+  border-radius: 0.4rem;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: color 0.15s ease, background-color 0.15s ease;
+}
+.links a:hover {
+  color: var(--text);
+  background: var(--surface-2);
+}
+.links a.active {
+  color: var(--accent);
+  background: var(--accent-soft);
+  font-weight: 600;
+}
+.nav-toggle {
+  display: none;
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 0.4rem;
+  padding: 0.4rem 0.55rem;
+  color: var(--text);
+  font-size: 1.15rem;
+  line-height: 1;
+  cursor: pointer;
+}
+.nav-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+@media (max-width: 720px) {
+  .nav-toggle {
+    display: block;
+  }
+  .navbar {
+    flex-wrap: wrap;
+    padding: 0.75rem 1.25rem;
+  }
+  .links {
+    display: none;
+    flex-direction: column;
+    align-items: stretch;
+    width: 100%;
+    gap: 0.15rem;
+    padding: 0.5rem 0 0.25rem;
+  }
+  .navbar.open .links {
+    display: flex;
+  }
+  .links a {
+    padding: 0.6rem 0.9rem;
+  }
+}
+h1 {
+  font-size: clamp(1.5rem, 3.5vw, 2rem);
+  margin: 0 0 0.35rem;
+  letter-spacing: -0.02em;
+  color: var(--text);
+}
+h2 {
+  font-size: 1.1rem;
+  margin: 1.5rem 0 0.75rem;
+  color: var(--text);
+}
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1rem;
+  box-shadow: var(--shadow-sm);
+  transition: box-shadow 0.15s ease, border-color 0.15s ease;
+}
+.panel:hover {
+  border-color: #c3cfe2;
+  box-shadow: var(--shadow);
+}
+.auth-card {
+  max-width: 400px;
+  margin: clamp(2rem, 8vh, 5rem) auto;
+  background: var(--surface);
+  padding: 2rem;
+  border-radius: 0.75rem;
+  border: 1px solid var(--border);
+  box-shadow: var(--shadow-sm);
+}
+.auth-card.wide {
+  max-width: 720px;
+}
+.auth-card h1 {
+  text-align: center;
+}
+fieldset {
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 1rem;
+  margin: 0 0 1.25rem;
+}
+legend {
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0 0.5rem;
+}
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 0 1.25rem;
+}
+.form-grid .full {
+  grid-column: 1 / -1;
+}
+label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  font-weight: 500;
+  color: var(--muted);
+}
+input,
+textarea {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  padding: 0.55rem 0.75rem;
+  font-size: 0.95rem;
+  width: 100%;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+input::placeholder,
+textarea::placeholder {
+  color: var(--muted);
+  opacity: 0.75;
+}
+input:focus,
+textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.12);
+}
+textarea {
+  resize: vertical;
+  min-height: 70px;
+}
+button {
+  background: var(--accent);
+  color: #ffffff;
+  border: none;
+  border-radius: 0.375rem;
+  padding: 0.55rem 1.15rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+  transition: background-color 0.15s ease, box-shadow 0.15s ease;
+}
+button:hover:not(:disabled) {
+  background: var(--accent-hover);
+  box-shadow: 0 2px 6px rgba(37, 99, 235, 0.25);
+}
+button:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+button.secondary {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+}
+button.secondary:hover:not(:disabled) {
+  background: var(--surface-2);
+  box-shadow: none;
+}
+button.danger {
+  background: var(--surface);
+  color: var(--danger);
+  border: 1px solid #f3b6b6;
+}
+button.danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+  box-shadow: none;
+}
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+.list .panel {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  margin-bottom: 0;
+}
+@media (max-width: 560px) {
+  .list .panel {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .list .panel .row {
+    width: 100%;
+  }
+  .list .panel .row button {
+    flex: 1;
+  }
+}
+.two-col {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1.5rem;
+  align-items: start;
+}
+@media (max-width: 720px) {
+  .two-col {
+    grid-template-columns: 1fr;
+  }
+}
+.row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.row button {
+  flex-shrink: 0;
+}
+.error,
+.success {
+  border-radius: 0.375rem;
+  padding: 0.65rem 0.9rem;
+  font-size: 0.9rem;
+  margin: 0.75rem 0;
+}
+.error {
+  color: var(--danger);
+  background: var(--danger-soft);
+  border: 1px solid #f3b6b6;
+}
+.success {
+  color: var(--success);
+  background: var(--success-soft);
+  border: 1px solid #bbe6c8;
+}
+.muted {
+  color: var(--muted);
+}
+.badge {
+  background: var(--accent-soft);
+  color: var(--accent);
+  border: 1px solid #c7d9fb;
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  padding: 0.15rem 0.55rem;
+  margin-left: 0.4rem;
+  vertical-align: middle;
+}
+.page-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1.5rem;
+}
+.page-header h1 {
+  margin: 0;
+}
+.page-header .page-subtitle {
+  color: var(--muted);
+  margin: 0.25rem 0 0;
+  font-size: 0.95rem;
+}
+.page-header .page-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+.badge--admin {
+  background: var(--role-admin-soft);
+  color: var(--role-admin);
+  border-color: #ddd1f7;
+}
+.badge--reviewer {
+  background: var(--role-reviewer-soft);
+  color: var(--role-reviewer);
+  border-color: #f0e2c4;
+}
+.badge--user {
+  background: var(--role-user-soft);
+  color: var(--role-user);
+  border-color: #c7d9fb;
+}
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border-radius: 999px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  color: #ffffff;
+  flex-shrink: 0;
+  user-select: none;
+}
+.avatar--sm {
+  width: 1.75rem;
+  height: 1.75rem;
+  font-size: 0.7rem;
+}
+.avatar--lg {
+  width: 4rem;
+  height: 4rem;
+  font-size: 1.4rem;
+}
+.spinner {
+  display: inline-block;
+  width: 1.25rem;
+  height: 1.25rem;
+  border: 2px solid var(--border);
+  border-top-color: var(--accent);
+  border-radius: 999px;
+  animation: spin 0.7s linear infinite;
+  vertical-align: middle;
+}
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+.loading-block {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--muted);
+  padding: 1rem 0;
+}
+.skeleton {
+  position: relative;
+  overflow: hidden;
+  background: var(--skeleton-base);
+  border-radius: 0.375rem;
+  min-height: 1rem;
+}
+.skeleton::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transform: translateX(-100%);
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--skeleton-glow),
+    transparent
+  );
+  animation: shimmer 1.4s infinite;
+}
+@keyframes shimmer {
+  100% {
+    transform: translateX(100%);
+  }
+}
+.skeleton--text {
+  height: 0.85rem;
+  margin-bottom: 0.5rem;
+}
+.skeleton--card {
+  height: 7rem;
+  border-radius: var(--radius);
+}
+.toast-stack {
+  position: fixed;
+  bottom: 1.25rem;
+  right: 1.25rem;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-width: min(92vw, 380px);
+}
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--info);
+  border-radius: 0.5rem;
+  padding: 0.7rem 0.9rem;
+  box-shadow: var(--shadow);
+  font-size: 0.9rem;
+  animation: toast-in 0.25s ease both;
+}
+@keyframes toast-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.toast--success {
+  border-left-color: var(--success);
+}
+.toast--error {
+  border-left-color: var(--danger);
+}
+.toast--success svg {
+  color: var(--success);
+}
+.toast--error svg {
+  color: var(--danger);
+}
+.toast .toast-close {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--muted);
+  padding: 0.15rem;
+  display: inline-flex;
+  cursor: pointer;
+}
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  text-align: center;
+  padding: 2.5rem 1rem;
+  color: var(--muted);
+}
+.empty-state svg {
+  color: var(--surface-2);
+}
+.empty-state .empty-title {
+  font-weight: 600;
+  color: var(--text);
+  margin: 0;
+}
+.empty-state .empty-message {
+  margin: 0;
+  font-size: 0.92rem;
+}
+.stat-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-sm);
+}
+.stat-card .stat-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  background: var(--accent-soft);
+  color: var(--accent);
+  flex-shrink: 0;
+}
+.stat-card .stat-value {
+  font-size: 1.4rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--text);
+}
+.stat-card .stat-label {
+  color: var(--muted);
+  font-size: 0.85rem;
+}
+.input-icon {
+  position: relative;
+  display: block;
+}
+.input-icon svg {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  pointer-events: none;
+}
+.input-icon input {
+  padding-left: 2.35rem;
+}
+.input-icon input:focus + svg {
+  color: var(--accent);
+}
+.icon-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  border-radius: 0.375rem;
+  cursor: pointer;
+  transition: color 0.15s ease, background-color 0.15s ease, border-color 0.15s ease;
+}
+.icon-btn:hover:not(:disabled) {
+  background: var(--surface-2);
+  color: var(--text);
+  box-shadow: none;
+}
+.icon-btn--danger:hover:not(:disabled) {
+  background: var(--danger-soft);
+  color: var(--danger);
+  border-color: #f3b6b6;
+}
+button.favorite {
+  background: var(--surface);
+  color: var(--muted);
+  border: 1px solid var(--border);
+  box-shadow: none;
+  font-size: 0.85rem;
+  padding: 0.35rem 0.8rem;
+  margin: 0.4rem 0;
+}
+button.favorite:hover:not(:disabled) {
+  background: var(--favorite-soft);
+  color: var(--favorite);
+  border-color: #fbcfe8;
+  box-shadow: none;
+}
+button.favorite.active {
+  color: var(--favorite);
+  border-color: #f9a8d4;
+  background: var(--favorite-soft);
+}
+.page-enter {
+  animation: page-in 0.28s ease both;
+}
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0.01ms !important;
+  }
+}
+</file>
+
+<file path="main.tsx">
+import { StrictMode } from 'react'
+import { createRoot } from 'react-dom/client'
+import { BrowserRouter } from 'react-router-dom'
+import App from './App'
+import { AuthProvider } from './context/AuthContext'
+import { ToastProvider } from './components/Toast'
+import './index.css'
+createRoot(document.getElementById('root')!).render(
+  <StrictMode>
+    <BrowserRouter>
+      <AuthProvider>
+        <ToastProvider>
+          <App />
+        </ToastProvider>
+      </AuthProvider>
+    </BrowserRouter>
+  </StrictMode>,
+)
+</file>
+
+<file path="pages/Admin.tsx">
+import { useEffect, useState } from 'react'
+import { api } from '../api/client'
+import type { User, UserWithProducts } from '../api/types'
+export default function Admin() {
+  const [users, setUsers] = useState<User[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  // The detail currently shown in the side panel (one-to-many result).
+  const [detail, setDetail] = useState<UserWithProducts | null>(null)
+  // Load the full user list once on mount.
+  useEffect(() => {
+    api
+      .adminUsers()
+      .then(setUsers)
+      .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load users'))
+      .finally(() => setLoading(false))
+  }, [])
+  async function showProducts(id: number) {
+    setError('')
+    setDetail(null)
+    try {
+      setDetail(await api.adminUserDetail(id))
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load user')
+    }
+  }
+  async function handleDelete(id: number) {
+    if (!window.confirm('Delete this user?')) return
+    setError('')
+    try {
+      await api.adminDeleteUser(id)
+      setUsers((prev) => prev.filter((u) => u.id !== id))
+      if (detail?.id === id) setDetail(null)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Delete failed')
+    }
+  }
+  return (
+    <div>
+      <h1>Admin</h1>
+      {error && <p className="error">{error}</p>}
+      <div className="two-col">
+        {}
+        <div>
+          <h2>Users</h2>
+          {loading ? (
+            <p className="muted">Loading...</p>
+          ) : users.length === 0 ? (
+            <p className="muted">No users.</p>
+          ) : (
+            <ul className="list">
+              {users.map((u) => (
+                <li key={u.id} className="panel">
+                  <div>
+                    <strong>{u.username}</strong> <span className="badge">{u.role}</span>
+                    <p className="muted">{u.email}</p>
+                  </div>
+                  <div className="row">
+                    <button className="secondary" onClick={() => showProducts(u.id)}>
+                      Products
+                    </button>
+                    <button className="danger" onClick={() => handleDelete(u.id)}>
+                      Delete
+                    </button>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+        {}
+        <div>
+          <h2>User details</h2>
+          {detail ? (
+            <div className="panel">
+              <p>
+                <strong>{detail.username}</strong> <span className="badge">{detail.role}</span>
+              </p>
+              <p className="muted">{detail.email}</p>
+              {detail.profile && <p className="muted">Full name: {detail.profile.full_name}</p>}
+              <h3>Products ({detail.products.length})</h3>
+              {detail.products.length === 0 ? (
+                <p className="muted">This user has no products.</p>
+              ) : (
+                <ul className="list">
+                  {detail.products.map((p) => (
+                    <li key={p.id} className="panel">
+                      <strong>{p.name}</strong> — ${p.price.toFixed(2)}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </div>
+          ) : (
+            <p className="muted">Click "Products" on a user to see their items.</p>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+</file>
+
+<file path="pages/Dashboard.tsx">
+import { useEffect, useState } from 'react'
+import { api } from '../api/client'
+import type { DashboardInfo } from '../api/types'
+import { useAuth } from '../context/AuthContext'
+export default function Dashboard() {
+  const { user, logout } = useAuth()
+  const [info, setInfo] = useState<DashboardInfo | null>(null)
+  const [error, setError] = useState('')
+  // Fetch /user/dashboard once on mount.
+  useEffect(() => {
+    api
+      .getDashboard()
+      .then(setInfo)
+      .catch((err) => setError(err instanceof Error ? err.message : 'Failed to load dashboard'))
+  }, [])
+  return (
+    <div>
+      <h1>Dashboard</h1>
+      {error && <p className="error">{error}</p>}
+      <div className="two-col">
+        {info && (
+          <div className="panel">
+            <h2>Welcome</h2>
+            {}
+            <p>{info.message}</p>
+            <p>
+              Role: <strong>{info.role}</strong> <span className="badge">{info.role}</span>
+            </p>
+          </div>
+        )}
+        {user && (
+          <div className="panel">
+            <h2>Account</h2>
+            <p>
+              Signed in as <strong>{user.username}</strong>
+            </p>
+            <p className="muted">{user.email}</p>
+            {
+}
+            <button className="secondary" onClick={logout}>
+              Sign out
+            </button>
+          </div>
+        )}
+      </div>
+    </div>
+  )
+}
+</file>
+
+<file path="pages/Forgot.tsx">
+
+</file>
+
+<file path="pages/ForgotPassword.tsx">
+import { useEffect, useState } from 'react'
+import type { FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { api } from '../api/client'
+import { useAuth } from '../context/AuthContext'
+export default function ForgotPassword() {
+    const { user } = useAuth()
+    const navigate = useNavigate()
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [error, setError] = useState('')
+    const [saved, setSaved] = useState(false)
+    const [submitting, setSubmitting] = useState(false)
+    // Whenever `user` becomes available, copy its username into the form.
+    useEffect(() => {
+        if (user) {
+            setUsername(user.username)
+        }
+    }, [user])
+    async function forgotCalls(e: FormEvent) {
+        e.preventDefault();
+        setError('')
+        setSaved(false)
+        setSubmitting(true)
+        try {
+            await api.forgotpassword({
+                username,
+                password
+            })
+            setSaved(true)
+            setPassword('')
+            window.setTimeout(() => navigate('/dashboard'), 1500)
+        }
+        catch (err) {
+            setError(err instanceof Error ? err.message : 'Update failed')
+        } finally {
+            setSubmitting(false)
+        }
+    }
+    return (
+        <div className="auth-card">
+            <h1>Forgot password</h1>
+            <form onSubmit={forgotCalls}>
+                <label>
+                    New Password
+                    <input value={password} type='password' onChange={(e) => setPassword(e.target.value)} required />
+                </label>
+                {error && <p className="error">{error}</p>}
+                {saved && (
+                    <p className="success">Password changed successfully</p>
+                )}
+                <button type="submit" disabled={submitting}>
+                    {submitting ? 'Updating...' : 'Set'}
+                </button>
+            </form>
+            <p className="muted">
+                Remembered it? <Link to="/login">Sign in</Link>
+            </p>
+        </div>
+    )
+}
+</file>
+
+<file path="pages/Login.tsx">
+import { useState } from 'react'
+import type { FormEvent } from 'react'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import { useAuth } from '../context/AuthContext'
+export default function Login() {
+  const { login } = useAuth()
+  const navigate = useNavigate()
+  const location = useLocation()
+  const [username, setUsername] = useState('')
+  const [password, setPassword] = useState('')
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault() // stop the browser's default form reload
+    setError('')
+    setSubmitting(true)
+    try {
+      await login(username, password)
+      // Read where the user originally wanted to go (if any) and go there.
+      const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname
+      navigate(from ?? '/dashboard', { replace: true })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Login failed')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+  return (
+    <div className="auth-card">
+      <h1>Sign in</h1>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Username
+          <input value={username} onChange={(e) => setUsername(e.target.value)} required />
+        </label>
+        <label>
+          Password
+          <input
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            required
+          />
+        </label>
+        {error && <p className="error">{error}</p>}
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Signing in...' : 'Sign in'}
+        </button>
+      </form>
+      <p className="muted">
+        No account? <Link to="/register">Register</Link>
+      </p>
+    </div>
+  )
+}
+</file>
+
+<file path="pages/Products.tsx">
+import { useCallback, useEffect, useState } from 'react'
+import type { FormEvent } from 'react'
+import { api } from '../api/client'
+import type { CartItem, Order, Product } from '../api/types'
+import { useAuth } from '../context/AuthContext'
+export default function Products() {
+  const { user } = useAuth()
+  const [products, setProducts] = useState<Product[]>([])
+  const [total, setTotal] = useState(0)
+  const [page, setPage] = useState(1)
+  const [pages, setPages] = useState(1)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  // MANY-TO-MANY: when true, load only the current user's favorites
+  const [onlyFavorites, setOnlyFavorites] = useState(false)
+  const [orders, setOrders] = useState<Order[]>([])
+  const [ordersOpen, setOrdersOpen] = useState(false)
+  const [ordersLoading, setOrdersLoading] = useState(false)
+  const [ordersError, setOrdersError] = useState('')
+  // Cart lines (PENDING items, GET /cart). Checkout approves them into
+  // orders.
+  const [cart, setCart] = useState<CartItem[]>([])
+  const [cartOpen, setCartOpen] = useState(false)
+  const [cartLoading, setCartLoading] = useState(false)
+  const [cartError, setCartError] = useState('')
+  // Form state. `editing` is null for "create" mode, or a Product while
+  // editing that product.
+  const [editing, setEditing] = useState<Product | null>(null)
+  const [name, setName] = useState('')
+  const [description, setDescription] = useState('')
+  const [price, setPrice] = useState('')
+  // `useCallback` keeps a stable reference so the useEffect below
+  // doesn't refire on every render.
+  const load = useCallback(async (targetPage: number) => {
+    setLoading(true)
+    setError('')
+    try {
+      const res = onlyFavorites
+        ? await api.listFavorites(targetPage, 5)
+        : await api.listProducts(undefined, targetPage, 5)
+      setProducts(res.items)
+      setTotal(res.total)
+      setPage(res.page)
+      setPages(res.pages)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load products')
+    } finally {
+      setLoading(false)
+    }
+  }, [onlyFavorites])
+  useEffect(() => {
+    load(page)
+  }, [load, page])
+  function toggleFilter() {
+    const next = !onlyFavorites
+    setOnlyFavorites(next)
+    setPage(1)
+    setProducts([])
+    if (!next) resetForm()
+  }
+  async function toggleFavorite(p: Product) {
+    setError('')
+    try {
+      if (p.is_favorited) await api.unfavoriteProduct(p.id)
+      else await api.favoriteProduct(p.id)
+      await load(page)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to update favorite')
+    }
+  }
+  function goToPage(target: number) {
+    if (target < 1 || target > pages) return
+    resetForm()
+    setPage(target)
+  }
+  function resetForm() {
+    setEditing(null)
+    setName('')
+    setDescription('')
+    setPrice('')
+  }
+  // Submit handler shared by create + edit.
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    setError('')
+    try {
+      const data = {
+        name,
+        description: description || null,
+        price: parseFloat(price), // convert the string input to a number
+      }
+      if (editing) await api.updateProduct(editing.id, data)
+      else await api.createProduct(data)
+      resetForm()
+      await load(page) // refresh the current page after saving
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Save failed')
+    }
+  }
+  function startEdit(p: Product) {
+    setEditing(p)
+    setName(p.name)
+    setDescription(p.description ?? '')
+    setPrice(String(p.price))
+  }
+  async function handleDelete(id: number) {
+    if (!window.confirm('Delete this product?')) return
+    try {
+      await api.deleteProduct(id)
+      await load(page)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Delete failed')
+    }
+  }
+  async function addToCart(p: Product) {
+    setError('')
+    try {
+      await api.addToCart({ product_id: p.id, quantity: 1 })
+      // Refresh the cart panel if it is open so the new line shows up.
+      await loadCart()
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to add to cart')
+    }
+  }
+  async function loadCart() {
+    setCartError('')
+    setCartLoading(true)
+    try {
+      const newCart = await api.listCart()
+      setCart(newCart)
+    } catch (err) {
+      setCartError(err instanceof Error ? err.message : 'Failed to load cart')
+    } finally {
+      setCartLoading(false)
+    }
+  }
+  async function toggleCart() {
+    if (cartOpen) {
+      setCartOpen(false)
+      return
+    }
+    await loadCart()
+    setCartOpen(true)
+  }
+  async function removeFromCart(id: number) {
+    try {
+      await api.removeCartItem(id)
+      await loadCart()
+    } catch (err) {
+      setCartError(err instanceof Error ? err.message : 'Failed to remove item')
+    }
+  }
+  async function checkout() {
+    setCartError('')
+    try {
+      await api.checkoutCart()
+      await loadCart()
+      setOrders(await api.listOrders())
+      if (!ordersOpen) setOrdersOpen(true)
+    } catch (err) {
+      setCartError(err instanceof Error ? err.message : 'Checkout failed')
+    }
+  }
+  const canManage = (p: Product) => user?.role === 'ADMIN' || user?.id === p.owner_id
+  async function toggleOrders() {
+    if (ordersOpen) {
+      setOrdersOpen(false)
+      return
+    }
+    setOrdersError('')
+    setOrdersLoading(true)
+    try {
+      setOrders(await api.listOrders())
+      setOrdersOpen(true)
+    } catch (err) {
+      setOrdersError(err instanceof Error ? err.message : 'Failed to load orders')
+    } finally {
+      setOrdersLoading(false)
+    }
+  }
+  return (
+    <div>
+      <h1>Products</h1>
+      {error && <p className="error">{error}</p>}
+      {}
+      <h2>{editing ? `Edit product #${editing.id}` : 'New product'}</h2>
+      <form onSubmit={handleSubmit} className="panel">
+        <label>
+          Name
+          <input value={name} onChange={(e) => setName(e.target.value)} required />
+        </label>
+        <label>
+          Description
+          <textarea value={description} onChange={(e) => setDescription(e.target.value)} />
+        </label>
+        <label>
+          Price
+          <input
+            type="number"
+            step="0.01"
+            min="0"
+            value={price}
+            onChange={(e) => setPrice(e.target.value)}
+            required
+          />
+        </label>
+        <div className="row">
+          <button type="submit">{editing ? 'Save changes' : 'Create'}</button>
+          {editing && (
+            <button type="button" className="secondary" onClick={resetForm}>
+              Cancel
+            </button>
+          )}
+        </div>
+      </form>
+      {
+}
+      <div className="row">
+        <h2>{onlyFavorites ? 'My favorites' : 'All products'}</h2>
+        <button
+          type="button"
+          className="secondary"
+          onClick={toggleFilter}
+          disabled={loading}
+        >
+          {onlyFavorites ? 'Show all products' : '♥ My favorites'}
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={toggleOrders}
+          disabled={ordersLoading}
+        >
+          {ordersLoading ? 'Loading...' : ordersOpen ? 'Hide orders' : 'My Orders'}
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={toggleCart}
+          disabled={cartLoading}
+        >
+          {cartLoading ? 'Loading...' : cartOpen ? 'Hide cart' : `My Cart (${cart.length})`}
+        </button>
+      </div>
+      {}
+      {cartError && <p className="error">{cartError}</p>}
+      {cartOpen && (
+        <div className="panel">
+          <div className="row">
+            <h2>My Cart</h2>
+            <button
+              type="button"
+              onClick={checkout}
+              disabled={cart.length === 0 || cartLoading}
+            >
+              Approve & Checkout
+            </button>
+          </div>
+          {cart.length === 0 ? (
+            <p className="muted">Your cart is empty.</p>
+          ) : (
+            <ul className="list">
+              {cart.map((c) => (
+                <li key={c.id} className="panel">
+                  <div>
+                    <strong>{c.product.name}</strong> — ${c.product.price.toFixed(2)}
+                    <p className="muted">Qty: {c.quantity}</p>
+                  </div>
+                  <button
+                    className="secondary"
+                    type="button"
+                    onClick={() => removeFromCart(c.id)}
+                  >
+                    Remove
+                  </button>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+      {}
+      {ordersError && <p className="error">{ordersError}</p>}
+      {ordersOpen && (
+        <div className="panel">
+          <h2>My Orders</h2>
+          {orders.length === 0 ? (
+            <p className="muted">No orders yet.</p>
+          ) : (
+            <ul className="list">
+              {orders.map((o) => (
+                <li key={o.id} className="panel">
+                  <div>
+                    <strong>{o.product.name}</strong> — ${o.product.price.toFixed(2)}
+                    <p className="muted">
+                      Qty: {o.quantity} ·{' '}
+                      {new Date(o.created_at).toLocaleString()}
+                    </p>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+      {loading ? (
+        <p className="muted">Loading...</p>
+      ) : products.length === 0 ? (
+        <p className="muted">{onlyFavorites ? 'No favorites yet.' : 'No products yet.'}</p>
+      ) : (
+        <>
+          <ul className="list">
+            {products.map((p) => (
+              <li key={p.id} className="panel">
+                <div>
+                  <strong>{p.name}</strong> — ${p.price.toFixed(2)}
+                  {p.description && <p className="muted">{p.description}</p>}
+                  {
+}
+                  <button
+                    type="button"
+                    onClick={() => toggleFavorite(p)}
+                    className={p.is_favorited ? 'favorite active' : 'favorite'}
+                    title={p.is_favorited ? 'Remove from favorites' : 'Add to favorites'}
+                  >
+                    {p.is_favorited ? '♥' : '♡'} Favorite
+                  </button>
+                  <button type="button" onClick={() => addToCart(p)}>
+                    Add to cart
+                  </button>
+                  {
+}
+                  <p className="muted">
+                    owner: <strong>{p.owner?.username ?? `#${p.owner_id}`}</strong>
+                  </p>
+                </div>
+                {canManage(p) && (
+                  <div className="row">
+                    <button className="secondary" onClick={() => startEdit(p)}>
+                      Edit
+                    </button>
+                    <button className="danger" onClick={() => handleDelete(p.id)}>
+                      Delete
+                    </button>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+          <br></br>
+          {}
+          <div className="row">
+            <button
+              className="secondary"
+              disabled={page <= 1 || loading}
+              onClick={() => goToPage(page - 1)}
+            >
+              Prev
+            </button>
+            <p className="muted">
+              Page {page} of {pages ?? 1} ({total} products)
+            </p>
+            <button
+              className="secondary"
+              disabled={page >= pages || loading}
+              onClick={() => goToPage(page + 1)}
+            >
+              Next
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  )
+}
+</file>
+
+<file path="pages/Profile.tsx">
+import { useEffect, useState } from 'react'
+import type { FormEvent } from 'react'
+import { api } from '../api/client'
+import { useAuth } from '../context/AuthContext'
+export default function Profile() {
+  const { user } = useAuth()
+  const [email, setEmail] = useState('')
+  const [fullName, setFullName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [bio, setBio] = useState('')
+  const [location, setLocation] = useState('')
+  const [age, setAge] = useState('')
+  const [dateOfBirth, setDateOfBirth] = useState('')
+  const [error, setError] = useState('')
+  const [saved, setSaved] = useState(false)
+  const [submitting, setSubmitting] = useState(false)
+  // Whenever `user` becomes available, copy its values into the form.
+  // `?.` safely handles a null profile (e.g. legacy users).
+  useEffect(() => {
+    if (user) {
+      // setUsername(user.username)
+      setEmail(user.email)
+      setFullName(user.profile?.full_name ?? '')
+      setPhone(user.profile?.phone ?? '')
+      setBio(user.profile?.bio ?? '')
+      setLocation(user.profile?.location ?? '')
+      setAge(user.profile?.age != null ? String(user.profile.age) : '')
+      setDateOfBirth(user.profile?.date_of_birth ?? '')
+    }
+  }, [user])
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    setError('')
+    setSaved(false)
+    setSubmitting(true)
+    try {
+      // One flattened body; the backend splits account vs profile fields.
+      await api.updateProfile({
+        // username,
+        email,
+        full_name: fullName || undefined,
+        phone: phone || undefined,
+        bio: bio || undefined,
+        location: location || undefined,
+        age: age ? parseInt(age, 10) : undefined,
+        date_of_birth: dateOfBirth || undefined,
+      })
+      setSaved(true)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Update failed')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+  return (
+    <div>
+      <h1>Profile</h1>
+      <form onSubmit={handleSubmit} className="panel">
+        <div className="form-grid">
+          {}
+          {
+}
+          <label>
+            Email
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </label>
+          {}
+          <label>
+            Full name
+            <input value={fullName} onChange={(e) => setFullName(e.target.value)} />
+          </label>
+          <label>
+            Phone
+            <input value={phone} onChange={(e) => setPhone(e.target.value)} />
+          </label>
+          <label>
+            Location
+            <input value={location} onChange={(e) => setLocation(e.target.value)} />
+          </label>
+          <label>
+            Age
+            <input type="number" min="0" value={age} onChange={(e) => setAge(e.target.value)} />
+          </label>
+          <label className="full">
+            Date of birth
+            <input
+              type="date"
+              value={dateOfBirth}
+              onChange={(e) => setDateOfBirth(e.target.value)}
+            />
+          </label>
+          <label className="full">
+            Bio
+            <textarea value={bio} onChange={(e) => setBio(e.target.value)} />
+          </label>
+        </div>
+        {error && <p className="error">{error}</p>}
+        {saved && <p className="success">Profile updated.</p>}
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Saving...' : 'Save changes'}
+        </button>
+      </form>
+    </div>
+  )
+}
+</file>
+
+<file path="pages/Register.tsx">
+import { useState } from 'react'
+import type { FormEvent } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import { api } from '../api/client'
+export default function Register() {
+  const navigate = useNavigate()
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  // Profile (profiles table) fields.
+  const [fullName, setFullName] = useState('')
+  const [phone, setPhone] = useState('')
+  const [bio, setBio] = useState('')
+  const [location, setLocation] = useState('')
+  const [age, setAge] = useState('') // kept as string for the number input
+  const [dateOfBirth, setDateOfBirth] = useState('') // <input type="date">
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  async function handleSubmit(e: FormEvent) {
+    e.preventDefault()
+    setError('')
+    setSubmitting(true)
+    try {
+      await api.register({
+        username,
+        email,
+        password,
+        // The nested profile object mirrors ProfileCreate on the backend.
+        profile: {
+          full_name: fullName,
+          // Optional fields: send `undefined` when empty so the backend
+          // stores NULL instead of an empty string.
+          phone: phone || undefined,
+          bio: bio || undefined,
+          location: location || undefined,
+          age: age ? parseInt(age, 10) : undefined,
+          date_of_birth: dateOfBirth || undefined,
+        },
+      })
+      // Registration succeeded -> go sign in.
+      navigate('/login', { replace: true })
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Registration failed')
+    } finally {
+      setSubmitting(false)
+    }
+  }
+  return (
+    <div className="auth-card wide">
+      <h1>Create account</h1>
+      <form onSubmit={handleSubmit}>
+        {}
+        <fieldset>
+          <legend>Account</legend>
+          <label>
+            Username
+            <input value={username} onChange={(e) => setUsername(e.target.value)} required />
+          </label>
+          <label>
+            Email
+            <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+          </label>
+          <label>
+            Password
+            <input
+              type="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+          </label>
+        </fieldset>
+        {}
+        <fieldset>
+          <legend>Profile</legend>
+          <div className="form-grid">
+            <label>
+              Full name
+              <input value={fullName} onChange={(e) => setFullName(e.target.value)} required />
+            </label>
+            <label>
+              Phone
+              <input value={phone} onChange={(e) => setPhone(e.target.value)} />
+            </label>
+            <label>
+              Location
+              <input value={location} onChange={(e) => setLocation(e.target.value)} />
+            </label>
+            <label>
+              Age
+              <input type="number" min="0" value={age} onChange={(e) => setAge(e.target.value)} />
+            </label>
+            <label className="full">
+              Date of birth
+              <input
+                type="date"
+                value={dateOfBirth}
+                onChange={(e) => setDateOfBirth(e.target.value)}
+              />
+            </label>
+            <label className="full">
+              Bio
+              <textarea value={bio} onChange={(e) => setBio(e.target.value)} />
+            </label>
+          </div>
+        </fieldset>
+        {error && <p className="error">{error}</p>}
+        <button type="submit" disabled={submitting}>
+          {submitting ? 'Registering...' : 'Register'}
+        </button>
+      </form>
+      <p className="muted">
+        Already have an account? <Link to="/login">Sign in</Link>
+      </p>
+    </div>
+  )
+}
+</file>
+
+<file path="vite-env.d.ts">
+
+</file>
+
+</files>
