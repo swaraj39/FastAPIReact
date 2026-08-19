@@ -28,6 +28,8 @@ class Settings(BaseSettings):
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 30
 
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+
     LOG_DIR: str = "logs"
 
     # Comma-separated list of allowed browser origins for CORS.

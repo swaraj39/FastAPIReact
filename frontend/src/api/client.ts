@@ -84,7 +84,9 @@ http.interceptors.response.use(
   (error: AxiosError) => {
     const status = error.response?.status ?? 0
     let detail = error.response?.statusText ?? error.message
-
+    if(error.message === "Invalid or Expired Token")
+      clearToken()
+      window.location.href = '/login'
     const body = error.response?.data as
       | { detail?: string | Array<{ msg: string }> }
       | undefined

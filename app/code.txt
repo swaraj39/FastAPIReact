@@ -1,0 +1,1785 @@
+<directory_structure>
+__init__.py
+api/__init__.py
+api/dependencies.py
+api/v1/__init__.py
+api/v1/admin.py
+api/v1/auth.py
+api/v1/cart.py
+api/v1/orders.py
+api/v1/products.py
+api/v1/router.py
+api/v1/users.py
+core/__init__.py
+core/config.py
+core/exceptions.py
+core/logging.py
+core/rate_limiting.py
+core/security.py
+db/__init__.py
+db/base.py
+db/database.py
+db/session.py
+main.py
+middleware/__init__.py
+middleware/request_logging.py
+models/__init__.py
+models/associations.py
+models/cart.py
+models/orders.py
+models/product.py
+models/profile.py
+models/role.py
+models/user.py
+repositories/__init__.py
+repositories/cart_repository.py
+repositories/order_repository.py
+repositories/product_repository.py
+repositories/user_repository.py
+requirements.txt
+schemas/__init__.py
+schemas/auth.py
+schemas/cart.py
+schemas/order.py
+schemas/product.py
+schemas/user.py
+services/__init__.py
+services/auth_service.py
+services/cart_service.py
+services/order_service.py
+services/product_service.py
+services/user_service.py
+tests/__init__.py
+tests/conftest.py
+tests/test_auth.py
+tests/test_users.py
+utils/__init__.py
+</directory_structure>
+
+<files>
+This section contains the contents of the repository's files.
+
+<file path="__init__.py">
+
+</file>
+
+<file path="api/__init__.py">
+
+</file>
+
+<file path="api/dependencies.py">
+from fastapi import Depends, HTTPException, status
+from fastapi.security import OAuth2PasswordBearer
+from sqlalchemy.orm import Session
+from app.core.security import verify_access_token
+from app.db.session import get_db
+from app.models.role import Role
+from app.models.user import User
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
+def get_current_user(
+    token: str = Depends(oauth2_scheme),
+    db: Session = Depends(get_db),
+) -> User:
+    payload = verify_access_token(token)
+    if payload is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or Expired Token",
+        )
+    username = payload.get("sub")
+    if username is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid Token",
+        )
+    user = db.query(User).filter(User.username == username).first()
+    if user is None:
+        raise HTTPException(
+            status_code=status.HTTP_404_NOT_FOUND,
+            detail="User not found",
+        )
+    return user
+def require_role(*roles: Role):
+    def role_checker(
+        current_user: User = Depends(get_current_user),
+    ) -> User:
+        if current_user.role not in roles:
+            raise HTTPException(
+                status_code=status.HTTP_403_FORBIDDEN,
+                detail="Permission Denied",
+            )
+        return current_user
+    return role_checker
+</file>
+
+<file path="api/v1/__init__.py">
+
+</file>
+
+<file path="api/v1/admin.py">
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.api.dependencies import require_role
+from app.db.session import get_db
+from app.models.role import Role
+from app.models.user import User
+from app.schemas.user import UserResponse, UserWithProductsResponse
+from app.services import user_service
+router = APIRouter(
+    prefix="/admin",
+    tags=["Admin"],
+)
+@router.get("/dashboard")
+def admin_dashboard(
+    current_user: User = Depends(require_role(Role.ADMIN)),
+):
+    return {
+        "message": f"Welcome Admin {current_user.username}",
+    }
+@router.get("/users", response_model=list[UserResponse])
+def get_users(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(Role.ADMIN)),
+):
+    return user_service.get_all_users(db)
+@router.get("/users/{user_id}", response_model=UserWithProductsResponse)
+def get_user_detail(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(Role.ADMIN)),
+):
+    return user_service.get_user_with_details(db, user_id)
+@router.delete("/users/{user_id}")
+def delete_user(
+    user_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(Role.ADMIN)),
+):
+    user_service.delete_user(db, user_id)
+    return {"message": "User deleted"}
+@router.post("/create-admin")
+def create_admin(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(require_role(Role.ADMIN)),
+):
+    return {
+        "message": "Only Admin can access this endpoint.",
+    }
+</file>
+
+<file path="api/v1/auth.py">
+from fastapi import APIRouter, Depends, status
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
+from app.db.session import get_db
+from app.schemas.auth import Token
+from app.schemas.user import UserCreate, UserResponse
+from app.services import auth_service
+router = APIRouter(
+    prefix="/auth",
+    tags=["Authentication"],
+)
+@router.post(
+    "/register",
+    response_model=UserResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def register(
+    request: UserCreate,
+    db: Session = Depends(get_db),
+):
+    return auth_service.register_user(db, request)
+@router.post("/login", response_model=Token)
+def login(
+    form_data: OAuth2PasswordRequestForm = Depends(),
+    db: Session = Depends(get_db),
+):
+    return auth_service.authenticate_user(
+        db,
+        form_data.username,
+        form_data.password,
+    )
+</file>
+
+<file path="api/v1/cart.py">
+from fastapi import APIRouter, Depends, status
+from sqlalchemy.orm import Session
+from app.api.dependencies import get_current_user
+from app.db.session import get_db
+from app.models.user import User
+from app.schemas.cart import CartItemCreate, CartItemResponse, CartItemUpdate
+from app.services import cart_service
+router = APIRouter(
+    prefix="/cart",
+    tags=["Cart"],
+)
+@router.post("", response_model=CartItemResponse, status_code=status.HTTP_201_CREATED)
+def add_to_cart(
+    request: CartItemCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return cart_service.add_to_cart(request, db, current_user)
+@router.get("", response_model=list[CartItemResponse])
+def list_cart(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    Every line in the logged-in user's cart (the PENDING items not yet
+    turned into orders).
+    """
+    return cart_service.list_cart(db, current_user)
+@router.put("/{item_id}", response_model=CartItemResponse)
+def update_quantity(
+    item_id: int,
+    request: CartItemUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return cart_service.update_quantity(item_id, request.quantity, db, current_user)
+@router.delete("/{item_id}", status_code=status.HTTP_204_NO_CONTENT)
+def remove_from_cart(
+    item_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    cart_service.remove_from_cart(item_id, db, current_user)
+@router.post("/checkout")
+def checkout(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    orders = cart_service.checkout(db, current_user)
+    return {
+        "message": f"{len(orders)} order(s) placed",
+        "orders": len(orders),
+    }
+</file>
+
+<file path="api/v1/orders.py">
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.api.dependencies import get_current_user
+from app.core.rate_limiting import check_rate_limit
+from app.db.session import get_db
+from app.models.user import User
+from app.schemas.order import OrderCreate, OrderResponse
+from app.services import order_service
+router = APIRouter(
+    prefix="/orders",
+    tags=["Orders"],
+)
+@router.post(
+    ""
+)
+def add_order(request: OrderCreate,
+            db: Session = Depends(get_db),
+            current_user: User = Depends(get_current_user),):
+    return order_service.create_order(request, db, current_user)
+@router.get("", response_model=list[OrderResponse])
+def list_orders(
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    _: None = Depends(check_rate_limit),
+):
+    """
+    Return every order placed by the logged-in user.
+    """
+    return order_service.list_orders(db, current_user)
+</file>
+
+<file path="api/v1/products.py">
+import math
+from fastapi import APIRouter, Depends, Query, status
+from sqlalchemy.orm import Session
+from app.api.dependencies import get_current_user
+from app.core.rate_limiting import check_rate_limit
+from app.db.session import get_db
+from app.models.user import User
+from app.schemas.product import (
+    FavoriteResponse,
+    PaginatedProducts,
+    ProductCreate,
+    ProductResponse,
+    ProductUpdate,
+)
+from app.services import product_service
+router = APIRouter(
+    prefix="/products",
+    tags=["Products"],
+)
+@router.post(
+    "",
+    response_model=ProductResponse,
+    status_code=status.HTTP_201_CREATED,
+)
+def create_product(
+    request: ProductCreate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),  # only logged-in users
+):
+    # The product is created as owned by `current_user`.
+    return product_service.create_product(db, current_user, request)
+@router.get("", response_model=PaginatedProducts)
+def list_products(
+    # Query parses optional URL parameters: ?owner_id=... skips to a page
+    # with ?page=2 and limits rows per page with ?limit=5.
+    owner_id: int | None = Query(default=None),
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=5, ge=1, le=100),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    """
+    List products, one page at a time. Each item's nested `owner` is
+    eager-loaded with selectinload (see ProductRepository) so there are
+    no N+1 queries.
+    Returns a wrapper with `items`, `total`, `pages`, `page` and `limit`
+    so the frontend can draw Prev/Next controls on top of the one page.
+    """
+    items, total = product_service.list_products(db, owner_id=owner_id, page=page, limit=limit)
+    return {
+        "items": product_service.stamp_favorites(db, current_user, items),
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": math.ceil(total / limit),
+    }
+@router.get("/favorites", response_model=PaginatedProducts)
+def list_favorites(
+    page: int = Query(default=1, ge=1),
+    limit: int = Query(default=5, ge=1, le=100),
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    items, total = product_service.list_favorites(db, current_user, page=page, limit=limit)
+    return {
+        "items": items,
+        "total": total,
+        "page": page,
+        "limit": limit,
+        "pages": math.ceil(total / limit),
+    }
+@router.post("/{product_id}/favorite", response_model=FavoriteResponse)
+def favorite_product(
+    product_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    product = product_service.get_product(db, product_id)
+    product_service.add_favorite(db, current_user, product)
+    return {"product_id": product_id, "favorited": True}
+@router.delete("/{product_id}/favorite", response_model=FavoriteResponse)
+def unfavorite_product(
+    product_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    product = product_service.get_product(db, product_id)
+    product_service.remove_favorite(db, current_user, product)
+    return {"product_id": product_id, "favorited": False}
+@router.get("/{product_id}", response_model=ProductResponse)
+def get_product(
+    product_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+    _: None = Depends(check_rate_limit),
+):
+    product = product_service.get_product(db, product_id)
+    return product_service.stamp_favorites(db, current_user, [product])[0]
+@router.put("/{product_id}", response_model=ProductResponse)
+def update_product(
+    product_id: int,
+    request: ProductUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    product = product_service.get_product(db, product_id)
+    product_service.can_manage_product(product, current_user)
+    return product_service.update_product(db, product, request)
+@router.delete("/{product_id}")
+def delete_product(
+    product_id: int,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    product = product_service.get_product(db, product_id)
+    product_service.can_manage_product(product, current_user)
+    product_service.delete_product(db, product)
+    return {"message": "Product deleted"}
+</file>
+
+<file path="api/v1/router.py">
+from fastapi import APIRouter
+from app.api.v1 import admin, auth, cart, orders, products, users
+api_router = APIRouter()
+api_router.include_router(auth.router)
+api_router.include_router(users.router)
+api_router.include_router(admin.router)
+api_router.include_router(products.router)
+api_router.include_router(orders.router)
+api_router.include_router(cart.router)
+</file>
+
+<file path="api/v1/users.py">
+from fastapi import APIRouter, Depends
+from sqlalchemy.orm import Session
+from app.api.dependencies import get_current_user
+from app.db.session import get_db
+from app.models.user import User
+from app.schemas.user import UserResponse, UserUpdate, Forgot
+from app.services import user_service
+router = APIRouter(
+    prefix="/user",
+    tags=["User"],
+)
+@router.get("/profile", response_model=UserResponse)
+def profile(
+    current_user: User = Depends(get_current_user),
+):
+    return user_service.get_profile(current_user)
+@router.put("/update", response_model=UserResponse)
+def update_profile(
+    request: UserUpdate,
+    db: Session = Depends(get_db),
+    current_user: User = Depends(get_current_user),
+):
+    return user_service.update_profile(db, current_user, request)
+@router.get("/dashboard")
+def dashboard(
+    current_user: User = Depends(get_current_user),
+):
+    return {
+        "message": f"Welcome {current_user.username}",
+        "role": current_user.role,
+    }
+@router.post("/forgot")
+def forgot(
+    request: Forgot,
+    db: Session = Depends(get_db),
+):
+    user = user_service.forgot_password(db, request)
+    return {
+        "message": "Password updated successfully",
+        "username": user.username,
+    }
+</file>
+
+<file path="core/__init__.py">
+
+</file>
+
+<file path="core/exceptions.py">
+import logging
+from fastapi import FastAPI, Request
+from fastapi.responses import JSONResponse
+from app.core.logging import logger
+class AppException(Exception):
+    status_code = 500
+    detail = "Internal Server Error"
+    def __init__(self, detail: str | None = None):
+        self.detail = detail or self.detail
+        super().__init__(self.detail)
+class DuplicateResourceError(AppException):
+    status_code = 409
+    detail = "Resource already exists"
+class InvalidCredentialsError(AppException):
+    status_code = 401
+    detail = "Invalid username or password"
+class ResourceNotFoundError(AppException):
+    status_code = 404
+    detail = "Resource not found"
+class PermissionDeniedError(AppException):
+    status_code = 403
+    detail = "Permission denied"
+def register_exception_handlers(app: FastAPI) -> None:
+    @app.exception_handler(AppException)
+    async def app_exception_handler(request: Request, exc: AppException):
+        return JSONResponse(
+            status_code=exc.status_code,
+            content={"detail": exc.detail},
+        )
+    @app.exception_handler(Exception)
+    async def unhandled_exception_handler(request: Request, exc: Exception):
+        logger.error("Unhandled error: %s", exc, exc_info=True)
+        return JSONResponse(
+            status_code=500,
+            content={"detail": "Internal Server Error"},
+        )
+</file>
+
+<file path="core/logging.py">
+import logging
+import os
+from logging.handlers import RotatingFileHandler
+from app.core.config import settings
+def setup_logger() -> logging.Logger:
+    log_dir = settings.LOG_DIR
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    log_file = os.path.join(log_dir, "app.log")
+    _logger = logging.getLogger("fastapi_app")
+    _logger.setLevel(logging.INFO)
+    if _logger.hasHandlers():
+        _logger.handlers.clear()
+    formatter = logging.Formatter(
+        fmt="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S",
+    )
+    console_handler = logging.StreamHandler()
+    console_handler.setLevel(logging.INFO)
+    console_handler.setFormatter(formatter)
+    file_handler = RotatingFileHandler(
+        filename=log_file,
+        maxBytes=5 * 1024 * 1024,
+        backupCount=5,
+        encoding="utf-8",
+    )
+    file_handler.setLevel(logging.INFO)
+    file_handler.setFormatter(formatter)
+    _logger.addHandler(console_handler)
+    _logger.addHandler(file_handler)
+    return _logger
+logger = setup_logger()
+</file>
+
+<file path="core/rate_limiting.py">
+from datetime import datetime, timedelta
+from fastapi import Depends, HTTPException, status
+from app.api.dependencies import get_current_user
+from app.models.user import User
+MAX_REQUESTS = 5
+WINDOW = timedelta(minutes=1)
+user_requests = {}
+def check_rate_limit(
+    current_user: User = Depends(get_current_user),
+):
+    username = current_user.username
+    now = datetime.now()
+    if username not in user_requests:
+        user_requests[username] = {
+            "count": 0,
+            "window_start": now,
+        }
+    user_data = user_requests[username]
+    if now - user_data["window_start"] >= WINDOW:
+        user_data["count"] = 0
+        user_data["window_start"] = now
+    if user_data["count"] >= MAX_REQUESTS:
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many requests. Try again later.",
+        )
+    user_data["count"] += 1
+</file>
+
+<file path="core/security.py">
+from datetime import datetime, timedelta, timezone
+from jose import JWTError, jwt
+from passlib.context import CryptContext
+from app.core.config import settings
+pwd_context = CryptContext(
+    schemes=["bcrypt"],
+    deprecated="auto",
+)
+def hash_password(password: str) -> str:
+    return pwd_context.hash(password)
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return pwd_context.verify(plain_password, hashed_password)
+def create_access_token(data: dict) -> str:
+    to_encode = data.copy()
+    expire = datetime.now(timezone.utc) + timedelta(
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
+    to_encode.update({"exp": expire})
+    return jwt.encode(
+        to_encode,
+        settings.SECRET_KEY,
+        algorithm=settings.ALGORITHM,
+    )
+def verify_access_token(token: str):
+    try:
+        return jwt.decode(
+            token,
+            settings.SECRET_KEY,
+            algorithms=[settings.ALGORITHM],
+        )
+    except JWTError:
+        return None
+</file>
+
+<file path="db/__init__.py">
+
+</file>
+
+<file path="db/base.py">
+from sqlalchemy.orm import declarative_base
+Base = declarative_base()
+</file>
+
+<file path="db/database.py">
+from sqlalchemy import create_engine
+from app.core.config import settings
+connect_args = {}
+if settings.DATABASE_URL.startswith("sqlite"):
+    connect_args["check_same_thread"] = False
+engine = create_engine(
+    settings.DATABASE_URL,
+    connect_args=connect_args,
+)
+</file>
+
+<file path="db/session.py">
+from sqlalchemy.orm import sessionmaker
+from app.db.database import engine
+SessionLocal = sessionmaker(
+    bind=engine,
+    autoflush=False,
+    autocommit=False,
+)
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
+</file>
+
+<file path="main.py">
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+import app.models.associations
+import app.models.cart
+import app.models.orders
+import app.models.product
+import app.models.profile
+import app.models.user
+from app.api.v1.router import api_router
+from app.core.config import settings
+from app.core.exceptions import register_exception_handlers
+from app.core.logging import logger
+from app.db.base import Base
+from app.db.database import engine
+from app.middleware.request_logging import RequestLoggingMiddleware
+logger.info("Application Started")
+Base.metadata.create_all(bind=engine)
+app = FastAPI(
+    title=settings.APP_NAME,
+)
+app.add_middleware(RequestLoggingMiddleware)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=settings.cors_origins_list,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+register_exception_handlers(app)
+app.include_router(api_router)
+@app.get("/")
+def home():
+    return {
+        "message": "FastAPI JWT Authentication",
+    }
+</file>
+
+<file path="middleware/__init__.py">
+
+</file>
+
+<file path="middleware/request_logging.py">
+import time
+from starlette.middleware.base import BaseHTTPMiddleware
+from starlette.requests import Request
+from app.core.logging import logger
+class RequestLoggingMiddleware(BaseHTTPMiddleware):
+    async def dispatch(self, request: Request, call_next):
+        start = time.perf_counter()
+        response = await call_next(request)
+        duration = (time.perf_counter() - start) * 1000
+        logger.info(
+            "%s %s -> %s (%.2f ms)",
+            request.method,
+            request.url.path,
+            response.status_code,
+            duration,
+        )
+        return response
+</file>
+
+<file path="models/__init__.py">
+from app.models.cart import CartItem
+from app.models.profile import Profile
+from app.models.product import Product
+from app.models.user import User
+__all__ = ["CartItem", "Profile", "Product", "User"]
+</file>
+
+<file path="models/associations.py">
+from sqlalchemy import Column, ForeignKey, Integer, Table
+from app.db.base import Base
+user_favorites = Table(
+    "user_favorites",
+    Base.metadata,
+    Column(
+        "user_id",
+        Integer,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+    Column(
+        "product_id",
+        Integer,
+        ForeignKey("products.id", ondelete="CASCADE"),
+        primary_key=True,
+    ),
+)
+</file>
+
+<file path="models/cart.py">
+from datetime import datetime, timezone
+from sqlalchemy import Column, DateTime, ForeignKey, Integer
+from sqlalchemy.orm import relationship
+from app.db.base import Base
+class CartItem(Base):
+    __tablename__ = "cart_items"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True,
+    )
+    product_id = Column(
+        Integer,
+        ForeignKey("products.id"),
+        nullable=False,
+        index=True,
+    )
+    quantity = Column(Integer, nullable=False, default=1)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc),
+    )
+    cart_user = relationship("User", back_populates="user_cart")
+    cart_product = relationship("Product", back_populates="product_cart")
+</file>
+
+<file path="models/orders.py">
+from datetime import datetime, timezone
+import uuid
+from sqlalchemy import Column, DateTime, ForeignKey, Integer, String
+from app.db.base import Base
+from app.models.product import Product
+from sqlalchemy.orm import relationship
+class Orders(Base):
+    __tablename__ = "orders"
+    id = Column("order_id", String, primary_key=True, default=lambda: str(uuid.uuid4()))
+    product = Column("product_id", Integer, ForeignKey("products.id"), nullable=False,
+            index=True)
+    user = Column("user_id", Integer, ForeignKey("users.id"),nullable=False,
+            index=True)
+    created_at = Column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at = Column(
+        DateTime,
+        default=lambda: datetime.now(timezone.utc),
+        onupdate=lambda: datetime.now(timezone.utc)
+    )
+    quantity = Column(Integer, default=1)
+    order_product = relationship("Product", back_populates="product_order")
+    order_user = relationship("User", back_populates="users_order")
+</file>
+
+<file path="models/product.py">
+from sqlalchemy import Column, Float, ForeignKey, Integer, String, Text
+from sqlalchemy.orm import relationship
+from app.db.base import Base
+from app.models.associations import user_favorites
+class Product(Base):
+    __tablename__ = "products"
+    id = Column(Integer, primary_key=True, index=True)
+    name = Column(String(100), nullable=False, index=True)
+    description = Column(Text, nullable=True)
+    price = Column(Float, nullable=False)
+    owner_id = Column(
+        Integer,
+        ForeignKey("users.id"),
+        nullable=False,
+        index=True,
+    )
+    owner = relationship("User", back_populates="products")
+    favorited_by = relationship(
+        "User",
+        secondary=user_favorites,
+        back_populates="favorite_products",
+    )
+    product_order = relationship("Orders", back_populates="order_product", cascade="all, delete-orphan")
+    product_cart = relationship("CartItem", back_populates="cart_product", cascade="all, delete-orphan")
+</file>
+
+<file path="models/profile.py">
+from datetime import date
+from sqlalchemy import Column, Date, ForeignKey, Integer, String, Text
+from sqlalchemy.orm import relationship
+from app.db.base import Base
+class Profile(Base):
+    __tablename__ = "profiles"
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(
+        Integer,
+        ForeignKey("users.id", ondelete="CASCADE"),
+        unique=True,
+        nullable=False,
+        index=True,
+    )
+    full_name = Column(String(100), nullable=False)
+    phone = Column(String(20), nullable=True)
+    bio = Column(Text, nullable=True)
+    location = Column(String(100), nullable=True)
+    age = Column(Integer, nullable=True)
+    date_of_birth = Column(Date, nullable=True)
+    user = relationship("User", back_populates="profile")
+</file>
+
+<file path="models/role.py">
+from enum import Enum
+class Role(str, Enum):
+    ADMIN = "ADMIN"
+    REVIEWER = "REVIEWER"
+    USER = "USER"
+</file>
+
+<file path="models/user.py">
+from sqlalchemy import Column, Enum, Integer, String
+from sqlalchemy.orm import relationship
+from app.db.base import Base
+from app.models.associations import user_favorites
+from app.models.role import Role
+class User(Base):
+    __tablename__ = "users"
+    id = Column(Integer, primary_key=True, index=True)
+    username = Column(String(50), unique=True, nullable=False, index=True)
+    email = Column(String(100), unique=True, nullable=False)
+    password = Column(String(255), nullable=False)
+    role = Column(Enum(Role), default=Role.USER, nullable=False)
+    products = relationship(
+        "Product",
+        back_populates="owner",
+        cascade="all, delete-orphan",
+    )
+    profile = relationship(
+        "Profile",
+        back_populates="user",
+        uselist=False,
+        cascade="all, delete-orphan",
+    )
+    favorite_products = relationship(
+        "Product",
+        secondary=user_favorites,
+        back_populates="favorited_by",
+    )
+    users_order = relationship("Orders", back_populates="order_user", cascade="all, delete-orphan")
+    user_cart = relationship("CartItem", back_populates="cart_user", cascade="all, delete-orphan")
+</file>
+
+<file path="repositories/__init__.py">
+
+</file>
+
+<file path="repositories/cart_repository.py">
+from sqlalchemy.orm import Session
+from app.models.cart import CartItem
+class CartRepository:
+    def __init__(self, db: Session):
+        self.db = db
+    def add(self, item: CartItem) -> CartItem:
+        self.db.add(item)
+        self.db.commit()
+        self.db.refresh(item)
+        return item
+    def find_by_user_and_product(self, user_id: int, product_id: int) -> CartItem | None:
+        return (
+            self.db.query(CartItem)
+            .filter(
+                CartItem.user_id == user_id,
+                CartItem.product_id == product_id,
+            )
+            .first()
+        )
+    def get_by_id(self, item_id: int) -> CartItem | None:
+        return self.db.query(CartItem).filter(CartItem.id == item_id).first()
+    def list_by_user(self, user_id: int) -> list[CartItem]:
+        return (
+            self.db.query(CartItem)
+            .filter(CartItem.user_id == user_id)
+            .order_by(CartItem.created_at.desc())
+            .all()
+        )
+    def delete(self, item: CartItem) -> None:
+        self.db.delete(item)
+        self.db.commit()
+    def delete_all_for_user(self, user_id: int) -> None:
+        self.db.query(CartItem).filter(CartItem.user_id == user_id).delete()
+        self.db.commit()
+</file>
+
+<file path="repositories/order_repository.py">
+from sqlalchemy.orm import Session
+from app.models.orders import Orders
+class OrderRepository:
+    def __init__(self, db: Session):
+        self.db = db
+    def createOrder(self, data: Orders):
+        self.db.add(data)
+        self.db.commit()
+        self.db.refresh(data)
+        return data
+    def list_by_user(self, user_id: int):
+        return (
+            self.db.query(Orders)
+            .filter(Orders.user == user_id)
+            .order_by(Orders.created_at.desc())
+            .all()
+        )
+</file>
+
+<file path="repositories/product_repository.py">
+from sqlalchemy.orm import Session, selectinload
+from app.models.associations import user_favorites
+from app.models.product import Product
+class ProductRepository:
+    def __init__(self, db: Session):
+        self.db = db
+    def get_by_id(self, product_id: int) -> Product | None:
+        return (
+            self.db.query(Product)
+            .options(selectinload(Product.owner))
+            .filter(Product.id == product_id)
+            .first()
+        )
+    def get_all(
+        self, owner_id: int | None = None, skip: int = 0, limit: int = 100
+    ) -> list[Product]:
+        query = self.db.query(Product).options(selectinload(Product.owner))
+        if owner_id is not None:
+            query = query.filter(Product.owner_id == owner_id)
+        return query.offset(skip).limit(limit).all()
+    def count(self, owner_id: int | None = None) -> int:
+        query = self.db.query(Product)
+        if owner_id is not None:
+            query = query.filter(Product.owner_id == owner_id)
+        return query.count()
+    def create(self, product: Product) -> Product:
+        self.db.add(product)
+        self.db.commit()
+        self.db.refresh(product)
+        return product
+    def delete(self, product: Product) -> None:
+        self.db.delete(product)
+        self.db.commit()
+    def get_favorite_ids(self, user_id: int) -> set[int]:
+        rows = (
+            self.db.query(user_favorites.c.product_id)
+            .filter(user_favorites.c.user_id == user_id)
+            .all()
+        )
+        return {row[0] for row in rows}
+    def get_favorites(
+        self, user_id: int, skip: int = 0, limit: int = 100
+    ) -> list[Product]:
+        return (
+            self.db.query(Product)
+            .join(user_favorites, user_favorites.c.product_id == Product.id)
+            .filter(user_favorites.c.user_id == user_id)
+            .options(selectinload(Product.owner))
+            .offset(skip)
+            .limit(limit)
+            .all()
+        )
+    def count_favorites(self, user_id: int) -> int:
+        return (
+            self.db.query(user_favorites)
+            .filter(user_favorites.c.user_id == user_id)
+            .count()
+        )
+</file>
+
+<file path="repositories/user_repository.py">
+from sqlalchemy.orm import Session, selectinload
+from app.models.user import User
+class UserRepository:
+    def __init__(self, db: Session):
+        self.db = db
+    def get_by_id(self, user_id: int) -> User | None:
+        return self.db.query(User).filter(User.id == user_id).first()
+    def get_by_username(self, username: str) -> User | None:
+        return self.db.query(User).filter(User.username == username).first()
+    def get_by_email(self, email: str) -> User | None:
+        return self.db.query(User).filter(User.email == email).first()
+    def get_all(self) -> list[User]:
+        return self.db.query(User).all()
+    def get_with_details(self, user_id: int) -> User | None:
+        return (
+            self.db.query(User)
+            .options(
+                selectinload(User.profile),
+                selectinload(User.products),
+            )
+            .filter(User.id == user_id)
+            .first()
+        )
+    def create(self, user: User) -> User:
+        self.db.add(user)
+        self.db.commit()
+        self.db.refresh(user)
+        return user
+    def delete(self, user: User) -> None:
+        self.db.delete(user)
+        self.db.commit()
+</file>
+
+<file path="requirements.txt">
+fastapi==0.141.1
+uvicorn==0.52.1
+sqlalchemy==2.0.51
+psycopg2-binary==2.9.12
+python-jose[cryptography]==3.5.0
+passlib==1.7.4
+bcrypt==4.0.1
+python-multipart==0.0.32
+email-validator==2.3.0
+python-dotenv==1.2.2
+pydantic-settings==2.14.2
+
+# Development / Testing
+pytest
+httpx
+</file>
+
+<file path="schemas/__init__.py">
+
+</file>
+
+<file path="schemas/auth.py">
+from typing import Optional
+from pydantic import BaseModel
+class UserLogin(BaseModel):
+    username: str
+    password: str
+class Token(BaseModel):
+    access_token: str
+    token_type: str
+class TokenData(BaseModel):
+    username: Optional[str] = None
+    role: Optional[str] = None
+</file>
+
+<file path="schemas/cart.py">
+from datetime import datetime
+from pydantic import BaseModel, Field
+class CartItemCreate(BaseModel):
+    product_id: int = Field(...)
+    quantity: int = Field(default=1, ge=1)
+class CartItemUpdate(BaseModel):
+    quantity: int = Field(..., ge=1)
+class CartProductSummary(BaseModel):
+    id: int
+    name: str
+    price: float
+class CartItemResponse(BaseModel):
+    id: int
+    quantity: int
+    created_at: datetime
+    product: CartProductSummary
+</file>
+
+<file path="schemas/order.py">
+from datetime import datetime
+from typing import Optional
+from pydantic import BaseModel, ConfigDict, Field
+class OrderCreate(BaseModel):
+    product_id: int = Field(...)
+    quantity: int = Field(default=1, ge=1)
+class OrderProductSummary(BaseModel):
+    id: int
+    name: str
+    price: float
+class OrderResponse(BaseModel):
+    model_config = ConfigDict(from_attributes=True)
+    id: str
+    quantity: int
+    created_at: datetime
+    product: OrderProductSummary
+</file>
+
+<file path="schemas/product.py">
+from typing import Optional
+from pydantic import BaseModel, ConfigDict, Field
+class ProductCreate(BaseModel):
+    name: str = Field(...)
+    description: Optional[str] = None
+    price: float
+class ProductUpdate(BaseModel):
+    name: Optional[str] = None
+    description: Optional[str] = None
+    price: Optional[float] = None
+class OwnerSummary(BaseModel):
+    id: int
+    username: str
+    model_config = ConfigDict(from_attributes=True)
+class ProductResponse(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    price: float
+    owner_id: int
+    owner: Optional[OwnerSummary] = None
+    is_favorited: bool = False
+    model_config = ConfigDict(from_attributes=True)
+class PaginatedProducts(BaseModel):
+    items: list[ProductResponse]
+    total: int
+    page: int
+    limit: int
+    pages: int
+class FavoriteResponse(BaseModel):
+    product_id: int
+    favorited: bool
+</file>
+
+<file path="schemas/user.py">
+from datetime import date
+from typing import Optional
+from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
+from app.models.role import Role
+class ProfileCreate(BaseModel):
+    full_name: str
+    phone: Optional[str] = None
+    bio: Optional[str] = None
+    location: Optional[str] = None
+    age: Optional[int] = None
+    date_of_birth: Optional[date] = None
+class UserCreate(BaseModel):
+    username: str
+    email: EmailStr
+    password: str
+    profile: ProfileCreate
+class ProfileResponse(BaseModel):
+    id: int
+    full_name: Optional[str] = None
+    phone: Optional[str] = None
+    bio: Optional[str] = None
+    location: Optional[str] = None
+    age: Optional[int] = None
+    date_of_birth: Optional[date] = None
+    model_config = ConfigDict(from_attributes=True)
+class UserResponse(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+    role: Role
+    profile: Optional[ProfileResponse] = None
+    model_config = ConfigDict(from_attributes=True)
+class ProductSummary(BaseModel):
+    id: int
+    name: str
+    description: Optional[str] = None
+    price: float
+    owner_id: int
+    model_config = ConfigDict(from_attributes=True)
+class UserWithProductsResponse(BaseModel):
+    id: int
+    username: str
+    email: EmailStr
+    role: Role
+    profile: Optional[ProfileResponse] = None
+    products: list[ProductSummary] = []
+    model_config = ConfigDict(from_attributes=True)
+class UserUpdate(BaseModel):
+    username: Optional[str] = None
+    email: Optional[EmailStr] = None
+    full_name: Optional[str] = None
+    phone: Optional[str] = None
+    bio: Optional[str] = None
+    location: Optional[str] = None
+    age: Optional[int] = None
+    date_of_birth: Optional[date] = None
+class Forgot(BaseModel):
+    username: str
+    password: str
+    @field_validator("username")
+    @classmethod
+    def username_not_empty(cls, v: str) -> str:
+        v = v.strip()
+        if not v:
+            raise ValueError("Username cannot be empty")
+        return v
+    @field_validator("password")
+    @classmethod
+    def password_valid(cls, v: str) -> str:
+        if not v or len(v) < 8:
+            raise ValueError("Password must be at least 8 characters")
+        return v
+</file>
+
+<file path="services/__init__.py">
+
+</file>
+
+<file path="services/auth_service.py">
+from sqlalchemy.orm import Session
+from app.core.exceptions import DuplicateResourceError, InvalidCredentialsError
+from app.core.security import create_access_token, hash_password, verify_password
+from app.models.profile import Profile
+from app.models.user import User
+from app.repositories.user_repository import UserRepository
+from app.schemas.auth import Token
+from app.schemas.user import UserCreate
+def register_user(db: Session, data: UserCreate) -> User:
+    repo = UserRepository(db)
+    if repo.get_by_username(data.username):
+        raise DuplicateResourceError("Username already exists")
+    if repo.get_by_email(data.email):
+        raise DuplicateResourceError("Email already exists")
+    user = User(
+        username=data.username,
+        email=data.email,
+        password=hash_password(data.password),
+    )
+    user.profile = Profile(
+        full_name=data.profile.full_name,
+        phone=data.profile.phone,
+        bio=data.profile.bio,
+        location=data.profile.location,
+        age=data.profile.age,
+        date_of_birth=data.profile.date_of_birth,
+    )
+    return repo.create(user)
+def authenticate_user(db: Session, username: str, password: str) -> Token:
+    repo = UserRepository(db)
+    user = repo.get_by_username(username)
+    if not user or not verify_password(password, user.password):
+        raise InvalidCredentialsError()
+    token = create_access_token(
+        {
+            "sub": user.username,
+            "role": user.role.value,
+        }
+    )
+    return Token(access_token=token, token_type="bearer")
+</file>
+
+<file path="services/cart_service.py">
+from sqlalchemy.orm import Session
+from app.core.exceptions import ResourceNotFoundError
+from app.models.cart import CartItem
+from app.models.orders import Orders
+from app.models.user import User
+from app.repositories.cart_repository import CartRepository
+from app.repositories.order_repository import OrderRepository
+from app.repositories.product_repository import ProductRepository
+from app.schemas.cart import CartItemCreate
+def _serialize(item: CartItem) -> dict:
+    product = item.cart_product
+    return {
+        "id": item.id,
+        "quantity": item.quantity,
+        "created_at": item.created_at,
+        "product": {
+            "id": product.id,
+            "name": product.name,
+            "price": product.price,
+        },
+    }
+def add_to_cart(
+    data: CartItemCreate,
+    db: Session,
+    current_user: User,
+):
+    product = ProductRepository(db).get_by_id(data.product_id)
+    if product is None:
+        raise ResourceNotFoundError("Product not found")
+    repo = CartRepository(db)
+    existing = repo.find_by_user_and_product(current_user.id, data.product_id)
+    if existing is not None:
+        existing.quantity += data.quantity
+        db.commit()
+        db.refresh(existing)
+        return _serialize(existing)
+    item = CartItem(
+        user_id=current_user.id,
+        product_id=data.product_id,
+        quantity=data.quantity,
+    )
+    return _serialize(repo.add(item))
+def list_cart(db: Session, current_user: User):
+    return [_serialize(item) for item in CartRepository(db).list_by_user(current_user.id)]
+def update_quantity(
+    item_id: int,
+    quantity: int,
+    db: Session,
+    current_user: User,
+):
+    repo = CartRepository(db)
+    item = repo.get_by_id(item_id)
+    if item is None or item.user_id != current_user.id:
+        raise ResourceNotFoundError("Cart item not found")
+    item.quantity = quantity
+    db.commit()
+    db.refresh(item)
+    return _serialize(item)
+def remove_from_cart(item_id: int, db: Session, current_user: User) -> None:
+    repo = CartRepository(db)
+    item = repo.get_by_id(item_id)
+    if item is None or item.user_id != current_user.id:
+        raise ResourceNotFoundError("Cart item not found")
+    repo.delete(item)
+def checkout(db: Session, current_user: User):
+    cart_repo = CartRepository(db)
+    order_repo = OrderRepository(db)
+    items = cart_repo.list_by_user(current_user.id)
+    created = []
+    for item in items:
+        if item.cart_product is None:
+            continue
+        order = Orders(
+            product=item.product_id,
+            user=current_user.id,
+            quantity=item.quantity,
+        )
+        order_repo.createOrder(order)
+        created.append(order)
+    cart_repo.delete_all_for_user(current_user.id)
+    return created
+</file>
+
+<file path="services/order_service.py">
+from sqlalchemy.orm import Session
+from app.core.exceptions import ResourceNotFoundError
+from app.models.orders import Orders
+from app.models.user import User
+from app.repositories.order_repository import OrderRepository
+from app.repositories.product_repository import ProductRepository
+from app.schemas.order import OrderCreate
+def create_order(data: OrderCreate,
+                db : Session,
+                current_user: User):
+    product = ProductRepository(db).get_by_id(data.product_id)
+    if product is None:
+        raise ResourceNotFoundError("Product not found")
+    orders = Orders(
+        product=product.id,
+        user=current_user.id,
+        quantity=data.quantity
+    )
+    return OrderRepository(db).createOrder(orders)
+def list_orders(db: Session, current_user: User):
+    orders = OrderRepository(db).list_by_user(current_user.id)
+    return [
+        {
+            "id": order.id,
+            "quantity": order.quantity,
+            "created_at": order.created_at,
+            "product": {
+                "id": order.order_product.id,
+                "name": order.order_product.name,
+                "price": order.order_product.price,
+            },
+        }
+        for order in orders
+    ]
+</file>
+
+<file path="services/product_service.py">
+from sqlalchemy.orm import Session
+from app.core.exceptions import PermissionDeniedError, ResourceNotFoundError
+from app.models.product import Product
+from app.models.role import Role
+from app.models.user import User
+from app.repositories.product_repository import ProductRepository
+from app.schemas.product import ProductCreate, ProductUpdate
+def create_product(db: Session, owner: User, data: ProductCreate) -> Product:
+    product = Product(
+        name=data.name,
+        description=data.description,
+        price=data.price,
+        owner_id=owner.id,
+    )
+    return ProductRepository(db).create(product)
+def get_product(db: Session, product_id: int) -> Product:
+    product = ProductRepository(db).get_by_id(product_id)
+    if product is None:
+        raise ResourceNotFoundError("Product not found")
+    return product
+def list_products(
+    db: Session, owner_id: int | None = None, page: int = 1, limit: int = 5
+) -> tuple[list[Product], int]:
+    repo = ProductRepository(db)
+    total = repo.count(owner_id=owner_id)
+    items = repo.get_all(owner_id=owner_id, skip=(page - 1) * limit, limit=limit)
+    return items, total
+def update_product(db: Session, product: Product, data: ProductUpdate) -> Product:
+    if data.name is not None:
+        product.name = data.name
+    if data.description is not None:
+        product.description = data.description
+    if data.price is not None:
+        product.price = data.price
+    db.add(product)
+    db.commit()
+    db.refresh(product)
+    return product
+def delete_product(db: Session, product: Product) -> None:
+    ProductRepository(db).delete(product)
+def can_manage_product(product: Product, user: User) -> None:
+    if product.owner_id != user.id and user.role != Role.ADMIN:
+        raise PermissionDeniedError()
+def stamp_favorites(db: Session, user: User, products: list[Product]) -> list[Product]:
+    favorite_ids = ProductRepository(db).get_favorite_ids(user.id)
+    for product in products:
+        product.is_favorited = product.id in favorite_ids
+    return products
+def add_favorite(db: Session, user: User, product: Product) -> None:
+    if product not in user.favorite_products:
+        user.favorite_products.append(product)
+        db.commit()
+def remove_favorite(db: Session, user: User, product: Product) -> None:
+    if product in user.favorite_products:
+        user.favorite_products.remove(product)
+        db.commit()
+def list_favorites(
+    db: Session, user: User, page: int = 1, limit: int = 5
+) -> tuple[list[Product], int]:
+    repo = ProductRepository(db)
+    total = repo.count_favorites(user.id)
+    items = repo.get_favorites(user.id, skip=(page - 1) * limit, limit=limit)
+    for product in items:
+        product.is_favorited = True
+    return items, total
+</file>
+
+<file path="services/user_service.py">
+from sqlalchemy.orm import Session
+from app.core.exceptions import DuplicateResourceError, ResourceNotFoundError
+from app.core.security import hash_password
+from app.models.profile import Profile
+from app.models.user import User
+from app.repositories.user_repository import UserRepository
+from app.schemas.user import UserUpdate, Forgot
+PROFILE_FIELDS = ("full_name", "phone", "bio", "location", "age", "date_of_birth")
+def get_profile(current_user: User) -> User:
+    return current_user
+def update_profile(db: Session, current_user: User, data: UserUpdate) -> User:
+    repo = UserRepository(db)
+    if data.username:
+        existing = repo.get_by_username(data.username)
+        if existing and existing.id != current_user.id:
+            raise DuplicateResourceError("Username already exists")
+        current_user.username = data.username
+    if data.email:
+        existing = repo.get_by_email(data.email)
+        if existing and existing.id != current_user.id:
+            raise DuplicateResourceError("Email already exists")
+        current_user.email = data.email
+    if any(getattr(data, field) is not None for field in PROFILE_FIELDS):
+        if current_user.profile is None:
+            current_user.profile = Profile(user_id=current_user.id)
+        for field in PROFILE_FIELDS:
+            value = getattr(data, field)
+            if value is not None:
+                setattr(current_user.profile, field, value)
+    db.add(current_user)
+    db.commit()
+    db.refresh(current_user)
+    return current_user
+def get_all_users(db: Session) -> list[User]:
+    return UserRepository(db).get_all()
+def get_user_with_details(db: Session, user_id: int) -> User:
+    repo = UserRepository(db)
+    user = repo.get_with_details(user_id)
+    if user is None:
+        raise ResourceNotFoundError("User not found")
+    return user
+def delete_user(db: Session, user_id: int) -> None:
+    repo = UserRepository(db)
+    user = repo.get_by_id(user_id)
+    if user is None:
+        raise ResourceNotFoundError("User not found")
+    repo.delete(user)
+def forgot_password(db: Session, data: Forgot) -> User:
+    repo = UserRepository(db)
+    user = repo.get_by_username(data.username)
+    if user is None:
+        raise ResourceNotFoundError("User not found")
+    user.password = hash_password(data.password)
+    return repo.create(user)
+</file>
+
+<file path="tests/__init__.py">
+
+</file>
+
+<file path="tests/conftest.py">
+import os
+import sys
+os.environ["DATABASE_URL"] = os.getenv(
+    "TEST_DATABASE_URL", "sqlite:///./test.db"
+)
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import pytest
+from fastapi.testclient import TestClient
+@pytest.fixture(scope="session")
+def client():
+    from app.main import app
+    with TestClient(app) as test_client:
+        yield test_client
+@pytest.fixture(autouse=True)
+def clean_tables():
+    from app.db.session import SessionLocal
+    from app.models.cart import CartItem
+    from app.models.orders import Orders
+    from app.models.product import Product
+    from app.models.profile import Profile
+    from app.models.user import User
+    db = SessionLocal()
+    db.query(CartItem).delete()
+    db.query(Orders).delete()
+    db.query(Product).delete()
+    db.query(Profile).delete()
+    db.query(User).delete()
+    db.commit()
+    db.close()
+    yield
+</file>
+
+<file path="tests/test_auth.py">
+REGISTER_PROFILE = {
+    "full_name": "Alice Doe",
+    "phone": "1234567890",
+    "bio": "Hello there",
+    "location": "New York",
+    "age": 30,
+    "date_of_birth": "1995-01-15",
+}
+def register_payload(username, email):
+    return {
+        "username": username,
+        "email": email,
+        "password": "secret123",
+        "profile": REGISTER_PROFILE,
+    }
+def test_register_success(client):
+    response = client.post("/auth/register", json=register_payload("alice", "alice@example.com"))
+    assert response.status_code == 201
+    data = response.json()
+    assert data["username"] == "alice"
+    assert data["email"] == "alice@example.com"
+    assert data["role"] == "USER"
+    assert "password" not in data
+    assert data["profile"]["full_name"] == "Alice Doe"
+    assert data["profile"]["age"] == 30
+    assert data["profile"]["date_of_birth"] == "1995-01-15"
+def test_register_duplicate_username(client):
+    payload = register_payload("dupe", "dupe@example.com")
+    assert client.post("/auth/register", json=payload).status_code == 201
+    response = client.post("/auth/register", json=payload)
+    assert response.status_code == 409
+    assert response.json()["detail"] == "Username already exists"
+def test_register_duplicate_email(client):
+    first = client.post(
+        "/auth/register",
+        json=register_payload("first", "shared@example.com"),
+    )
+    assert first.status_code == 201
+    second = client.post(
+        "/auth/register",
+        json=register_payload("second", "shared@example.com"),
+    )
+    assert second.status_code == 409
+def test_login_success(client):
+    client.post(
+        "/auth/register",
+        json=register_payload("login_user", "login@example.com"),
+    )
+    response = client.post(
+        "/auth/login",
+        data={"username": "login_user", "password": "secret123"},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["token_type"] == "bearer"
+    assert data["access_token"]
+def test_login_wrong_password(client):
+    client.post(
+        "/auth/register",
+        json=register_payload("badpw_user", "badpw@example.com"),
+    )
+    response = client.post(
+        "/auth/login",
+        data={"username": "badpw_user", "password": "wrong"},
+    )
+    assert response.status_code == 401
+</file>
+
+<file path="tests/test_users.py">
+def get_token(client, username="bob"):
+    client.post(
+        "/auth/register",
+        json={
+            "username": username,
+            "email": f"{username}@example.com",
+            "password": "secret123",
+            "profile": {"full_name": f"{username} full"},
+        },
+    )
+    response = client.post(
+        "/auth/login",
+        data={"username": username, "password": "secret123"},
+    )
+    return response.json()["access_token"]
+def test_profile_requires_token(client):
+    response = client.get("/user/profile")
+    assert response.status_code == 401
+def test_profile(client):
+    token = get_token(client)
+    response = client.get(
+        "/user/profile",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 200
+    assert response.json()["username"] == "bob"
+def test_dashboard(client):
+    token = get_token(client)
+    response = client.get(
+        "/user/dashboard",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 200
+    assert response.json()["role"] == "USER"
+def test_update_profile(client):
+    token = get_token(client)
+    response = client.put(
+        "/user/update",
+        json={
+            "username": "bob_updated",
+            "bio": "I love testing",
+            "location": "Pune",
+        },
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 200
+    data = response.json()
+    assert data["username"] == "bob_updated"
+    assert data["profile"]["bio"] == "I love testing"
+    assert data["profile"]["location"] == "Pune"
+def test_admin_requires_admin_role(client):
+    token = get_token(client)
+    response = client.get(
+        "/admin/users",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert response.status_code == 403
+def test_product_crud_flow(client):
+    token = get_token(client)
+    headers = {"Authorization": f"Bearer {token}"}
+    created = client.post(
+        "/products",
+        json={
+            "name": "Laptop",
+            "description": "A powerful laptop",
+            "price": 999.99,
+        },
+        headers=headers,
+    )
+    assert created.status_code == 201
+    product = created.json()
+    assert product["name"] == "Laptop"
+    assert product["owner_id"] == 1
+    assert product["owner"]["username"] == "bob"
+    product_id = product["id"]
+    listed = client.get("/products", headers=headers)
+    assert listed.status_code == 200
+    body = listed.json()
+    assert body["total"] == 1
+    assert len(body["items"]) == 1
+    fetched = client.get(f"/products/{product_id}", headers=headers)
+    assert fetched.status_code == 200
+    assert fetched.json()["price"] == 999.99
+    updated = client.put(
+        f"/products/{product_id}",
+        json={"price": 899.99},
+        headers=headers,
+    )
+    assert updated.status_code == 200
+    assert updated.json()["price"] == 899.99
+    deleted = client.delete(f"/products/{product_id}", headers=headers)
+    assert deleted.status_code == 200
+    gone = client.get(f"/products/{product_id}", headers=headers)
+    assert gone.status_code == 404
+def test_cannot_modify_others_product(client):
+    token_a = get_token(client, username="owner_a")
+    token_b = get_token(client, username="owner_b")
+    created = client.post(
+        "/products",
+        json={"name": "Phone", "price": 500.0},
+        headers={"Authorization": f"Bearer {token_a}"},
+    )
+    product_id = created.json()["id"]
+    response = client.put(
+        f"/products/{product_id}",
+        json={"price": 1.0},
+        headers={"Authorization": f"Bearer {token_b}"},
+    )
+    assert response.status_code == 403
+def test_admin_can_view_user_with_products(client):
+    # There is no public "sign up as admin" endpoint, so we create an
+    from app.core.security import hash_password
+    from app.db.session import SessionLocal
+    from app.models.role import Role
+    from app.models.user import User
+    token = get_token(client, username="product_owner")
+    client.post(
+        "/products",
+        json={"name": "Mouse", "price": 25.0},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    # Insert an admin user directly.
+    db = SessionLocal()
+    admin = User(
+        username="admin_x",
+        email="admin_x@example.com",
+        password=hash_password("x"),
+        role=Role.ADMIN,
+    )
+    db.add(admin)
+    db.commit()
+    db.refresh(admin)
+    admin_id = admin.id
+    db.close()
+    login = client.post("/auth/login", data={"username": "admin_x", "password": "x"})
+    admin_token = login.json()["access_token"]
+    admin_headers = {"Authorization": f"Bearer {admin_token}"}
+    # Find the normal user's id via the admin user list.
+    users = client.get("/admin/users", headers=admin_headers).json()
+    owner = next(u for u in users if u["username"] == "product_owner")
+    response = client.get(f"/admin/users/{owner['id']}", headers=admin_headers)
+    assert response.status_code == 200
+    data = response.json()
+    assert data["username"] == "product_owner"
+    assert data["profile"] is not None
+    assert len(data["products"]) == 1
+    assert data["products"][0]["name"] == "Mouse"
+    assert "owner" not in data["products"][0]
+    assert client.get(
+        f"/admin/users/{owner['id']}"
+    ).status_code == 401
+</file>
+
+<file path="utils/__init__.py">
+
+</file>
+
+</files>

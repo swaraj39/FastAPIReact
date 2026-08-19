@@ -1,7 +1,7 @@
 from sqlalchemy.orm import Session
 
 from app.core.exceptions import DuplicateResourceError, InvalidCredentialsError
-from app.core.security import create_access_token, hash_password, verify_password
+from app.core.security import create_access_token, create_refresh_token, hash_password, verify_password
 from app.models.profile import Profile
 from app.models.user import User
 from app.repositories.user_repository import UserRepository
@@ -72,11 +72,19 @@ def authenticate_user(db: Session, username: str, password: str) -> Token:
 
     # Create a signed JWT. The frontend sends it back as
     # `Authorization: Bearer <token>` on every protected request.
-    token = create_access_token(
+    access_token = create_access_token(
+        {
+            "sub": user.username,
+            "role": user.role.value,
+        }
+    )
+    refresh_token = create_refresh_token(
         {
             "sub": user.username,
             "role": user.role.value,
         }
     )
 
-    return Token(access_token=token, token_type="bearer")
+    return Token(access_token=access_token, 
+                refresh_token=refresh_token, 
+                token_type="bearer")
