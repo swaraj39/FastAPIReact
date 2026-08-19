@@ -28,7 +28,7 @@ import type {
   User,
   UserWithProducts,
 } from './types'
-
+import { jwtDecode } from "jwt-decode"
 // Thrown whenever the backend returns a non-2xx response. `status` is
 // the HTTP code (401, 403, 404, 409...) and `detail` is the message.
 export class ApiError extends Error {
@@ -43,20 +43,31 @@ export class ApiError extends Error {
 }
 
 // ---- Token persistence -------------------------------------------------
-// The JWT is stored in localStorage so the user stays logged in across
-// page reloads. (For tighter security you would use httpOnly cookies.)
+// The access JWT and its longer-lived refresh token are both stored in
+// localStorage so the user stays logged in across page reloads and tab
+// closes. (For tighter security you would use httpOnly cookies.)
 const TOKEN_KEY = 'token'
+const REFRESH_KEY = 'refresh_token'
 
 export function getToken(): string | null {
   return localStorage.getItem(TOKEN_KEY)
+}
+
+export function getRefreshToken(): string | null {
+  return localStorage.getItem(REFRESH_KEY)
 }
 
 export function setToken(token: string): void {
   localStorage.setItem(TOKEN_KEY, token)
 }
 
+export function setRefreshToken(token: string): void {
+  localStorage.setItem(REFRESH_KEY, token)
+}
+
 export function clearToken(): void {
   localStorage.removeItem(TOKEN_KEY)
+  localStorage.removeItem(REFRESH_KEY)
 }
 
 // ---- Axios instance -----------------------------------------------------
@@ -68,12 +79,50 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL
 const http = axios.create({
   baseURL: BASE_URL,
 })
+const isTokenExpired = (token: string) => {
+  const decoded = jwtDecode(token)
 
-// Attach the JWT on every request: `Authorization: Bearer <token>`.
-// The backend's OAuth2PasswordBearer dependency reads this header.
-http.interceptors.request.use((config) => {
-  const token = getToken()
-  if (token) config.headers.Authorization = `Bearer ${token}`
+  if (!decoded.exp) {
+    return true
+  }
+
+  return decoded.exp * 1000 <= Date.now()
+}
+
+// Exchange the stored refresh token for a fresh access token. Skips the
+// expiry check for auth calls so refreshing never recurses into itself.
+http.interceptors.request.use(async (config) => {
+  const isAuthCall =
+    config.url?.includes('/auth/refresh') ||
+    config.url?.includes('/auth/login')
+  let accessToken = getToken()
+
+  if (accessToken && isTokenExpired(accessToken) && !isAuthCall) {
+    const refresh = getRefreshToken()
+    if (!refresh) {
+      clearToken()
+      accessToken = null
+    } else {
+      try {
+        // The backend /auth/refresh expects the refresh token in the JSON
+        // body (RefreshTokenRequest schema) and returns a new access token.
+        const { data } = await http.post<{ access_token: string }>(
+          '/auth/refresh',
+          { refresh_token: refresh },
+        )
+        setToken(data.access_token)
+        accessToken = data.access_token
+      } catch {
+        // Refresh failed (invalid/expired) -> the session is over.
+        clearToken()
+        accessToken = null
+      }
+    }
+  }
+
+  if (accessToken) {
+    config.headers.Authorization = `Bearer ${accessToken}`
+  }
   return config
 })
 
@@ -84,9 +133,6 @@ http.interceptors.response.use(
   (error: AxiosError) => {
     const status = error.response?.status ?? 0
     let detail = error.response?.statusText ?? error.message
-    if(error.message === "Invalid or Expired Token")
-      clearToken()
-      window.location.href = '/login'
     const body = error.response?.data as
       | { detail?: string | Array<{ msg: string }> }
       | undefined
@@ -100,7 +146,7 @@ http.interceptors.response.use(
 
 // ---- Endpoint methods ---------------------------------------------------
 export const api = {
-  // POST /auth/login (form data). Stores the token on success.
+  // POST /auth/login (form data). Stores both tokens on success.
   async login(username: string, password: string): Promise<Token> {
     // OAuth2PasswordRequestForm expects URL-encoded form fields; axios
     // auto-sets the form content-type for URLSearchParams bodies.
@@ -108,7 +154,9 @@ export const api = {
     params.set('username', username)
     params.set('password', password)
     const { data } = await http.post<Token>('/auth/login', params)
-    setToken(data.access_token)
+    const loginData = data as Token & { refresh_token?: string }
+    setToken(loginData.access_token)
+    if (loginData.refresh_token) setRefreshToken(loginData.refresh_token)
     return data
   },
 
