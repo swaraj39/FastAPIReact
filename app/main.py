@@ -24,7 +24,7 @@ logger.info("Application Started")
 
 # Create any missing tables (users, profiles, products) on startup.
 # Great for development; in production you would use Alembic migrations.
-Base.metadata.create_all(bind=engine)
+# Base.metadata.create_all(bind=engine)
 
 # Instantiate the FastAPI application.
 app = FastAPI(
