@@ -1,0 +1,30 @@
+services:
+  api:
+    build: .
+    container_name: fastapi
+    ports:
+      - "8000:8000"
+    volumes:
+      - uploads_data:/app/uploads
+    depends_on:
+      - redis
+  redis:
+    image: redis:7
+    container_name: fastapi-reactjs-redis
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+
+  postgres:
+    image: postgres:16
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: Swaraj@39
+      POSTGRES_DB: fastapiall
+    ports:
+      - "5432:5432"
+
+
+volumes:
+  uploads_data:
+  redis_data:
