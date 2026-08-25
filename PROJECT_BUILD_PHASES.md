@@ -775,8 +775,105 @@ render.yaml             # new: Render Blueprint defining the web service
 
 ---
 
+# PHASE 23 — Frontend Deployment (Vercel)
+
+**Goal:** Deploy the React SPA to Vercel, pointing directly at the Render backend via CORS.
+
+**What you learn:**
+- Vercel's zero-config React/Vite deployment
+- Cross-origin API calls (frontend on Vercel, backend on Render)
+- SPA routing via `vercel.json` rewrites
+- Environment variables at build time (Vite's `VITE_*` prefix)
+
+**Architecture (after this phase):**
+```
+browser → Vercel (React SPA)  →  fetch("https://api.onrender.com/...")
+                    ↓                          ↓
+             Static files served        Render (FastAPI)
+             by Vercel CDN             with Supabase Postgres
+```
+
+No nginx. The frontend calls the backend URL directly. CORS handles cross-origin.
+
+**Pre-requisites:**
+- Backend deployed on Render (Phase 22) with a known URL
+- Backend `CORS_ORIGINS` updated to include the Vercel URL
+
+**Files changed / created:**
+```
+frontend/.env.production   # VITE_API_BASE_URL now points to Render URL
+frontend/vercel.json       # SPA rewrite + asset caching headers
+```
+
+**Steps:**
+
+1. **Update `frontend/.env.production`:**
+   ```env
+   VITE_API_BASE_URL=https://fastapi-jwt-rbac.onrender.com
+   ```
+   This tells axios to call the Render backend directly. The old `/api` value was for the nginx proxy (Docker/VPS path).
+
+2. **Create `frontend/vercel.json`:**
+   ```json
+   {
+     "rewrites": [
+       {
+         "source": "/((?!assets/).*)",
+         "destination": "/index.html"
+       }
+     ],
+     "headers": [
+       {
+         "source": "/assets/(.*)",
+         "headers": [
+           {
+             "key": "Cache-Control",
+             "value": "public, max-age=31536000, immutable"
+           }
+         ]
+       }
+     ]
+   }
+   ```
+   - The rewrite sends every non-asset path to `index.html` so react-router handles client-side routing.
+   - Hashed build assets (`/assets/index-*.js`, `/assets/index-*.css`) get immutable caching.
+
+3. **Update backend CORS on Render:**
+   In the Render dashboard → env vars → `CORS_ORIGINS`:
+   ```
+   https://your-app.vercel.app
+   ```
+   This tells FastAPI to allow requests from the Vercel origin.
+
+4. **Deploy on Vercel:**
+   - Push to GitHub.
+   - In Vercel dashboard: **New Project → Import GitHub repo**.
+   - Framework: **Vite** (auto-detected).
+   - Root directory: `frontend/`.
+   - Build command: `npm run build` (auto-detected).
+   - Output directory: `dist` (auto-detected).
+   - Environment variable: `VITE_API_BASE_URL` = `https://fastapi-jwt-rbac.onrender.com`
+   - Deploy.
+
+5. **Verify end-to-end:**
+   - Visit `https://your-app.vercel.app` → React app loads.
+   - Register a new account → 201 → redirected to dashboard.
+   - Login → token stored in localStorage → dashboard shows data.
+   - Products page loads from the Render backend.
+   - Admin page (if user has ADMIN role) shows user list.
+
+**Key decisions:**
+- **Vercel over Netlify** — better Vite integration, faster builds, generous free tier.
+- **Direct backend URL** — no nginx proxy; simpler architecture, CORS handles cross-origin.
+- **`VITE_API_BASE_URL` in Vercel dashboard** — keeps the secret out of git; the `.env.production` file is a fallback for local testing.
+- **Asset caching** — hashed filenames get `immutable` headers so repeat visits are instant.
+
+**Verify:** the live Vercel URL loads the React app, register/login works, products load from the Render backend, and no CORS errors appear in the browser console.
+
+---
+
 ## Suggested Learning Order (if rebuilding)
 
-1. Setup → 2. DB connection → 3. Schema → 4. Schemas → 5. Security → 6. Auth → 7. CRUD → 8. JWT/RBAC → 9. Admin → 10. Products → 11. Favorites → 12. Cart → 13. Orders → 14. Cross-cutting → 15. Tests → 16. Frontend setup → 17. Frontend auth/routing → 18. Frontend pages → 19. Design system → 20. Tailwind CSS → 21. Confirmation dialog → 22. Production deployment.
+1. Setup → 2. DB connection → 3. Schema → 4. Schemas → 5. Security → 6. Auth → 7. CRUD → 8. JWT/RBAC → 9. Admin → 10. Products → 11. Favorites → 12. Cart → 13. Orders → 14. Cross-cutting → 15. Tests → 16. Frontend setup → 17. Frontend auth/routing → 18. Frontend pages → 19. Design system → 20. Tailwind CSS → 21. Confirmation dialog → 22. Backend deployment → 23. Frontend deployment.
 
 Each phase builds on the previous one, and each phase is independently testable before moving on.
