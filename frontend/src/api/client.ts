@@ -11,6 +11,7 @@
 // ============================================================
 
 import axios, { AxiosError } from 'axios'
+import { showLoading, hideLoading } from './loadingState'
 import type {
   CartItem,
   CartItemCreate,
@@ -95,6 +96,8 @@ http.interceptors.request.use(async (config) => {
   const isAuthCall =
     config.url?.includes('/auth/refresh') ||
     config.url?.includes('/auth/login')
+  // Skip overlay for token refresh calls to avoid flickering.
+  if (!isAuthCall) showLoading()
   let accessToken = getToken()
 
   if (accessToken && isTokenExpired(accessToken) && !isAuthCall) {
@@ -129,8 +132,12 @@ http.interceptors.request.use(async (config) => {
 // Normalize FastAPI error responses into a single ApiError. FastAPI
 // returns `{"detail": "..."}` or a list of validation errors.
 http.interceptors.response.use(
-  (res) => res,
+  (res) => {
+    hideLoading()
+    return res
+  },
   (error: AxiosError) => {
+    hideLoading()
     const status = error.response?.status ?? 0
     let detail = error.response?.statusText ?? error.message
     const body = error.response?.data as

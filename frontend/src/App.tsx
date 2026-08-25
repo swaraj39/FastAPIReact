@@ -12,6 +12,7 @@ import { useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Avatar from './components/Avatar'
 import Loading from './components/Spinner'
+import LoadingOverlay from './components/LoadingOverlay'
 import ForgotPassword from './pages/ForgotPassword'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -53,6 +54,7 @@ export default function App() {
 
   return (
     <div className="flex min-h-screen flex-col">
+      <LoadingOverlay />
       {/* Navbar switches links depending on auth state + role. */}
       <nav className="sticky top-0 z-50 flex flex-wrap items-center justify-between gap-4 border-b border-line bg-surface px-6 py-[0.7rem] shadow-nav max-[820px]:px-5 max-[820px]:py-3">
         <button
