@@ -31,6 +31,9 @@ class Product(Base):
     # The price as a floating point number.
     price = Column(Float, nullable=False)
 
+    # The quantity as a Integer
+    quantity = Column(Integer, default=1)
+
     # ------------------------------------------------------------------
     # FOREIGN KEY - this is the column that links Product back to User.
     # ------------------------------------------------------------------

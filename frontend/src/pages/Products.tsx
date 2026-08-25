@@ -73,6 +73,7 @@ export default function Products() {
   const [name, setName] = useState('')
   const [description, setDescription] = useState('')
   const [price, setPrice] = useState('')
+  const [quantity, setQuantity] = useState('')
 
   // The product awaiting a delete confirmation (null = dialog closed).
   const [confirmProduct, setConfirmProduct] = useState<Product | null>(null)
@@ -156,6 +157,7 @@ export default function Products() {
         name,
         description: description || null,
         price: parseFloat(price), // convert the string input to a number
+        quantity: parseInt(quantity)
       }
       if (editing) {
         await api.updateProduct(editing.id, data)
@@ -177,6 +179,7 @@ export default function Products() {
     setName(p.name)
     setDescription(p.description ?? '')
     setPrice(String(p.price))
+    setQuantity(String(p.quantity))
   }
 
   async function handleDelete(id: number) {
@@ -343,6 +346,17 @@ export default function Products() {
                   min="0"
                   value={price}
                   onChange={(e) => setPrice(e.target.value)}
+                  required
+                />
+              </label>
+              <label>
+                Quantity
+                <input
+                  type="number"
+                  step="0"
+                  min="0"
+                  value={quantity}
+                  onChange={(e) => setQuantity(e.target.value)}
                   required
                 />
               </label>

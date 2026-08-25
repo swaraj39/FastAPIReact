@@ -17,6 +17,7 @@ def create_product(db: Session, owner: User, data: ProductCreate) -> Product:
         description=data.description,
         price=data.price,
         owner_id=owner.id,
+        quantity=data.quantity
     )
 
     return ProductRepository(db).create(product)

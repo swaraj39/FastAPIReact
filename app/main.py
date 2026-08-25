@@ -27,8 +27,14 @@ logger.info("Application Started")
 # Base.metadata.create_all(bind=engine)
 
 # Instantiate the FastAPI application.
+# In prod (ENVIRONMENT=prod) the auto-docs are disabled: /docs, /redoc and
+# /openapi.json would otherwise hand attackers a complete map of the API.
+_is_dev = settings.ENVIRONMENT == "dev"
 app = FastAPI(
     title=settings.APP_NAME,
+    docs_url="/docs" if _is_dev else None,
+    redoc_url="/redoc" if _is_dev else None,
+    openapi_url="/openapi.json" if _is_dev else None,
 )
 
 # Middleware runs on EVERY request (logging here). Order matters: the

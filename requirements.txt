@@ -1,5 +1,8 @@
 fastapi==0.141.1
 uvicorn==0.52.1
+# Process manager for production: runs MULTIPLE uvicorn workers.
+# Linux/Docker only (won't execute on Windows) - used in the prod container CMD.
+gunicorn==23.0.0
 sqlalchemy==2.0.51
 psycopg2-binary==2.9.12
 python-jose[cryptography]==3.5.0

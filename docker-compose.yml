@@ -1,29 +1,71 @@
+# ============================================================
+# Production-shaped local stack.
+#
+#   web (:80)  ->  api (:8000, internal)  ->  Supabase Postgres (cloud)
+#                       |
+#                       +-> redis (:6379, internal)
+#
+# Only `web` publishes a port. api and redis are reachable ONLY
+# inside the compose network. Postgres was removed: the database
+# lives in Supabase and is reached over the internet.
+#
+# Environment variables use ${VAR} substitution from the host .env
+# file in this folder - secrets stay OUT of images and OUT of git.
+# ============================================================
+
 services:
+  # ---- Frontend: nginx serving React + proxying /api to FastAPI ----
+  web:
+    build: ./frontend
+    container_name: fastapi-web
+    ports:
+      - "80:80"          # the ONLY public entry point of the whole app
+    depends_on:
+      - api
+    restart: unless-stopped
+
+  # ---- Backend API: gunicorn workers behind nginx ----
   api:
     build: .
-    container_name: fastapi
-    ports:
-      - "8000:8000"
+    container_name: fastapi-api
+    expose:
+      - "8000"           # internal only - nginx proxies to it
+    environment:
+      DATABASE_URL: ${DATABASE_URL}
+      SECRET_KEY: ${SECRET_KEY}
+      ALGORITHM: ${ALGORITHM:-HS256}
+      ACCESS_TOKEN_EXPIRE_MINUTES: ${ACCESS_TOKEN_EXPIRE_MINUTES:-30}
+      # Containers default to prod (docs hidden). Override per machine by
+      # setting ENVIRONMENT in that machine's .env.
+      ENVIRONMENT: ${ENVIRONMENT:-prod}
+      # Inside the compose network the Redis server is simply the host
+      # named "redis" - never localhost (that would be the api container
+      # itself). Comments MUST sit on their own YAML line: a '#' without
+      # a preceding space becomes part of the value!
+      REDIS_URL: redis://redis:6379
+      LOG_DIR: ${LOG_DIR:-logs}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost}
     volumes:
-      - uploads_data:/app/uploads
+      - uploads_data:/app/uploads  
     depends_on:
-      - redis
+      redis:
+        condition: service_healthy   # wait until Redis ANSWERS, not just starts
+    restart: unless-stopped
+
+  # ---- Redis: shared rate-limit counters for every gunicorn worker ----
   redis:
     image: redis:7
     container_name: fastapi-reactjs-redis
-    ports:
-      - "6379:6379"
+    expose:
+      - "6379"
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 5
     restart: unless-stopped
-
-  postgres:
-    image: postgres:16
-    environment:
-      POSTGRES_USER: postgres
-      POSTGRES_PASSWORD: Swaraj@39
-      POSTGRES_DB: fastapiall
-    ports:
-      - "5432:5432"
-
 
 volumes:
   uploads_data:

@@ -10,9 +10,12 @@
 
 from redis.asyncio import Redis
 
-# Connection URL for the local Redis server. Change this to point
-# at a hosted Redis (e.g. Redis Cloud) in production.
-REDIS_URL = "redis://localhost:6379"
+from app.core.config import settings
+
+# The URL comes from settings (REDIS_URL in .env) so dev uses the local
+# container while production points at a managed instance (e.g. Upstash,
+# which requires the TLS scheme "rediss://") without code changes.
+REDIS_URL = settings.REDIS_URL
 
 # One shared async Redis client. `decode_responses=True` makes Redis
 # return plain str objects instead of bytes, which is easier to work

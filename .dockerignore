@@ -1,0 +1,16 @@
+# Never bake these into the backend image.
+# Secrets (.env) are injected at RUNTIME by docker-compose instead.
+venv/
+.git/
+.idea/
+.pytest_cache/
+__pycache__/
+**/__pycache__/
+*.pyc
+logs/
+uploads/
+test.db
+code.txt
+.env
+frontend/
+node_modules/

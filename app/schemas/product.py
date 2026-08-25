@@ -1,6 +1,6 @@
 from typing import Optional
 
-from pydantic import BaseModel, ConfigDict, Field
+from pydantic import BaseModel, ConfigDict, Field, field_validator
 
 
 class ProductCreate(BaseModel):
@@ -19,6 +19,9 @@ class ProductCreate(BaseModel):
     description: Optional[str] = None 
     # or write str | none = none 
     price: float 
+    # Defaults to 1 when the client omits it, mirroring the model's
+    # Column(Integer, default=1) so old callers/tests keep working.
+    quantity: int = 1
 
 
 class ProductUpdate(BaseModel):
@@ -69,7 +72,17 @@ class ProductResponse(BaseModel):
     # this product. Defaults to False when not set (e.g. the owner-less
     # create response); the list/get endpoints stamp it per user.
     is_favorited: bool = False
-    # usually the pydantic reads or wants the dict by this it will get the object 
+    quantity: int
+
+    # Older rows may hold NULL in products.quantity (the column was added
+    # without NOT NULL). Coerce None -> 1 BEFORE Pydantic type-checks the
+    # int, so serialization never fails with ResponseValidationError.
+    @field_validator("quantity", mode="before")
+    @classmethod
+    def default_quantity(cls, v):
+        return 1 if v is None else v
+
+    # usually the pydantic reads or wants the dict by this it will get the object
     model_config = ConfigDict(from_attributes=True)
 
 

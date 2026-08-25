@@ -29,7 +29,6 @@ import app.models.orders  # noqa: F401
 import app.models.product  # noqa: F401
 import app.models.profile  # noqa: F401
 import app.models.user  # noqa: F401
-import app.models.demo
 from app.db.base import Base
 
 # Alembic Config object (reads alembic.ini).

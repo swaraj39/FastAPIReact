@@ -21,12 +21,17 @@ def client():
 
 @pytest.fixture(autouse=True)
 def clean_tables():
-    from app.db.session import SessionLocal
+    from app.db.base import Base
+    from app.db.session import SessionLocal, engine
     from app.models.cart import CartItem
     from app.models.orders import Orders
     from app.models.product import Product
     from app.models.profile import Profile
     from app.models.user import User
+
+    # Ensure every table exists even when test.db was deleted or is
+    # missing newer columns - create_all() only ADDS what is absent.
+    Base.metadata.create_all(bind=engine)
 
     db = SessionLocal()
     db.query(CartItem).delete()

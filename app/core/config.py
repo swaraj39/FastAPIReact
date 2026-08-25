@@ -30,6 +30,14 @@ class Settings(BaseSettings):
 
     REFRESH_TOKEN_EXPIRE_DAYS: int = 7
 
+    # Runtime mode: "dev" enables Swagger docs, "prod" hides them.
+    # Set via ENVIRONMENT in .env so the SAME image/code runs in both.
+    ENVIRONMENT: str = "dev"
+
+    # Redis connection for shared state (rate limiting counters).
+    # Must be reachable by EVERY worker process; see core/redis.py.
+    REDIS_URL: str = "redis://localhost:6379"
+
     LOG_DIR: str = "logs"
 
     # Comma-separated list of allowed browser origins for CORS.

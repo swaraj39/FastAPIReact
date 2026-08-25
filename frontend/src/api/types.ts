@@ -85,6 +85,7 @@ export interface Product {
   owner_id: number
   owner: OwnerSummary | null
   is_favorited: boolean
+  quantity: number
 }
 
 export interface OrderCreate{
