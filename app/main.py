@@ -65,3 +65,13 @@ def home():
     return {
         "message": "FastAPI JWT Authentication",
     }
+
+
+@app.get("/health")
+def health():
+    """Health check endpoint for Render / load balancers.
+
+    Returns 200 when the process is alive and can serve requests.
+    Render pings this path to decide if the service is healthy.
+    """
+    return {"status": "ok"}

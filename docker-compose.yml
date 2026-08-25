@@ -2,12 +2,12 @@
 # Production-shaped local stack.
 #
 #   web (:80)  ->  api (:8000, internal)  ->  Supabase Postgres (cloud)
-#                       |
-#                       +-> redis (:6379, internal)
+#                                               |
+#                                               +-> Redis Cloud (external)
 #
-# Only `web` publishes a port. api and redis are reachable ONLY
-# inside the compose network. Postgres was removed: the database
-# lives in Supabase and is reached over the internet.
+# Only `web` publishes a port. api is reachable ONLY inside the
+# compose network. Postgres and Redis live in the cloud and are
+# reached over the internet.
 #
 # Environment variables use ${VAR} substitution from the host .env
 # file in this folder - secrets stay OUT of images and OUT of git.
@@ -38,35 +38,14 @@ services:
       # Containers default to prod (docs hidden). Override per machine by
       # setting ENVIRONMENT in that machine's .env.
       ENVIRONMENT: ${ENVIRONMENT:-prod}
-      # Inside the compose network the Redis server is simply the host
-      # named "redis" - never localhost (that would be the api container
-      # itself). Comments MUST sit on their own YAML line: a '#' without
-      # a preceding space becomes part of the value!
-      REDIS_URL: redis://redis:6379
+      # External Redis Cloud instance - shared rate-limit counters for every
+      # gunicorn worker.
+      REDIS_URL: redis://default:YilFHmWaXmMfsILP05yLVEiYba9mzKUW@nautical-taste-macrofine-12507.db.redis.io:10613
       LOG_DIR: ${LOG_DIR:-logs}
       CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost}
     volumes:
-      - uploads_data:/app/uploads  
-    depends_on:
-      redis:
-        condition: service_healthy   # wait until Redis ANSWERS, not just starts
-    restart: unless-stopped
-
-  # ---- Redis: shared rate-limit counters for every gunicorn worker ----
-  redis:
-    image: redis:7
-    container_name: fastapi-reactjs-redis
-    expose:
-      - "6379"
-    volumes:
-      - redis_data:/data
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 5s
-      timeout: 3s
-      retries: 5
+      - uploads_data:/app/uploads
     restart: unless-stopped
 
 volumes:
   uploads_data:
-  redis_data:

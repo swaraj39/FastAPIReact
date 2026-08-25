@@ -1,1 +1,25 @@
 /node_modules
+
+# Environment secrets — NEVER commit
+.env
+
+# Python
+venv/
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# App runtime
+logs/
+uploads/
+test.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# OS
+Thumbs.db
+.DS_Store

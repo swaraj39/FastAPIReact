@@ -1,0 +1,40 @@
+# ============================================================
+# Render Blueprint — backend API service.
+#
+# Render reads this file on "New > Blueprint" to auto-create
+# the service. You can also create the service manually in the
+# dashboard and just use this as documentation.
+#
+# deploy: push to main → Render builds the Dockerfile →
+#         docker-entrypoint.sh runs migrations → gunicorn starts.
+# ============================================================
+
+services:
+  - type: web
+    name: fastapi-jwt-rbac
+    runtime: image            # build from the Dockerfile in repo root
+    image:
+      url:                    # empty = Render builds from Dockerfile
+    envVars:
+      # ---- Paste these in the Render dashboard (sensitive) ----
+      - key: DATABASE_URL
+        sync: false           # set manually: your Supabase session-pooler URL
+      - key: SECRET_KEY
+        generateValue: true   # Render creates a random 64-char hex string
+      - key: REDIS_URL
+        sync: false           # set later when you add a managed Redis
+
+      # ---- Safe to define here (non-sensitive) ----
+      - key: ENVIRONMENT
+        value: prod           # hides /docs, /redoc, /openapi.json
+      - key: ALGORITHM
+        value: HS256
+      - key: ACCESS_TOKEN_EXPIRE_MINUTES
+        value: "30"
+      - key: CORS_ORIGINS
+        sync: false           # set to https://your-frontend-domain after Stage 5
+      - key: LOG_DIR
+        value: logs
+
+    healthCheckPath: /health
+    autoDeploy: true          # redeploy on every push to main
