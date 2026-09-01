@@ -36,6 +36,7 @@ export default function App() {
   const { user, loading, logout } = useAuth()
   const { theme, toggleTheme } = useTheme()
   const [menuOpen, setMenuOpen] = useState(false)
+  const [loggedout, setLoggedOut] = useState(false)
   const navigate = useNavigate()
 
   // Close the mobile menu after a link is tapped.

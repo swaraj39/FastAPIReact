@@ -127,6 +127,14 @@ export default function Products() {
   // reload so the backend re-stamps is_favorited on every product.
   async function toggleFavorite(p: Product) {
     setError('')
+
+    // Optimistic update: flip the heart instantly
+    setProducts((prev) =>
+      prev.map((item) =>
+        item.id === p.id ? { ...item, is_favorited: !item.is_favorited } : item,
+      ),
+    )
+
     try {
       if (p.is_favorited) {
         await api.unfavoriteProduct(p.id)
@@ -137,6 +145,12 @@ export default function Products() {
       }
       await load(page)
     } catch (err) {
+      // Revert: flip the heart back on failure
+      setProducts((prev) =>
+        prev.map((item) =>
+          item.id === p.id ? { ...item, is_favorited: p.is_favorited } : item,
+        ),
+      )
       setError(err instanceof Error ? err.message : 'Failed to update favorite')
     }
   }

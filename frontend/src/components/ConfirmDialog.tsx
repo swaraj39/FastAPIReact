@@ -21,6 +21,7 @@
 // ============================================================
 
 import { useEffect } from 'react'
+import { createPortal } from 'react-dom'
 
 interface ConfirmDialogProps {
   /** Whether the dialog is visible (renders nothing when false). */
@@ -79,7 +80,7 @@ export default function ConfirmDialog({
 
   if (!open) return null
 
-  return (
+  return createPortal(
     <div
       className="fixed inset-0 z-[120] flex items-center justify-center bg-ink/40 p-4"
       onClick={onCancel}
@@ -113,6 +114,7 @@ export default function ConfirmDialog({
           </button>
         </div>
       </div>
-    </div>
+    </div>,
+    document.body,
   )
 }

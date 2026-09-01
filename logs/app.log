@@ -7213,3 +7213,856 @@ redis.exceptions.ConnectionError: Error Multiple exceptions: [Errno 10061] Conne
 2026-08-31 13:54:31 | INFO | fastapi_app | GET /products -> 200 (367.48 ms)
 2026-08-31 13:54:34 | INFO | fastapi_app | GET /admin/users -> 200 (374.61 ms)
 2026-08-31 13:54:34 | INFO | fastapi_app | GET /admin/users -> 200 (353.48 ms)
+2026-09-01 10:47:55 | INFO | fastapi_app | Application Started
+2026-09-01 10:48:23 | INFO | fastapi_app | POST /auth/refresh -> 200 (1249.29 ms)
+2026-09-01 10:48:23 | INFO | fastapi_app | POST /auth/refresh -> 200 (628.72 ms)
+2026-09-01 10:48:23 | INFO | fastapi_app | POST /auth/refresh -> 200 (643.33 ms)
+2026-09-01 10:48:23 | INFO | fastapi_app | POST /auth/refresh -> 200 (1241.77 ms)
+2026-09-01 10:48:24 | INFO | fastapi_app | GET /user/profile -> 200 (560.58 ms)
+2026-09-01 10:48:24 | INFO | fastapi_app | GET /user/profile -> 200 (169.33 ms)
+2026-09-01 10:48:24 | INFO | fastapi_app | GET /user/profile -> 200 (178.01 ms)
+2026-09-01 10:48:24 | INFO | fastapi_app | GET /admin/users -> 200 (393.04 ms)
+2026-09-01 10:48:24 | INFO | fastapi_app | GET /user/profile -> 200 (231.53 ms)
+2026-09-01 10:48:25 | INFO | fastapi_app | GET /admin/users -> 200 (362.75 ms)
+2026-09-01 10:48:25 | INFO | fastapi_app | GET /user/dashboard -> 200 (120.29 ms)
+2026-09-01 10:48:25 | INFO | fastapi_app | GET /user/dashboard -> 200 (117.00 ms)
+2026-09-01 10:48:26 | INFO | fastapi_app | GET /user/dashboard -> 200 (118.77 ms)
+2026-09-01 10:48:26 | INFO | fastapi_app | GET /user/dashboard -> 200 (154.88 ms)
+2026-09-01 10:48:27 | INFO | fastapi_app | GET /cart -> 200 (262.88 ms)
+2026-09-01 10:48:27 | INFO | fastapi_app | GET /cart -> 200 (187.26 ms)
+2026-09-01 10:48:28 | INFO | fastapi_app | GET /products -> 200 (576.55 ms)
+2026-09-01 10:48:28 | INFO | fastapi_app | GET /products -> 200 (409.33 ms)
+2026-09-01 10:49:09 | INFO | fastapi_app | GET /products/favorites -> 200 (291.53 ms)
+2026-09-01 10:49:10 | INFO | fastapi_app | GET /cart -> 200 (170.40 ms)
+2026-09-01 10:49:16 | INFO | fastapi_app | GET /orders -> 200 (3249.70 ms)
+2026-09-01 10:49:21 | INFO | fastapi_app | GET /products -> 200 (355.59 ms)
+2026-09-01 10:51:18 | INFO | fastapi_app | GET /cart -> 200 (193.60 ms)
+2026-09-01 10:51:18 | INFO | fastapi_app | GET /cart -> 200 (176.77 ms)
+2026-09-01 10:51:18 | INFO | fastapi_app | GET /products -> 200 (430.71 ms)
+2026-09-01 10:51:18 | INFO | fastapi_app | GET /products -> 200 (344.64 ms)
+2026-09-01 10:53:00 | INFO | fastapi_app | POST /auth/login -> 200 (488.62 ms)
+2026-09-01 10:53:00 | INFO | fastapi_app | GET /user/profile -> 200 (192.49 ms)
+2026-09-01 10:53:00 | INFO | fastapi_app | GET /user/dashboard -> 200 (121.20 ms)
+2026-09-01 10:53:00 | INFO | fastapi_app | GET /user/dashboard -> 200 (153.71 ms)
+2026-09-01 10:53:01 | INFO | fastapi_app | GET /cart -> 200 (204.00 ms)
+2026-09-01 10:53:02 | INFO | fastapi_app | GET /products -> 200 (396.25 ms)
+2026-09-01 10:53:02 | INFO | fastapi_app | GET /cart -> 200 (217.21 ms)
+2026-09-01 10:53:02 | INFO | fastapi_app | GET /products -> 200 (407.57 ms)
+2026-09-01 10:53:44 | INFO | fastapi_app | GET /user/profile -> 200 (227.54 ms)
+2026-09-01 10:53:44 | INFO | fastapi_app | GET /user/profile -> 200 (205.01 ms)
+2026-09-01 10:53:45 | INFO | fastapi_app | GET /cart -> 200 (179.81 ms)
+2026-09-01 10:53:45 | INFO | fastapi_app | GET /products -> 200 (403.46 ms)
+2026-09-01 10:53:45 | INFO | fastapi_app | GET /cart -> 200 (209.09 ms)
+2026-09-01 10:53:45 | INFO | fastapi_app | GET /products -> 200 (466.20 ms)
+2026-09-01 10:55:37 | INFO | fastapi_app | GET /user/profile -> 200 (185.25 ms)
+2026-09-01 10:55:37 | INFO | fastapi_app | GET /user/profile -> 200 (187.57 ms)
+2026-09-01 10:55:37 | INFO | fastapi_app | GET /cart -> 200 (178.44 ms)
+2026-09-01 10:55:37 | INFO | fastapi_app | GET /products -> 200 (362.53 ms)
+2026-09-01 10:55:37 | INFO | fastapi_app | GET /cart -> 200 (221.60 ms)
+2026-09-01 10:55:38 | INFO | fastapi_app | GET /products -> 200 (370.96 ms)
+2026-09-01 10:56:10 | INFO | fastapi_app | GET /user/profile -> 200 (487.25 ms)
+2026-09-01 10:56:11 | INFO | fastapi_app | GET /user/profile -> 200 (647.71 ms)
+2026-09-01 10:56:11 | INFO | fastapi_app | GET /cart -> 200 (220.02 ms)
+2026-09-01 10:56:11 | INFO | fastapi_app | GET /products -> 200 (622.63 ms)
+2026-09-01 10:56:11 | INFO | fastapi_app | GET /cart -> 200 (208.55 ms)
+2026-09-01 10:56:11 | INFO | fastapi_app | GET /products -> 200 (395.89 ms)
+2026-09-01 10:57:28 | INFO | fastapi_app | GET /user/profile -> 200 (214.06 ms)
+2026-09-01 10:57:29 | INFO | fastapi_app | GET /user/profile -> 200 (264.10 ms)
+2026-09-01 10:57:29 | INFO | fastapi_app | GET /products -> 200 (401.43 ms)
+2026-09-01 10:57:29 | INFO | fastapi_app | GET /cart -> 200 (192.59 ms)
+2026-09-01 10:57:29 | INFO | fastapi_app | GET /cart -> 200 (220.23 ms)
+2026-09-01 10:57:29 | INFO | fastapi_app | GET /products -> 200 (435.87 ms)
+2026-09-01 10:58:30 | INFO | fastapi_app | GET /user/profile -> 200 (235.64 ms)
+2026-09-01 10:58:30 | INFO | fastapi_app | GET /user/profile -> 200 (214.19 ms)
+2026-09-01 10:58:30 | INFO | fastapi_app | GET /cart -> 200 (187.53 ms)
+2026-09-01 10:58:31 | INFO | fastapi_app | GET /products -> 200 (379.68 ms)
+2026-09-01 10:58:31 | INFO | fastapi_app | GET /cart -> 200 (188.50 ms)
+2026-09-01 10:58:31 | INFO | fastapi_app | GET /products -> 200 (485.77 ms)
+2026-09-01 10:58:51 | INFO | fastapi_app | GET /cart -> 200 (250.17 ms)
+2026-09-01 10:58:51 | INFO | fastapi_app | GET /products -> 200 (500.93 ms)
+2026-09-01 10:59:01 | INFO | fastapi_app | GET /cart -> 200 (195.97 ms)
+2026-09-01 10:59:01 | INFO | fastapi_app | GET /products -> 200 (660.18 ms)
+2026-09-01 10:59:15 | INFO | fastapi_app | GET /user/profile -> 200 (246.56 ms)
+2026-09-01 10:59:15 | INFO | fastapi_app | GET /user/profile -> 200 (193.25 ms)
+2026-09-01 10:59:15 | INFO | fastapi_app | GET /cart -> 200 (209.40 ms)
+2026-09-01 10:59:15 | INFO | fastapi_app | GET /products -> 200 (430.53 ms)
+2026-09-01 10:59:15 | INFO | fastapi_app | GET /cart -> 200 (207.42 ms)
+2026-09-01 10:59:16 | INFO | fastapi_app | GET /products -> 200 (743.96 ms)
+2026-09-01 10:59:27 | INFO | fastapi_app | GET /products -> 200 (472.34 ms)
+2026-09-01 10:59:27 | INFO | fastapi_app | GET /cart -> 200 (190.70 ms)
+2026-09-01 10:59:42 | INFO | fastapi_app | GET /cart -> 200 (244.14 ms)
+2026-09-01 10:59:42 | INFO | fastapi_app | GET /products -> 200 (414.34 ms)
+2026-09-01 11:00:07 | INFO | fastapi_app | GET /user/profile -> 200 (256.88 ms)
+2026-09-01 11:00:07 | INFO | fastapi_app | GET /user/profile -> 200 (199.98 ms)
+2026-09-01 11:00:08 | INFO | fastapi_app | GET /products -> 200 (419.23 ms)
+2026-09-01 11:00:08 | INFO | fastapi_app | GET /cart -> 200 (201.90 ms)
+2026-09-01 11:00:08 | INFO | fastapi_app | GET /cart -> 200 (241.58 ms)
+2026-09-01 11:00:08 | INFO | fastapi_app | GET /products -> 200 (446.00 ms)
+2026-09-01 11:00:23 | INFO | fastapi_app | GET /products -> 200 (454.01 ms)
+2026-09-01 11:00:24 | INFO | fastapi_app | GET /cart -> 200 (232.90 ms)
+2026-09-01 11:00:44 | INFO | fastapi_app | GET /cart -> 200 (254.60 ms)
+2026-09-01 11:00:44 | INFO | fastapi_app | GET /products -> 200 (385.44 ms)
+2026-09-01 11:00:58 | INFO | fastapi_app | GET /user/profile -> 200 (237.17 ms)
+2026-09-01 11:00:59 | INFO | fastapi_app | GET /user/profile -> 200 (232.62 ms)
+2026-09-01 11:00:59 | INFO | fastapi_app | GET /products -> 200 (414.85 ms)
+2026-09-01 11:00:59 | INFO | fastapi_app | GET /cart -> 200 (230.05 ms)
+2026-09-01 11:01:00 | INFO | fastapi_app | GET /cart -> 200 (198.05 ms)
+2026-09-01 11:01:00 | INFO | fastapi_app | GET /products -> 200 (418.07 ms)
+2026-09-01 11:07:35 | INFO | fastapi_app | GET /cart -> 200 (287.46 ms)
+2026-09-01 11:07:35 | INFO | fastapi_app | GET /products -> 200 (458.90 ms)
+2026-09-01 11:11:59 | INFO | fastapi_app | GET /cart -> 200 (230.26 ms)
+2026-09-01 11:11:59 | INFO | fastapi_app | GET /products -> 200 (366.63 ms)
+2026-09-01 11:14:06 | INFO | fastapi_app | POST /cart -> 201 (868.79 ms)
+2026-09-01 11:14:06 | INFO | fastapi_app | GET /cart -> 200 (261.97 ms)
+2026-09-01 11:14:19 | INFO | fastapi_app | GET /cart -> 200 (286.14 ms)
+2026-09-01 11:14:24 | INFO | fastapi_app | PUT /cart/11 -> 200 (860.63 ms)
+2026-09-01 11:14:24 | INFO | fastapi_app | GET /cart -> 200 (241.95 ms)
+2026-09-01 11:14:25 | INFO | fastapi_app | GET /products -> 200 (424.95 ms)
+2026-09-01 11:14:30 | INFO | fastapi_app | DELETE /cart/11 -> 204 (639.03 ms)
+2026-09-01 11:14:30 | INFO | fastapi_app | GET /cart -> 200 (174.71 ms)
+2026-09-01 11:14:31 | INFO | fastapi_app | GET /products -> 200 (355.55 ms)
+2026-09-01 11:19:45 | INFO | fastapi_app | GET /user/profile -> 200 (238.63 ms)
+2026-09-01 11:19:45 | INFO | fastapi_app | GET /user/profile -> 200 (174.19 ms)
+2026-09-01 11:20:12 | INFO | fastapi_app | GET /user/profile -> 200 (178.38 ms)
+2026-09-01 11:20:12 | INFO | fastapi_app | GET /user/profile -> 200 (188.14 ms)
+2026-09-01 11:20:12 | INFO | fastapi_app | GET /products -> 200 (376.06 ms)
+2026-09-01 11:20:12 | INFO | fastapi_app | GET /cart -> 200 (213.74 ms)
+2026-09-01 11:20:12 | INFO | fastapi_app | GET /cart -> 200 (175.78 ms)
+2026-09-01 11:20:13 | INFO | fastapi_app | GET /products -> 200 (362.47 ms)
+2026-09-01 11:20:41 | INFO | fastapi_app | GET /products -> 200 (376.74 ms)
+2026-09-01 11:20:41 | INFO | fastapi_app | GET /cart -> 200 (195.90 ms)
+2026-09-01 11:20:41 | INFO | fastapi_app | GET /cart -> 200 (195.21 ms)
+2026-09-01 11:20:41 | INFO | fastapi_app | GET /products -> 200 (443.91 ms)
+2026-09-01 11:21:00 | INFO | fastapi_app | GET /cart -> 200 (221.14 ms)
+2026-09-01 11:21:00 | INFO | fastapi_app | GET /products -> 200 (405.40 ms)
+2026-09-01 11:21:42 | INFO | fastapi_app | GET /user/profile -> 200 (199.35 ms)
+2026-09-01 11:21:42 | INFO | fastapi_app | GET /user/profile -> 200 (312.21 ms)
+2026-09-01 11:21:43 | INFO | fastapi_app | GET /products -> 200 (512.75 ms)
+2026-09-01 11:21:43 | INFO | fastapi_app | GET /cart -> 200 (301.71 ms)
+2026-09-01 11:21:43 | INFO | fastapi_app | GET /cart -> 200 (266.47 ms)
+2026-09-01 11:21:43 | INFO | fastapi_app | GET /products -> 200 (473.92 ms)
+2026-09-01 11:21:58 | INFO | fastapi_app | GET /products -> 200 (399.17 ms)
+2026-09-01 11:21:58 | INFO | fastapi_app | GET /cart -> 200 (232.81 ms)
+2026-09-01 11:21:58 | INFO | fastapi_app | GET /cart -> 200 (182.25 ms)
+2026-09-01 11:21:58 | INFO | fastapi_app | GET /products -> 200 (363.98 ms)
+2026-09-01 11:22:01 | INFO | fastapi_app | GET /user/dashboard -> 200 (122.29 ms)
+2026-09-01 11:22:01 | INFO | fastapi_app | GET /user/dashboard -> 200 (124.90 ms)
+2026-09-01 11:22:03 | INFO | fastapi_app | GET /cart -> 200 (220.83 ms)
+2026-09-01 11:22:04 | INFO | fastapi_app | GET /products -> 200 (367.70 ms)
+2026-09-01 11:22:04 | INFO | fastapi_app | GET /cart -> 200 (173.38 ms)
+2026-09-01 11:22:04 | INFO | fastapi_app | GET /products -> 200 (359.41 ms)
+2026-09-01 11:23:40 | INFO | fastapi_app | POST /auth/refresh -> 200 (142.05 ms)
+2026-09-01 11:23:40 | INFO | fastapi_app | POST /auth/refresh -> 200 (160.89 ms)
+2026-09-01 11:23:40 | INFO | fastapi_app | GET /user/profile -> 200 (189.30 ms)
+2026-09-01 11:23:40 | INFO | fastapi_app | GET /user/profile -> 200 (236.77 ms)
+2026-09-01 11:23:40 | INFO | fastapi_app | GET /cart -> 200 (264.71 ms)
+2026-09-01 11:23:40 | INFO | fastapi_app | GET /products -> 200 (369.49 ms)
+2026-09-01 11:23:40 | INFO | fastapi_app | GET /cart -> 200 (224.07 ms)
+2026-09-01 11:23:41 | INFO | fastapi_app | GET /products -> 200 (364.85 ms)
+2026-09-01 11:25:32 | INFO | fastapi_app | GET /user/profile -> 200 (186.79 ms)
+2026-09-01 11:25:32 | INFO | fastapi_app | GET /user/profile -> 200 (181.99 ms)
+2026-09-01 11:25:35 | INFO | fastapi_app | GET /user/profile -> 200 (199.48 ms)
+2026-09-01 11:25:35 | INFO | fastapi_app | GET /user/profile -> 200 (281.46 ms)
+2026-09-01 11:25:36 | INFO | fastapi_app | GET /cart -> 200 (242.29 ms)
+2026-09-01 11:25:36 | INFO | fastapi_app | GET /products -> 200 (480.24 ms)
+2026-09-01 11:25:36 | INFO | fastapi_app | GET /cart -> 200 (191.44 ms)
+2026-09-01 11:25:36 | INFO | fastapi_app | GET /products -> 200 (388.53 ms)
+2026-09-01 11:25:38 | INFO | fastapi_app | GET /user/profile -> 200 (225.15 ms)
+2026-09-01 11:25:38 | INFO | fastapi_app | GET /user/profile -> 200 (216.58 ms)
+2026-09-01 11:25:39 | INFO | fastapi_app | GET /cart -> 200 (230.56 ms)
+2026-09-01 11:25:39 | INFO | fastapi_app | GET /products -> 200 (397.24 ms)
+2026-09-01 11:25:39 | INFO | fastapi_app | GET /cart -> 200 (188.05 ms)
+2026-09-01 11:25:39 | INFO | fastapi_app | GET /products -> 200 (461.21 ms)
+2026-09-01 11:25:44 | INFO | fastapi_app | GET /productss -> 404 (13.31 ms)
+2026-09-01 11:25:44 | INFO | fastapi_app | GET /cart -> 200 (346.69 ms)
+2026-09-01 11:25:52 | INFO | fastapi_app | GET /productss -> 404 (2.08 ms)
+2026-09-01 11:25:52 | INFO | fastapi_app | GET /productss -> 404 (0.44 ms)
+2026-09-01 11:25:52 | INFO | fastapi_app | GET /cart -> 200 (200.52 ms)
+2026-09-01 11:25:52 | INFO | fastapi_app | GET /cart -> 200 (176.32 ms)
+2026-09-01 11:28:20 | INFO | fastapi_app | GET /cart -> 200 (238.82 ms)
+2026-09-01 11:28:20 | INFO | fastapi_app | GET /products -> 200 (372.97 ms)
+2026-09-01 11:28:44 | INFO | fastapi_app | GET /user/profile -> 200 (182.55 ms)
+2026-09-01 11:28:45 | INFO | fastapi_app | GET /user/profile -> 200 (192.30 ms)
+2026-09-01 11:28:45 | INFO | fastapi_app | GET /products -> 200 (393.56 ms)
+2026-09-01 11:28:45 | INFO | fastapi_app | GET /cart -> 200 (231.32 ms)
+2026-09-01 11:28:46 | INFO | fastapi_app | GET /cart -> 200 (207.52 ms)
+2026-09-01 11:28:46 | INFO | fastapi_app | GET /products -> 200 (418.36 ms)
+2026-09-01 12:07:43 | INFO | fastapi_app | POST /auth/refresh -> 200 (158.90 ms)
+2026-09-01 12:07:44 | INFO | fastapi_app | GET /products/favorites -> 200 (276.29 ms)
+2026-09-01 12:07:46 | INFO | fastapi_app | GET /cart -> 200 (245.62 ms)
+2026-09-01 12:07:52 | INFO | fastapi_app | GET /user/dashboard -> 200 (118.21 ms)
+2026-09-01 12:07:52 | INFO | fastapi_app | GET /user/dashboard -> 200 (161.25 ms)
+2026-09-01 12:08:01 | INFO | fastapi_app | GET /cart -> 200 (180.39 ms)
+2026-09-01 12:08:01 | INFO | fastapi_app | GET /products -> 200 (389.80 ms)
+2026-09-01 12:08:01 | INFO | fastapi_app | GET /cart -> 200 (234.34 ms)
+2026-09-01 12:08:02 | INFO | fastapi_app | GET /products -> 200 (390.72 ms)
+2026-09-01 12:08:07 | INFO | fastapi_app | GET /admin/users -> 200 (378.25 ms)
+2026-09-01 12:08:07 | INFO | fastapi_app | GET /admin/users -> 200 (369.83 ms)
+2026-09-01 12:08:16 | INFO | fastapi_app | GET /cart -> 200 (200.79 ms)
+2026-09-01 12:08:16 | INFO | fastapi_app | GET /cart -> 200 (188.45 ms)
+2026-09-01 12:08:16 | INFO | fastapi_app | GET /products -> 200 (477.37 ms)
+2026-09-01 12:08:17 | INFO | fastapi_app | GET /products -> 200 (405.56 ms)
+2026-09-01 12:08:19 | INFO | fastapi_app | GET /user/dashboard -> 200 (117.78 ms)
+2026-09-01 12:08:19 | INFO | fastapi_app | GET /user/dashboard -> 200 (117.16 ms)
+2026-09-01 12:08:20 | INFO | fastapi_app | GET /cart -> 200 (229.64 ms)
+2026-09-01 12:08:20 | INFO | fastapi_app | GET /products -> 200 (463.48 ms)
+2026-09-01 12:08:20 | INFO | fastapi_app | GET /cart -> 200 (276.21 ms)
+2026-09-01 12:08:21 | INFO | fastapi_app | GET /products -> 200 (571.90 ms)
+2026-09-01 12:08:23 | INFO | fastapi_app | GET /cart -> 200 (324.35 ms)
+2026-09-01 12:08:23 | INFO | fastapi_app | GET /cart -> 200 (269.05 ms)
+2026-09-01 12:08:23 | INFO | fastapi_app | GET /products -> 200 (724.26 ms)
+2026-09-01 12:08:23 | INFO | fastapi_app | GET /products -> 200 (394.05 ms)
+2026-09-01 12:08:35 | INFO | fastapi_app | GET /user/dashboard -> 200 (175.28 ms)
+2026-09-01 12:08:35 | INFO | fastapi_app | GET /user/dashboard -> 200 (122.65 ms)
+2026-09-01 12:09:25 | INFO | fastapi_app | GET /cart -> 200 (226.53 ms)
+2026-09-01 12:09:26 | INFO | fastapi_app | GET /products -> 200 (391.63 ms)
+2026-09-01 12:09:26 | INFO | fastapi_app | GET /cart -> 200 (191.25 ms)
+2026-09-01 12:09:26 | INFO | fastapi_app | GET /products -> 200 (575.77 ms)
+2026-09-01 12:10:19 | INFO | fastapi_app | POST /auth/login -> 200 (500.11 ms)
+2026-09-01 12:10:19 | INFO | fastapi_app | GET /user/profile -> 200 (221.49 ms)
+2026-09-01 12:10:20 | INFO | fastapi_app | GET /products -> 200 (384.76 ms)
+2026-09-01 12:10:20 | INFO | fastapi_app | GET /cart -> 200 (180.90 ms)
+2026-09-01 12:10:20 | INFO | fastapi_app | GET /cart -> 200 (175.63 ms)
+2026-09-01 12:10:20 | INFO | fastapi_app | GET /products -> 200 (364.12 ms)
+2026-09-01 12:10:53 | INFO | fastapi_app | GET /user/profile -> 200 (234.28 ms)
+2026-09-01 12:10:53 | INFO | fastapi_app | GET /user/profile -> 200 (186.32 ms)
+2026-09-01 12:10:53 | INFO | fastapi_app | GET /cart -> 200 (180.30 ms)
+2026-09-01 12:10:53 | INFO | fastapi_app | GET /products -> 200 (354.28 ms)
+2026-09-01 12:10:53 | INFO | fastapi_app | GET /cart -> 200 (186.02 ms)
+2026-09-01 12:10:54 | INFO | fastapi_app | GET /products -> 200 (435.62 ms)
+2026-09-01 12:13:26 | INFO | fastapi_app | GET /cart -> 200 (244.25 ms)
+2026-09-01 12:13:26 | INFO | fastapi_app | GET /products -> 200 (442.59 ms)
+2026-09-01 12:16:17 | INFO | fastapi_app | GET /cart -> 200 (221.52 ms)
+2026-09-01 12:16:17 | INFO | fastapi_app | GET /products -> 200 (420.43 ms)
+2026-09-01 12:26:57 | INFO | fastapi_app | GET /user/dashboard -> 200 (171.94 ms)
+2026-09-01 12:26:57 | INFO | fastapi_app | GET /user/dashboard -> 200 (141.61 ms)
+2026-09-01 12:26:58 | INFO | fastapi_app | GET /cart -> 200 (197.18 ms)
+2026-09-01 12:26:58 | INFO | fastapi_app | GET /products -> 200 (382.41 ms)
+2026-09-01 12:26:58 | INFO | fastapi_app | GET /cart -> 200 (199.91 ms)
+2026-09-01 12:26:59 | INFO | fastapi_app | GET /products -> 200 (442.37 ms)
+2026-09-01 12:27:06 | INFO | fastapi_app | PUT /user/update -> 200 (636.09 ms)
+2026-09-01 12:28:41 | INFO | fastapi_app | GET /cart -> 200 (181.72 ms)
+2026-09-01 12:28:41 | INFO | fastapi_app | GET /products -> 200 (353.31 ms)
+2026-09-01 12:28:41 | INFO | fastapi_app | GET /cart -> 200 (218.84 ms)
+2026-09-01 12:28:41 | INFO | fastapi_app | GET /products -> 200 (373.05 ms)
+2026-09-01 12:35:55 | INFO | fastapi_app | GET /cart -> 200 (223.30 ms)
+2026-09-01 12:35:55 | INFO | fastapi_app | GET /products -> 200 (446.02 ms)
+2026-09-01 12:35:55 | INFO | fastapi_app | GET /cart -> 200 (225.25 ms)
+2026-09-01 12:35:56 | INFO | fastapi_app | GET /products -> 200 (473.10 ms)
+2026-09-01 12:35:59 | INFO | fastapi_app | GET /user/dashboard -> 200 (156.46 ms)
+2026-09-01 12:35:59 | INFO | fastapi_app | GET /user/dashboard -> 200 (119.74 ms)
+2026-09-01 12:36:01 | INFO | fastapi_app | GET /cart -> 200 (195.33 ms)
+2026-09-01 12:36:01 | INFO | fastapi_app | GET /products -> 200 (387.19 ms)
+2026-09-01 12:36:01 | INFO | fastapi_app | GET /cart -> 200 (229.58 ms)
+2026-09-01 12:36:01 | INFO | fastapi_app | GET /products -> 200 (378.29 ms)
+2026-09-01 12:36:26 | INFO | fastapi_app | GET /user/profile -> 200 (177.26 ms)
+2026-09-01 12:36:26 | INFO | fastapi_app | GET /user/profile -> 200 (177.91 ms)
+2026-09-01 12:36:27 | INFO | fastapi_app | GET /cart -> 200 (217.60 ms)
+2026-09-01 12:36:27 | INFO | fastapi_app | GET /products -> 200 (351.69 ms)
+2026-09-01 12:36:27 | INFO | fastapi_app | GET /cart -> 200 (176.17 ms)
+2026-09-01 12:36:27 | INFO | fastapi_app | GET /products -> 200 (351.45 ms)
+2026-09-01 12:36:35 | INFO | fastapi_app | GET /user/dashboard -> 200 (129.27 ms)
+2026-09-01 12:36:35 | INFO | fastapi_app | GET /user/dashboard -> 200 (160.99 ms)
+2026-09-01 12:36:36 | INFO | fastapi_app | GET /products -> 200 (352.43 ms)
+2026-09-01 12:36:36 | INFO | fastapi_app | GET /cart -> 200 (191.42 ms)
+2026-09-01 12:36:36 | INFO | fastapi_app | GET /cart -> 200 (184.20 ms)
+2026-09-01 12:36:36 | INFO | fastapi_app | GET /products -> 200 (378.31 ms)
+2026-09-01 14:54:22 | ERROR | fastapi_app | Unhandled error: (psycopg2.OperationalError) server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.role AS users_role 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'username_1': 'abcd', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\api\v1\auth.py", line 78, in refresh_access_token
+    .first()
+     ~~~~~^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2766, in first
+    return self.limit(1)._iter().first()  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2864, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2373, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2271, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2365, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.role AS users_role 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'username_1': 'abcd', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-09-01 14:54:24 | ERROR | fastapi_app | Unhandled error: (psycopg2.OperationalError) server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.role AS users_role 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'username_1': 'abcd', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+psycopg2.OperationalError: server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\api\v1\auth.py", line 78, in refresh_access_token
+    .first()
+     ~~~~~^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2766, in first
+    return self.limit(1)._iter().first()  # type: ignore
+           ~~~~~~~~~~~~~~~~~~~^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\query.py", line 2864, in _iter
+    result: Union[ScalarResult[_T], Result[_T]] = self.session.execute(
+                                                  ~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+        params,
+        ^^^^^^^
+        execution_options={"_sa_orm_load_options": self.load_options},
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2373, in execute
+    return self._execute_internal(
+           ~~~~~~~~~~~~~~~~~~~~~~^
+        statement,
+        ^^^^^^^^^^
+    ...<4 lines>...
+        _add_event=_add_event,
+        ^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2271, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self,
+        ^^^^^
+    ...<4 lines>...
+        conn,
+        ^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+        statement, params or {}, execution_options=execution_options
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1421, in execute
+    return meth(
+        self,
+        distilled_parameters,
+        execution_options or NO_OPTIONS,
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 526, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        self, distilled_params, execution_options
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1643, in _execute_clauseelement
+    ret = self._execute_context(
+        dialect,
+    ...<8 lines>...
+        cache_hit=cache_hit,
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1848, in _execute_context
+    return self._exec_single_context(
+           ~~~~~~~~~~~~~~~~~~~~~~~~~^
+        dialect, context, statement, parameters
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1988, in _exec_single_context
+    self._handle_dbapi_exception(
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^
+        e, str_statement, effective_parameters, cursor, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2365, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1969, in _exec_single_context
+    self.dialect.do_execute(
+    ~~~~~~~~~~~~~~~~~~~~~~~^
+        cursor, str_statement, effective_parameters, context
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\sqlalchemy\engine\default.py", line 952, in do_execute
+    cursor.execute(statement, parameters)
+    ~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^
+sqlalchemy.exc.OperationalError: (psycopg2.OperationalError) server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+server closed the connection unexpectedly
+	This probably means the server terminated abnormally
+	before or while processing the request.
+
+[SQL: SELECT users.id AS users_id, users.username AS users_username, users.email AS users_email, users.password AS users_password, users.role AS users_role 
+FROM users 
+WHERE users.username = %(username_1)s 
+ LIMIT %(param_1)s]
+[parameters: {'username_1': 'abcd', 'param_1': 1}]
+(Background on this error at: https://sqlalche.me/e/20/e3q8)
+2026-09-01 14:54:26 | INFO | fastapi_app | GET /user/profile -> 401 (3.44 ms)
+2026-09-01 14:54:27 | INFO | fastapi_app | GET /user/profile -> 401 (0.58 ms)
+2026-09-01 15:00:49 | INFO | fastapi_app | POST /auth/login -> 200 (2347.46 ms)
+2026-09-01 15:00:50 | INFO | fastapi_app | GET /user/profile -> 200 (560.55 ms)
+2026-09-01 15:00:50 | INFO | fastapi_app | GET /cart -> 200 (681.60 ms)
+2026-09-01 15:00:50 | INFO | fastapi_app | GET /products -> 200 (735.53 ms)
+2026-09-01 15:00:51 | INFO | fastapi_app | GET /products -> 200 (341.25 ms)
+2026-09-01 15:00:51 | INFO | fastapi_app | GET /cart -> 200 (527.34 ms)
+2026-09-01 15:00:52 | INFO | fastapi_app | GET /cart -> 200 (238.96 ms)
+2026-09-01 15:00:53 | INFO | fastapi_app | GET /products -> 200 (363.89 ms)
+2026-09-01 15:00:53 | INFO | fastapi_app | GET /cart -> 200 (178.52 ms)
+2026-09-01 15:00:53 | INFO | fastapi_app | GET /products -> 200 (335.30 ms)
+2026-09-01 15:00:54 | INFO | fastapi_app | GET /user/dashboard -> 200 (109.83 ms)
+2026-09-01 15:00:54 | INFO | fastapi_app | GET /user/dashboard -> 200 (158.33 ms)
+2026-09-01 15:00:55 | INFO | fastapi_app | GET /cart -> 200 (181.12 ms)
+2026-09-01 15:00:55 | INFO | fastapi_app | GET /products -> 200 (337.25 ms)
+2026-09-01 15:00:55 | INFO | fastapi_app | GET /cart -> 200 (168.49 ms)
+2026-09-01 15:00:55 | INFO | fastapi_app | GET /products -> 200 (341.51 ms)
+2026-09-01 15:58:20 | INFO | fastapi_app | POST /auth/login -> 200 (624.11 ms)
+2026-09-01 15:58:20 | INFO | fastapi_app | GET /user/profile -> 200 (280.76 ms)
+2026-09-01 15:58:21 | INFO | fastapi_app | GET /cart -> 200 (328.93 ms)
+2026-09-01 15:58:21 | INFO | fastapi_app | GET /products -> 200 (536.50 ms)
+2026-09-01 15:58:21 | INFO | fastapi_app | GET /cart -> 200 (261.38 ms)
+2026-09-01 15:58:21 | INFO | fastapi_app | GET /products -> 200 (461.19 ms)
+2026-09-01 16:00:23 | INFO | fastapi_app | GET /products -> 200 (406.51 ms)
+2026-09-01 16:16:08 | INFO | fastapi_app | GET /cart -> 200 (197.41 ms)
+2026-09-01 16:16:08 | INFO | fastapi_app | GET /products -> 200 (368.95 ms)
+2026-09-01 16:16:08 | INFO | fastapi_app | GET /cart -> 200 (196.68 ms)
+2026-09-01 16:16:09 | INFO | fastapi_app | GET /products -> 200 (445.60 ms)
+2026-09-01 16:16:11 | INFO | fastapi_app | POST /products/1/favorite -> 200 (790.87 ms)
+2026-09-01 16:16:11 | INFO | fastapi_app | GET /products -> 200 (347.02 ms)
+2026-09-01 16:16:16 | INFO | fastapi_app | DELETE /products/1/favorite -> 200 (416.94 ms)
+2026-09-01 16:16:17 | INFO | fastapi_app | GET /products -> 200 (1457.14 ms)
+2026-09-01 16:19:42 | INFO | fastapi_app | POST /products/1/favorite -> 200 (616.23 ms)
+2026-09-01 16:19:43 | INFO | fastapi_app | GET /products -> 200 (715.78 ms)
+2026-09-01 16:19:49 | INFO | fastapi_app | GET /products/favorites -> 200 (594.86 ms)
+2026-09-01 16:19:55 | INFO | fastapi_app | GET /products -> 200 (348.38 ms)
+2026-09-01 16:19:58 | INFO | fastapi_app | DELETE /products/1/favorite -> 200 (472.50 ms)
+2026-09-01 16:19:58 | INFO | fastapi_app | GET /products -> 200 (451.78 ms)
+2026-09-01 16:20:12 | INFO | fastapi_app | GET /products -> 200 (348.04 ms)
+2026-09-01 16:20:12 | INFO | fastapi_app | GET /cart -> 200 (164.31 ms)
+2026-09-01 16:20:12 | INFO | fastapi_app | GET /cart -> 200 (170.93 ms)
+2026-09-01 16:20:12 | INFO | fastapi_app | GET /products -> 200 (335.32 ms)
+2026-09-01 16:20:38 | INFO | fastapi_app | POST /products -> 201 (488.40 ms)
+2026-09-01 16:20:38 | INFO | fastapi_app | GET /products -> 200 (337.08 ms)
+2026-09-01 16:21:24 | ERROR | fastapi_app | Unhandled error: Error 10054 while writing to socket. An existing connection was forcibly closed by the remote host.
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1185, in send_packed_command
+    await asyncio.wait_for(
+        self._send_packed_command(command), self.socket_timeout
+    )
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\tasks.py", line 507, in wait_for
+    return await fut
+           ^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1169, in _send_packed_command
+    await self._writer.drain()
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\streams.py", line 374, in drain
+    raise exc
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\selector_events.py", line 1012, in _read_ready__data_received
+    data = self._sock.recv(self.max_size)
+ConnectionResetError: [WinError 10054] An existing connection was forcibly closed by the remote host
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 481, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 674, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\core\rate_limiting.py", line 40, in check_rate_limit
+    count = await redis_client.incr(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\client.py", line 946, in execute_command
+    result = await conn.retry.call_with_retry(
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<5 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 81, in call_with_retry
+    raise error
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\client.py", line 870, in _send_command_parse_response
+    await conn.send_command(*args)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1214, in send_command
+    await self.send_packed_command(
+        self.pack_command(*args), check_health=kwargs.get("check_health", True)
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1201, in send_packed_command
+    raise ConnectionError(
+        f"Error {err_no} while writing to socket. {errmsg}."
+    ) from e
+redis.exceptions.ConnectionError: Error 10054 while writing to socket. An existing connection was forcibly closed by the remote host.
+2026-09-01 16:21:51 | INFO | fastapi_app | GET /orders -> 200 (1657.93 ms)
+2026-09-01 16:21:54 | INFO | fastapi_app | GET /cart -> 200 (215.44 ms)
+2026-09-01 16:22:00 | INFO | fastapi_app | GET /products/favorites -> 200 (232.50 ms)
+2026-09-01 16:22:08 | INFO | fastapi_app | GET /user/profile -> 200 (180.83 ms)
+2026-09-01 16:22:08 | INFO | fastapi_app | GET /user/profile -> 200 (176.70 ms)
+2026-09-01 16:22:09 | INFO | fastapi_app | GET /cart -> 200 (216.20 ms)
+2026-09-01 16:22:09 | INFO | fastapi_app | GET /products -> 200 (342.39 ms)
+2026-09-01 16:22:09 | INFO | fastapi_app | GET /cart -> 200 (171.65 ms)
+2026-09-01 16:22:09 | INFO | fastapi_app | GET /products -> 200 (324.04 ms)
+2026-09-01 16:22:14 | INFO | fastapi_app | GET /cart -> 200 (164.97 ms)
+2026-09-01 16:22:30 | INFO | fastapi_app | GET /user/profile -> 200 (213.82 ms)
+2026-09-01 16:22:30 | INFO | fastapi_app | GET /user/profile -> 200 (172.16 ms)
+2026-09-01 16:22:30 | INFO | fastapi_app | GET /products -> 200 (348.08 ms)
+2026-09-01 16:22:30 | INFO | fastapi_app | GET /cart -> 200 (166.47 ms)
+2026-09-01 16:22:30 | INFO | fastapi_app | GET /cart -> 200 (218.13 ms)
+2026-09-01 16:22:30 | INFO | fastapi_app | GET /products -> 200 (340.04 ms)
+2026-09-01 17:06:49 | INFO | fastapi_app | POST /auth/refresh -> 200 (159.12 ms)
+2026-09-01 17:06:49 | INFO | fastapi_app | POST /auth/refresh -> 200 (168.70 ms)
+2026-09-01 17:06:49 | INFO | fastapi_app | POST /auth/refresh -> 200 (167.37 ms)
+2026-09-01 17:06:49 | INFO | fastapi_app | POST /auth/refresh -> 200 (191.61 ms)
+2026-09-01 17:06:49 | INFO | fastapi_app | GET /cart -> 200 (216.01 ms)
+2026-09-01 17:06:49 | INFO | fastapi_app | GET /cart -> 200 (188.13 ms)
+2026-09-01 17:06:53 | INFO | fastapi_app | GET /products -> 200 (4266.71 ms)
+2026-09-01 17:06:53 | INFO | fastapi_app | GET /products -> 200 (336.99 ms)
+2026-09-01 17:07:50 | INFO | fastapi_app | GET /products -> 200 (378.24 ms)
+2026-09-01 17:08:21 | INFO | fastapi_app | GET /user/profile -> 200 (535.36 ms)
+2026-09-01 17:08:21 | INFO | fastapi_app | GET /user/profile -> 200 (174.02 ms)
+2026-09-01 17:08:21 | INFO | fastapi_app | GET /cart -> 200 (174.37 ms)
+2026-09-01 17:08:22 | INFO | fastapi_app | GET /cart -> 200 (181.43 ms)
+2026-09-01 17:08:22 | INFO | fastapi_app | GET /products -> 200 (642.36 ms)
+2026-09-01 17:08:22 | INFO | fastapi_app | GET /products -> 200 (445.55 ms)
