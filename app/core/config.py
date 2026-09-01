@@ -36,7 +36,7 @@ class Settings(BaseSettings):
 
     # Redis connection for shared state (rate limiting counters).
     # Must be reachable by EVERY worker process; see core/redis.py.
-    REDIS_URL: str = "redis://localhost:6379"
+    REDIS_URL: str = "redis://default:YilFHmWaXmMfsILP05yLVEiYba9mzKUW@nautical-taste-macrofine-12507.db.redis.io:10613"
 
     LOG_DIR: str = "logs"
 

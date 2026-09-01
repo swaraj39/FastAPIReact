@@ -6147,3 +6147,1069 @@ Traceback (most recent call last):
 redis.exceptions.ConnectionError: Error UNKNOWN while writing to socket. Connection lost.
 2026-08-24 13:49:30 | INFO | fastapi_app | Application Started
 2026-08-24 13:49:56 | INFO | fastapi_app | POST /auth/login -> 200 (1608.68 ms)
+2026-08-25 14:06:24 | INFO | fastapi_app | Application Started
+2026-08-25 14:06:31 | INFO | fastapi_app | GET /products -> 401 (64.95 ms)
+2026-08-25 14:06:31 | INFO | fastapi_app | GET /favicon.ico -> 404 (24.84 ms)
+2026-08-25 14:06:45 | INFO | fastapi_app | POST /auth/login -> 200 (1843.67 ms)
+2026-08-25 14:06:46 | INFO | fastapi_app | GET /user/profile -> 200 (584.37 ms)
+2026-08-25 14:06:46 | INFO | fastapi_app | GET /user/dashboard -> 200 (147.24 ms)
+2026-08-25 14:06:46 | INFO | fastapi_app | GET /user/dashboard -> 200 (129.25 ms)
+2026-08-25 14:06:48 | INFO | fastapi_app | GET /products -> 200 (427.47 ms)
+2026-08-25 14:06:48 | INFO | fastapi_app | GET /products -> 200 (345.21 ms)
+2026-08-25 14:07:08 | INFO | fastapi_app | GET /products -> 200 (401.10 ms)
+2026-08-25 14:07:09 | INFO | fastapi_app | GET /products -> 200 (345.80 ms)
+2026-08-25 14:07:10 | INFO | fastapi_app | GET /admin/users -> 200 (489.25 ms)
+2026-08-25 14:07:11 | INFO | fastapi_app | GET /admin/users -> 200 (420.05 ms)
+2026-08-25 14:07:13 | INFO | fastapi_app | GET /admin/users/2 -> 200 (352.79 ms)
+2026-08-25 14:07:14 | INFO | fastapi_app | GET /admin/users/1 -> 200 (301.21 ms)
+2026-08-25 14:07:15 | INFO | fastapi_app | GET /admin/users/3 -> 200 (344.48 ms)
+2026-08-25 14:07:17 | INFO | fastapi_app | GET /admin/users/4 -> 200 (374.21 ms)
+2026-08-25 15:08:17 | INFO | fastapi_app | POST /auth/refresh -> 200 (479.01 ms)
+2026-08-25 15:08:17 | INFO | fastapi_app | POST /auth/refresh -> 200 (411.44 ms)
+2026-08-25 15:08:18 | INFO | fastapi_app | GET /products -> 200 (853.70 ms)
+2026-08-25 15:08:18 | INFO | fastapi_app | GET /products -> 200 (348.63 ms)
+2026-08-25 15:13:09 | INFO | fastapi_app | Application Started
+2026-08-25 15:13:16 | INFO | fastapi_app | Application Started
+2026-08-25 15:14:19 | INFO | fastapi_app | Application Started
+2026-08-25 15:14:26 | INFO | fastapi_app | Application Started
+2026-08-25 15:16:41 | INFO | fastapi_app | Application Started
+2026-08-25 15:16:43 | INFO | fastapi_app | POST /cart -> 201 (2374.83 ms)
+2026-08-25 15:16:44 | INFO | fastapi_app | GET /cart -> 200 (276.97 ms)
+2026-08-25 15:17:01 | INFO | fastapi_app | GET /cart -> 200 (252.03 ms)
+2026-08-25 15:17:23 | INFO | fastapi_app | Application Started
+2026-08-25 15:17:46 | INFO | fastapi_app | Application Started
+2026-08-25 15:18:00 | INFO | fastapi_app | DELETE /cart/1 -> 204 (4138.13 ms)
+2026-08-25 15:18:01 | INFO | fastapi_app | GET /user/profile -> 200 (204.90 ms)
+2026-08-25 15:18:02 | INFO | fastapi_app | GET /products -> 200 (386.78 ms)
+2026-08-25 15:18:02 | INFO | fastapi_app | GET /user/profile -> 200 (717.45 ms)
+2026-08-25 15:18:03 | INFO | fastapi_app | GET /products -> 200 (902.80 ms)
+2026-08-25 15:18:12 | INFO | fastapi_app | POST /cart -> 201 (705.93 ms)
+2026-08-25 15:18:12 | INFO | fastapi_app | GET /cart -> 200 (295.55 ms)
+2026-08-25 15:18:40 | INFO | fastapi_app | Application Started
+2026-08-25 15:18:48 | INFO | fastapi_app | Application Started
+2026-08-25 15:18:57 | INFO | fastapi_app | Application Started
+2026-08-25 15:18:59 | INFO | fastapi_app | GET /cart -> 200 (1398.66 ms)
+2026-08-25 15:19:01 | INFO | fastapi_app | DELETE /cart/2 -> 204 (299.22 ms)
+2026-08-25 15:19:01 | INFO | fastapi_app | GET /cart -> 200 (176.68 ms)
+2026-08-25 15:19:05 | INFO | fastapi_app | POST /cart -> 201 (680.70 ms)
+2026-08-25 15:19:05 | INFO | fastapi_app | GET /cart -> 200 (682.23 ms)
+2026-08-25 15:19:37 | INFO | fastapi_app | DELETE /cart/3 -> 204 (313.43 ms)
+2026-08-25 15:19:37 | INFO | fastapi_app | GET /cart -> 200 (190.31 ms)
+2026-08-25 15:19:40 | INFO | fastapi_app | POST /cart -> 201 (637.95 ms)
+2026-08-25 15:19:41 | INFO | fastapi_app | GET /cart -> 200 (246.80 ms)
+2026-08-25 15:20:29 | INFO | fastapi_app | Application Started
+2026-08-25 15:22:02 | INFO | fastapi_app | Application Started
+2026-08-25 15:22:40 | INFO | fastapi_app | Application Started
+2026-08-25 15:22:54 | INFO | fastapi_app | Application Started
+2026-08-25 15:23:19 | INFO | fastapi_app | Application Started
+2026-08-25 15:23:26 | INFO | fastapi_app | Application Started
+2026-08-25 15:24:36 | INFO | fastapi_app | Application Started
+2026-08-25 15:24:43 | INFO | fastapi_app | Application Started
+2026-08-25 15:24:54 | INFO | fastapi_app | Application Started
+2026-08-25 15:25:01 | INFO | fastapi_app | Application Started
+2026-08-25 15:25:08 | INFO | fastapi_app | Application Started
+2026-08-25 15:25:14 | INFO | fastapi_app | Application Started
+2026-08-25 15:25:25 | INFO | fastapi_app | Application Started
+2026-08-25 15:25:34 | INFO | fastapi_app | Application Started
+2026-08-25 15:25:40 | INFO | fastapi_app | Application Started
+2026-08-25 15:25:48 | INFO | fastapi_app | DELETE /cart/4 -> 204 (2883.00 ms)
+2026-08-25 15:25:48 | INFO | fastapi_app | GET /cart -> 200 (190.46 ms)
+2026-08-25 15:25:53 | INFO | fastapi_app | POST /cart -> 201 (871.13 ms)
+2026-08-25 15:25:53 | INFO | fastapi_app | GET /cart -> 200 (639.80 ms)
+2026-08-25 15:27:03 | INFO | fastapi_app | GET /user/dashboard -> 200 (149.37 ms)
+2026-08-25 15:27:04 | INFO | fastapi_app | GET /user/dashboard -> 200 (196.87 ms)
+2026-08-25 15:27:08 | INFO | fastapi_app | GET /user/dashboard -> 200 (118.23 ms)
+2026-08-25 15:27:08 | INFO | fastapi_app | GET /user/dashboard -> 200 (143.13 ms)
+2026-08-25 15:27:10 | INFO | fastapi_app | GET /products -> 200 (409.42 ms)
+2026-08-25 15:27:10 | INFO | fastapi_app | GET /products -> 200 (353.37 ms)
+2026-08-25 15:27:24 | INFO | fastapi_app | GET /cart -> 200 (239.99 ms)
+2026-08-25 15:27:31 | INFO | fastapi_app | GET /user/dashboard -> 200 (116.35 ms)
+2026-08-25 15:27:31 | INFO | fastapi_app | GET /user/dashboard -> 200 (130.85 ms)
+2026-08-25 15:27:32 | INFO | fastapi_app | GET /products -> 200 (346.45 ms)
+2026-08-25 15:27:32 | INFO | fastapi_app | GET /products -> 200 (366.33 ms)
+2026-08-25 15:27:44 | INFO | fastapi_app | GET /user/dashboard -> 200 (115.58 ms)
+2026-08-25 15:27:44 | INFO | fastapi_app | GET /user/dashboard -> 200 (130.02 ms)
+2026-08-25 15:27:46 | INFO | fastapi_app | GET /products -> 200 (347.06 ms)
+2026-08-25 15:27:46 | INFO | fastapi_app | GET /products -> 200 (359.17 ms)
+2026-08-25 15:29:03 | INFO | fastapi_app | GET /products -> 200 (342.27 ms)
+2026-08-25 15:29:07 | INFO | fastapi_app | GET /products -> 200 (617.54 ms)
+2026-08-25 15:29:36 | INFO | fastapi_app | GET /cart -> 200 (234.62 ms)
+2026-08-25 15:29:37 | INFO | fastapi_app | GET /products -> 200 (342.59 ms)
+2026-08-25 15:29:37 | INFO | fastapi_app | GET /cart -> 200 (230.83 ms)
+2026-08-25 15:29:38 | INFO | fastapi_app | GET /products -> 200 (345.64 ms)
+2026-08-25 15:29:44 | INFO | fastapi_app | GET /user/dashboard -> 200 (117.92 ms)
+2026-08-25 15:29:44 | INFO | fastapi_app | GET /user/dashboard -> 200 (140.75 ms)
+2026-08-25 15:29:45 | INFO | fastapi_app | GET /cart -> 200 (249.35 ms)
+2026-08-25 15:29:45 | INFO | fastapi_app | GET /cart -> 200 (238.79 ms)
+2026-08-25 15:29:46 | INFO | fastapi_app | GET /products -> 200 (760.81 ms)
+2026-08-25 15:29:46 | INFO | fastapi_app | GET /products -> 200 (352.48 ms)
+2026-08-25 15:30:12 | INFO | fastapi_app | Application Started
+2026-08-25 15:30:30 | INFO | fastapi_app | Application Started
+2026-08-25 15:30:32 | INFO | fastapi_app | POST /cart -> 201 (1855.78 ms)
+2026-08-25 15:30:33 | INFO | fastapi_app | GET /cart -> 200 (753.57 ms)
+2026-08-25 15:30:35 | INFO | fastapi_app | GET /cart -> 200 (250.48 ms)
+2026-08-25 15:46:45 | INFO | fastapi_app | Application Started
+2026-08-25 15:47:39 | INFO | fastapi_app | Application Started
+2026-08-25 15:49:07 | INFO | fastapi_app | POST /auth/refresh -> 200 (1303.89 ms)
+2026-08-25 15:49:07 | INFO | fastapi_app | GET /cart -> 200 (340.00 ms)
+2026-08-25 15:49:08 | INFO | fastapi_app | GET /products -> 200 (409.24 ms)
+2026-08-25 15:49:35 | INFO | fastapi_app | GET /cart -> 200 (241.94 ms)
+2026-08-25 15:49:36 | INFO | fastapi_app | GET /products -> 200 (358.01 ms)
+2026-08-25 15:50:16 | INFO | fastapi_app | GET /cart -> 200 (252.80 ms)
+2026-08-25 15:50:17 | INFO | fastapi_app | GET /products -> 200 (359.89 ms)
+2026-08-25 15:53:01 | INFO | fastapi_app | Application Started
+2026-08-25 15:53:04 | INFO | fastapi_app | GET /user/profile -> 200 (1711.78 ms)
+2026-08-25 15:53:05 | INFO | fastapi_app | GET /user/profile -> 200 (486.25 ms)
+2026-08-25 15:53:06 | INFO | fastapi_app | GET /cart -> 200 (1163.13 ms)
+2026-08-25 15:53:06 | INFO | fastapi_app | GET /cart -> 200 (252.97 ms)
+2026-08-25 15:53:06 | INFO | fastapi_app | GET /products -> 200 (501.52 ms)
+2026-08-25 15:53:06 | INFO | fastapi_app | GET /products -> 200 (354.04 ms)
+2026-08-25 15:53:13 | INFO | fastapi_app | GET /cart -> 200 (233.19 ms)
+2026-08-25 15:53:30 | INFO | fastapi_app | PUT /cart/5 -> 200 (915.57 ms)
+2026-08-25 15:53:31 | INFO | fastapi_app | GET /cart -> 200 (253.11 ms)
+2026-08-25 15:53:31 | INFO | fastapi_app | GET /cart -> 200 (247.58 ms)
+2026-08-25 15:53:31 | INFO | fastapi_app | GET /products -> 200 (344.50 ms)
+2026-08-25 15:53:34 | INFO | fastapi_app | PUT /cart/5 -> 200 (888.23 ms)
+2026-08-25 15:53:34 | INFO | fastapi_app | GET /cart -> 200 (238.03 ms)
+2026-08-25 15:53:34 | INFO | fastapi_app | GET /cart -> 200 (246.58 ms)
+2026-08-25 15:53:35 | INFO | fastapi_app | GET /products -> 200 (344.75 ms)
+2026-08-25 15:53:37 | INFO | fastapi_app | PUT /cart/5 -> 200 (911.41 ms)
+2026-08-25 15:53:37 | INFO | fastapi_app | GET /cart -> 200 (232.59 ms)
+2026-08-25 15:53:38 | INFO | fastapi_app | GET /cart -> 200 (228.00 ms)
+2026-08-25 15:53:38 | INFO | fastapi_app | GET /products -> 200 (348.19 ms)
+2026-08-25 15:53:39 | ERROR | fastapi_app | Unhandled error: Not enough stock available
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 354, in run_endpoint_function
+    return await run_in_threadpool(dependant.call, **values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\concurrency.py", line 34, in run_in_threadpool
+    return await anyio.to_thread.run_sync(func)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\anyio\to_thread.py", line 65, in run_sync
+    return await get_async_backend().run_sync_in_worker_thread(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        func, args, abandon_on_cancel=abandon_on_cancel, limiter=limiter
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 2641, in run_sync_in_worker_thread
+    return await future
+           ^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\anyio\_backends\_asyncio.py", line 1033, in run
+    result = context.run(func, *args)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\api\v1\cart.py", line 65, in update_quantity
+    return cart_service.update_quantity(item_id, request.quantity, db, current_user)
+           ~~~~~~~~~~~~~~~~~~~~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\services\cart_service.py", line 79, in update_quantity
+    raise Exception("Not enough stock available")
+Exception: Not enough stock available
+2026-08-25 16:03:12 | INFO | fastapi_app | GET /products -> 200 (355.59 ms)
+2026-08-25 16:03:17 | INFO | fastapi_app | GET /cart -> 200 (238.67 ms)
+2026-08-25 16:03:17 | INFO | fastapi_app | GET /products -> 200 (360.03 ms)
+2026-08-25 16:03:17 | INFO | fastapi_app | GET /products -> 200 (341.11 ms)
+2026-08-25 16:03:17 | INFO | fastapi_app | GET /cart -> 200 (636.08 ms)
+2026-08-25 16:03:19 | INFO | fastapi_app | GET /cart -> 200 (230.94 ms)
+2026-08-25 16:03:20 | INFO | fastapi_app | GET /products -> 200 (344.73 ms)
+2026-08-25 16:03:24 | INFO | fastapi_app | GET /user/dashboard -> 200 (118.81 ms)
+2026-08-25 16:03:24 | INFO | fastapi_app | GET /user/dashboard -> 200 (117.45 ms)
+2026-08-25 16:03:25 | INFO | fastapi_app | GET /cart -> 200 (242.26 ms)
+2026-08-25 16:03:26 | INFO | fastapi_app | GET /products -> 200 (344.25 ms)
+2026-08-25 16:03:26 | INFO | fastapi_app | GET /cart -> 200 (256.96 ms)
+2026-08-25 16:03:26 | INFO | fastapi_app | GET /products -> 200 (370.88 ms)
+2026-08-25 16:03:33 | INFO | fastapi_app | GET /cart -> 200 (227.17 ms)
+2026-08-25 16:03:40 | INFO | fastapi_app | PUT /cart/5 -> 200 (893.93 ms)
+2026-08-25 16:03:40 | INFO | fastapi_app | GET /cart -> 200 (254.44 ms)
+2026-08-25 16:03:41 | INFO | fastapi_app | GET /products -> 200 (360.16 ms)
+2026-08-25 16:03:44 | INFO | fastapi_app | PUT /cart/5 -> 200 (858.76 ms)
+2026-08-25 16:03:44 | INFO | fastapi_app | GET /cart -> 200 (222.83 ms)
+2026-08-25 16:03:44 | INFO | fastapi_app | GET /products -> 200 (353.10 ms)
+2026-08-25 16:03:47 | INFO | fastapi_app | PUT /cart/5 -> 200 (930.48 ms)
+2026-08-25 16:03:47 | INFO | fastapi_app | GET /cart -> 200 (237.86 ms)
+2026-08-25 16:03:48 | INFO | fastapi_app | GET /products -> 200 (356.93 ms)
+2026-08-25 16:03:53 | INFO | fastapi_app | POST /cart/checkout -> 200 (639.38 ms)
+2026-08-25 16:03:53 | INFO | fastapi_app | GET /cart -> 200 (171.11 ms)
+2026-08-25 16:03:57 | ERROR | fastapi_app | Unhandled error: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 850, in connect_check_health
+    await self._connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1487, in _connect
+    reader, writer = await asyncio.open_connection(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        **self._connection_arguments()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda: protocol, host, port, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py", line 1179, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+        ', '.join(str(exc) for exc in exceptions)))
+OSError: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 481, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 674, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\core\rate_limiting.py", line 40, in check_rate_limit
+    count = await redis_client.incr(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\client.py", line 929, in execute_command
+    conn = self.connection or await pool.get_connection()
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\utils.py", line 249, in async_wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2824, in get_connection
+    await self.ensure_connection(connection)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2865, in ensure_connection
+    await connection.connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 819, in connect
+    await self.retry.call_with_retry(
+    ...<7 lines>...
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 81, in call_with_retry
+    raise error
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 876, in connect_check_health
+    raise e
+redis.exceptions.ConnectionError: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+2026-08-25 16:09:18 | INFO | fastapi_app | POST /cart -> 201 (875.23 ms)
+2026-08-25 16:09:19 | INFO | fastapi_app | GET /cart -> 200 (283.16 ms)
+2026-08-25 16:09:24 | INFO | fastapi_app | POST /cart/checkout -> 200 (632.34 ms)
+2026-08-25 16:09:25 | INFO | fastapi_app | GET /cart -> 200 (179.61 ms)
+2026-08-25 16:09:29 | ERROR | fastapi_app | Unhandled error: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 850, in connect_check_health
+    await self._connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1487, in _connect
+    reader, writer = await asyncio.open_connection(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        **self._connection_arguments()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda: protocol, host, port, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py", line 1179, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+        ', '.join(str(exc) for exc in exceptions)))
+OSError: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 481, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 674, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\core\rate_limiting.py", line 40, in check_rate_limit
+    count = await redis_client.incr(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\client.py", line 929, in execute_command
+    conn = self.connection or await pool.get_connection()
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\utils.py", line 249, in async_wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2824, in get_connection
+    await self.ensure_connection(connection)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2865, in ensure_connection
+    await connection.connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 819, in connect
+    await self.retry.call_with_retry(
+    ...<7 lines>...
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 81, in call_with_retry
+    raise error
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 876, in connect_check_health
+    raise e
+redis.exceptions.ConnectionError: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+2026-08-25 16:09:52 | INFO | fastapi_app | POST /cart -> 201 (832.70 ms)
+2026-08-25 16:09:52 | INFO | fastapi_app | GET /cart -> 200 (260.29 ms)
+2026-08-25 16:09:59 | INFO | fastapi_app | POST /cart/checkout -> 200 (627.20 ms)
+2026-08-25 16:10:00 | INFO | fastapi_app | GET /cart -> 200 (175.61 ms)
+2026-08-25 16:10:04 | ERROR | fastapi_app | Unhandled error: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 850, in connect_check_health
+    await self._connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1487, in _connect
+    reader, writer = await asyncio.open_connection(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        **self._connection_arguments()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda: protocol, host, port, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py", line 1179, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+        ', '.join(str(exc) for exc in exceptions)))
+OSError: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 481, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 674, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\core\rate_limiting.py", line 40, in check_rate_limit
+    count = await redis_client.incr(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\client.py", line 929, in execute_command
+    conn = self.connection or await pool.get_connection()
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\utils.py", line 249, in async_wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2824, in get_connection
+    await self.ensure_connection(connection)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2865, in ensure_connection
+    await connection.connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 819, in connect
+    await self.retry.call_with_retry(
+    ...<7 lines>...
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 81, in call_with_retry
+    raise error
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 876, in connect_check_health
+    raise e
+redis.exceptions.ConnectionError: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+2026-08-25 16:11:11 | INFO | fastapi_app | GET /admin/users -> 200 (437.04 ms)
+2026-08-25 16:11:12 | INFO | fastapi_app | GET /admin/users -> 200 (415.20 ms)
+2026-08-25 16:11:14 | INFO | fastapi_app | GET /admin/users/3 -> 200 (301.64 ms)
+2026-08-25 16:11:19 | INFO | fastapi_app | DELETE /admin/users/3 -> 200 (675.24 ms)
+2026-08-25 16:11:21 | INFO | fastapi_app | GET /cart -> 200 (195.52 ms)
+2026-08-25 16:11:21 | INFO | fastapi_app | GET /products -> 200 (373.46 ms)
+2026-08-25 16:11:21 | INFO | fastapi_app | GET /cart -> 200 (179.20 ms)
+2026-08-25 16:11:21 | INFO | fastapi_app | GET /products -> 200 (344.92 ms)
+2026-08-25 16:11:54 | INFO | fastapi_app | POST /cart -> 201 (817.00 ms)
+2026-08-25 16:11:54 | INFO | fastapi_app | GET /cart -> 200 (237.29 ms)
+2026-08-25 16:11:58 | INFO | fastapi_app | GET /cart -> 200 (233.44 ms)
+2026-08-25 16:12:01 | INFO | fastapi_app | POST /cart/checkout -> 200 (632.98 ms)
+2026-08-25 16:12:01 | INFO | fastapi_app | GET /cart -> 200 (173.14 ms)
+2026-08-25 16:12:06 | ERROR | fastapi_app | Unhandled error: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 850, in connect_check_health
+    await self._connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1487, in _connect
+    reader, writer = await asyncio.open_connection(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        **self._connection_arguments()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda: protocol, host, port, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py", line 1179, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+        ', '.join(str(exc) for exc in exceptions)))
+OSError: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 481, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 674, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\core\rate_limiting.py", line 40, in check_rate_limit
+    count = await redis_client.incr(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\client.py", line 929, in execute_command
+    conn = self.connection or await pool.get_connection()
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\utils.py", line 249, in async_wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2824, in get_connection
+    await self.ensure_connection(connection)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2865, in ensure_connection
+    await connection.connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 819, in connect
+    await self.retry.call_with_retry(
+    ...<7 lines>...
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 81, in call_with_retry
+    raise error
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 876, in connect_check_health
+    raise e
+redis.exceptions.ConnectionError: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+2026-08-25 16:12:39 | INFO | fastapi_app | Application Started
+2026-08-25 16:12:43 | INFO | fastapi_app | GET /cart -> 200 (935.04 ms)
+2026-08-25 16:12:43 | INFO | fastapi_app | GET /products -> 200 (1395.34 ms)
+2026-08-25 16:12:43 | INFO | fastapi_app | GET /products -> 200 (349.69 ms)
+2026-08-25 16:12:43 | INFO | fastapi_app | GET /cart -> 200 (538.70 ms)
+2026-08-25 16:12:49 | INFO | fastapi_app | POST /cart -> 201 (817.33 ms)
+2026-08-25 16:12:49 | INFO | fastapi_app | GET /cart -> 200 (266.01 ms)
+2026-08-25 16:12:53 | INFO | fastapi_app | GET /cart -> 200 (228.17 ms)
+2026-08-25 16:12:59 | ERROR | fastapi_app | Unhandled error: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 850, in connect_check_health
+    await self._connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1487, in _connect
+    reader, writer = await asyncio.open_connection(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        **self._connection_arguments()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda: protocol, host, port, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py", line 1179, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+        ', '.join(str(exc) for exc in exceptions)))
+OSError: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 96, in __call__
+    await self.simple_response(scope, receive, send, request_headers=headers)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 154, in simple_response
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 481, in app
+    solved_result = await solve_dependencies(
+                    ^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<6 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\dependencies\utils.py", line 674, in solve_dependencies
+    solved = await call(**solved_result.values)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\core\rate_limiting.py", line 40, in check_rate_limit
+    count = await redis_client.incr(key)
+            ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\client.py", line 929, in execute_command
+    conn = self.connection or await pool.get_connection()
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\utils.py", line 249, in async_wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2824, in get_connection
+    await self.ensure_connection(connection)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2865, in ensure_connection
+    await connection.connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 819, in connect
+    await self.retry.call_with_retry(
+    ...<7 lines>...
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 81, in call_with_retry
+    raise error
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 876, in connect_check_health
+    raise e
+redis.exceptions.ConnectionError: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+2026-08-25 16:45:34 | ERROR | fastapi_app | Unhandled error: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 850, in connect_check_health
+    await self._connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 1487, in _connect
+    reader, writer = await asyncio.open_connection(
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        **self._connection_arguments()
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    )
+    ^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\streams.py", line 48, in open_connection
+    transport, _ = await loop.create_connection(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+        lambda: protocol, host, port, **kwds)
+        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Program Files\WindowsApps\PythonSoftwareFoundation.Python.3.13_3.13.3824.0_x64__qbz5n2kfra8p0\Lib\asyncio\base_events.py", line 1179, in create_connection
+    raise OSError('Multiple exceptions: {}'.format(
+        ', '.join(str(exc) for exc in exceptions)))
+OSError: Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379)
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\errors.py", line 164, in __call__
+    await self.app(scope, receive, _send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\cors.py", line 88, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 193, in __call__
+    response = await self.dispatch_func(request, call_next)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\middleware\request_logging.py", line 13, in dispatch
+    response = await call_next(request)
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 168, in call_next
+    raise app_exc from app_exc.__cause__ or app_exc.__context__
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\base.py", line 144, in coro
+    await self.app(scope, receive_or_disconnect, send_no_error)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\middleware\exceptions.py", line 63, in __call__
+    await wrap_app_handling_exceptions(self.app, conn)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\middleware\asyncexitstack.py", line 18, in __call__
+    await self.app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\routing.py", line 660, in __call__
+    await self.middleware_stack(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2734, in app
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1791, in _handle_selected
+    await route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1780, in handle
+    await self.original_router.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 2789, in handle
+    await included_router._handle_selected(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1800, in _handle_selected
+    await original_route.handle(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 1279, in handle
+    await app(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 158, in app
+    await wrap_app_handling_exceptions(app, request)(scope, receive, send)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 53, in wrapped_app
+    raise exc
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\starlette\_exception_handler.py", line 42, in wrapped_app
+    await app(scope, receive, sender)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 144, in app
+    response = await f(request)
+               ^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 706, in app
+    raw_response = await run_endpoint_function(
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    ...<3 lines>...
+    )
+    ^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\fastapi\routing.py", line 352, in run_endpoint_function
+    return await dependant.call(**values)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\app\api\v1\redis.py", line 25, in test_redis
+    await redis_client.set("test_key", "hello")
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\client.py", line 929, in execute_command
+    conn = self.connection or await pool.get_connection()
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\utils.py", line 249, in async_wrapper
+    return await func(*args, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2824, in get_connection
+    await self.ensure_connection(connection)
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 2865, in ensure_connection
+    await connection.connect()
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 819, in connect
+    await self.retry.call_with_retry(
+    ...<7 lines>...
+    )
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 81, in call_with_retry
+    raise error
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\retry.py", line 69, in call_with_retry
+    return await do()
+           ^^^^^^^^^^
+  File "C:\Users\swaraj.gujar\Documents\FastAPI All\venv\Lib\site-packages\redis\asyncio\connection.py", line 876, in connect_check_health
+    raise e
+redis.exceptions.ConnectionError: Error Multiple exceptions: [Errno 10061] Connect call failed ('::1', 6379, 0, 0), [Errno 10061] Connect call failed ('127.0.0.1', 6379) connecting to localhost:6379.
+2026-08-25 16:50:22 | INFO | fastapi_app | Application Started
+2026-08-25 16:50:27 | INFO | fastapi_app | Application Started
+2026-08-25 16:50:32 | INFO | fastapi_app | GET /redis/test-redis -> 200 (2341.70 ms)
+2026-08-25 16:50:46 | INFO | fastapi_app | POST /auth/refresh -> 200 (2350.27 ms)
+2026-08-25 16:50:48 | INFO | fastapi_app | POST /cart -> 201 (1174.46 ms)
+2026-08-25 16:50:48 | INFO | fastapi_app | GET /cart -> 200 (346.01 ms)
+2026-08-25 16:50:54 | INFO | fastapi_app | GET /user/dashboard -> 200 (122.23 ms)
+2026-08-25 16:50:54 | INFO | fastapi_app | GET /user/dashboard -> 200 (119.76 ms)
+2026-08-25 16:50:55 | INFO | fastapi_app | GET /cart -> 200 (236.25 ms)
+2026-08-25 16:50:55 | INFO | fastapi_app | GET /products -> 200 (366.23 ms)
+2026-08-25 16:50:55 | INFO | fastapi_app | GET /products -> 200 (342.21 ms)
+2026-08-25 16:50:55 | INFO | fastapi_app | GET /cart -> 200 (609.88 ms)
+2026-08-25 16:50:59 | INFO | fastapi_app | GET /cart -> 200 (349.08 ms)
+2026-08-25 16:51:03 | INFO | fastapi_app | POST /cart/checkout -> 200 (716.89 ms)
+2026-08-25 16:51:04 | INFO | fastapi_app | GET /cart -> 200 (205.41 ms)
+2026-08-25 16:51:04 | INFO | fastapi_app | GET /orders -> 200 (698.67 ms)
+2026-08-25 16:51:12 | INFO | fastapi_app | GET /orders -> 200 (491.89 ms)
+2026-08-25 17:00:08 | INFO | fastapi_app | GET /cart -> 200 (531.36 ms)
+2026-08-25 17:00:08 | INFO | fastapi_app | GET /products -> 200 (717.64 ms)
+2026-08-25 17:00:08 | INFO | fastapi_app | GET /cart -> 200 (270.43 ms)
+2026-08-25 17:00:09 | INFO | fastapi_app | GET /products -> 200 (393.79 ms)
+2026-08-25 17:00:11 | INFO | fastapi_app | GET /user/dashboard -> 200 (115.28 ms)
+2026-08-25 17:00:11 | INFO | fastapi_app | GET /user/dashboard -> 200 (116.21 ms)
+2026-08-25 17:21:06 | INFO | fastapi_app | POST /auth/refresh -> 200 (503.26 ms)
+2026-08-25 17:21:06 | INFO | fastapi_app | POST /auth/refresh -> 200 (530.83 ms)
+2026-08-25 17:21:06 | INFO | fastapi_app | POST /auth/refresh -> 200 (514.24 ms)
+2026-08-25 17:21:06 | INFO | fastapi_app | GET /cart -> 200 (257.76 ms)
+2026-08-25 17:21:07 | INFO | fastapi_app | GET /cart -> 200 (178.28 ms)
+2026-08-25 17:21:07 | INFO | fastapi_app | GET /products -> 200 (438.20 ms)
+2026-08-25 17:21:09 | INFO | fastapi_app | POST /auth/refresh -> 200 (3362.79 ms)
+2026-08-25 17:21:09 | INFO | fastapi_app | GET /products -> 200 (364.29 ms)
+2026-08-25 17:21:15 | INFO | fastapi_app | GET /admin/users -> 200 (519.10 ms)
+2026-08-25 17:21:15 | INFO | fastapi_app | GET /admin/users -> 200 (355.56 ms)
+2026-08-26 16:17:03 | INFO | fastapi_app | Application Started
+2026-08-26 16:18:15 | INFO | fastapi_app | POST /auth/refresh -> 200 (1299.82 ms)
+2026-08-26 16:18:15 | INFO | fastapi_app | POST /auth/refresh -> 200 (1307.39 ms)
+2026-08-26 16:18:15 | INFO | fastapi_app | POST /auth/refresh -> 200 (2775.42 ms)
+2026-08-26 16:18:15 | INFO | fastapi_app | POST /auth/refresh -> 200 (2814.36 ms)
+2026-08-26 16:18:16 | INFO | fastapi_app | GET /user/profile -> 200 (252.79 ms)
+2026-08-26 16:18:16 | INFO | fastapi_app | GET /user/profile -> 200 (208.58 ms)
+2026-08-26 16:18:16 | INFO | fastapi_app | GET /user/profile -> 200 (187.12 ms)
+2026-08-26 16:18:16 | INFO | fastapi_app | GET /admin/users -> 200 (428.51 ms)
+2026-08-26 16:18:17 | INFO | fastapi_app | GET /user/profile -> 200 (181.27 ms)
+2026-08-26 16:18:17 | INFO | fastapi_app | GET /admin/users -> 200 (348.25 ms)
+2026-08-26 16:18:20 | INFO | fastapi_app | GET /user/dashboard -> 200 (113.68 ms)
+2026-08-26 16:18:20 | INFO | fastapi_app | GET /user/dashboard -> 200 (115.22 ms)
+2026-08-26 16:18:26 | INFO | fastapi_app | GET /cart -> 200 (227.53 ms)
+2026-08-26 16:18:27 | INFO | fastapi_app | GET /cart -> 200 (183.06 ms)
+2026-08-26 16:18:27 | INFO | fastapi_app | GET /products -> 200 (381.95 ms)
+2026-08-26 16:18:27 | INFO | fastapi_app | GET /products -> 200 (348.42 ms)
+2026-08-26 16:18:30 | INFO | fastapi_app | GET /user/dashboard -> 200 (115.33 ms)
+2026-08-26 16:18:30 | INFO | fastapi_app | GET /user/dashboard -> 200 (117.90 ms)
+2026-08-26 16:20:36 | INFO | fastapi_app | GET /cart -> 200 (247.79 ms)
+2026-08-26 16:20:36 | INFO | fastapi_app | GET /cart -> 200 (193.34 ms)
+2026-08-26 16:20:36 | INFO | fastapi_app | GET /products -> 200 (375.95 ms)
+2026-08-26 16:20:36 | INFO | fastapi_app | GET /products -> 200 (347.63 ms)
+2026-08-26 16:20:37 | INFO | fastapi_app | GET /user/dashboard -> 200 (117.78 ms)
+2026-08-26 16:20:37 | INFO | fastapi_app | GET /user/dashboard -> 200 (124.22 ms)
+2026-08-26 16:24:37 | INFO | fastapi_app | GET /cart -> 200 (185.12 ms)
+2026-08-26 16:24:37 | INFO | fastapi_app | GET /cart -> 200 (190.11 ms)
+2026-08-26 16:24:37 | INFO | fastapi_app | GET /products -> 200 (356.16 ms)
+2026-08-26 16:24:37 | INFO | fastapi_app | GET /products -> 200 (353.81 ms)
+2026-08-26 16:24:40 | INFO | fastapi_app | POST /cart -> 201 (864.26 ms)
+2026-08-26 16:24:41 | INFO | fastapi_app | GET /cart -> 200 (229.22 ms)
+2026-08-26 16:24:48 | INFO | fastapi_app | POST /cart -> 201 (779.63 ms)
+2026-08-26 16:24:48 | INFO | fastapi_app | GET /cart -> 200 (227.00 ms)
+2026-08-26 16:24:53 | INFO | fastapi_app | GET /cart -> 200 (228.60 ms)
+2026-08-26 16:24:58 | INFO | fastapi_app | GET /cart -> 200 (252.36 ms)
+2026-08-26 16:24:58 | INFO | fastapi_app | GET /cart -> 200 (236.69 ms)
+2026-08-26 16:24:59 | INFO | fastapi_app | GET /products -> 200 (350.64 ms)
+2026-08-26 16:24:59 | INFO | fastapi_app | GET /products -> 200 (357.45 ms)
+2026-08-26 16:25:03 | INFO | fastapi_app | GET /cart -> 200 (251.00 ms)
+2026-08-26 16:25:06 | INFO | fastapi_app | PUT /cart/10 -> 200 (896.95 ms)
+2026-08-26 16:25:06 | INFO | fastapi_app | GET /cart -> 200 (270.75 ms)
+2026-08-26 16:25:06 | INFO | fastapi_app | GET /cart -> 200 (262.21 ms)
+2026-08-26 16:25:07 | INFO | fastapi_app | GET /products -> 200 (368.36 ms)
+2026-08-26 16:25:12 | INFO | fastapi_app | DELETE /cart/10 -> 204 (638.18 ms)
+2026-08-26 16:25:12 | INFO | fastapi_app | GET /cart -> 200 (168.37 ms)
+2026-08-26 16:25:12 | INFO | fastapi_app | GET /cart -> 200 (170.67 ms)
+2026-08-26 16:25:13 | INFO | fastapi_app | GET /products -> 200 (344.52 ms)
+2026-08-26 16:25:52 | INFO | fastapi_app | GET /user/dashboard -> 200 (131.45 ms)
+2026-08-26 16:25:53 | INFO | fastapi_app | GET /user/dashboard -> 200 (117.76 ms)
+2026-08-26 16:25:53 | INFO | fastapi_app | GET /cart -> 200 (177.42 ms)
+2026-08-26 16:25:53 | INFO | fastapi_app | GET /cart -> 200 (188.24 ms)
+2026-08-26 16:25:54 | INFO | fastapi_app | GET /products -> 200 (374.41 ms)
+2026-08-26 16:25:54 | INFO | fastapi_app | GET /products -> 200 (352.13 ms)
+2026-08-26 16:26:12 | INFO | fastapi_app | GET /user/profile -> 200 (177.51 ms)
+2026-08-26 16:26:12 | INFO | fastapi_app | GET /user/profile -> 200 (181.77 ms)
+2026-08-26 16:26:13 | INFO | fastapi_app | GET /products -> 200 (355.28 ms)
+2026-08-26 16:26:13 | INFO | fastapi_app | GET /cart -> 200 (181.17 ms)
+2026-08-26 16:26:13 | INFO | fastapi_app | GET /cart -> 200 (182.58 ms)
+2026-08-26 16:26:13 | INFO | fastapi_app | GET /products -> 200 (364.69 ms)
+2026-08-26 16:26:17 | INFO | fastapi_app | GET /user/dashboard -> 200 (120.37 ms)
+2026-08-26 16:26:17 | INFO | fastapi_app | GET /user/dashboard -> 200 (115.64 ms)
+2026-08-26 16:26:33 | INFO | fastapi_app | GET /admin/users -> 200 (345.35 ms)
+2026-08-26 16:26:33 | INFO | fastapi_app | GET /admin/users -> 200 (341.58 ms)
+2026-08-26 16:26:37 | INFO | fastapi_app | GET /cart -> 200 (182.62 ms)
+2026-08-26 16:26:37 | INFO | fastapi_app | GET /products -> 200 (361.28 ms)
+2026-08-26 16:26:37 | INFO | fastapi_app | GET /cart -> 200 (178.59 ms)
+2026-08-26 16:26:37 | INFO | fastapi_app | GET /products -> 200 (338.36 ms)
+2026-08-26 16:26:38 | INFO | fastapi_app | GET /admin/users -> 200 (344.85 ms)
+2026-08-26 16:26:38 | INFO | fastapi_app | GET /admin/users -> 200 (343.07 ms)
+2026-08-26 16:26:40 | INFO | fastapi_app | GET /admin/users -> 200 (390.42 ms)
+2026-08-26 16:26:41 | INFO | fastapi_app | GET /admin/users -> 200 (392.55 ms)
+2026-08-26 16:41:19 | INFO | fastapi_app | GET /cart -> 200 (179.71 ms)
+2026-08-26 16:41:19 | INFO | fastapi_app | GET /products -> 200 (345.59 ms)
+2026-08-26 16:41:19 | INFO | fastapi_app | GET /cart -> 200 (183.92 ms)
+2026-08-26 16:41:20 | INFO | fastapi_app | GET /products -> 200 (338.15 ms)
+2026-08-26 16:41:21 | INFO | fastapi_app | GET /user/dashboard -> 200 (123.74 ms)
+2026-08-26 16:41:21 | INFO | fastapi_app | GET /user/dashboard -> 200 (117.22 ms)
+2026-08-26 16:43:21 | INFO | fastapi_app | GET /user/profile -> 200 (180.82 ms)
+2026-08-26 16:43:21 | INFO | fastapi_app | GET /user/profile -> 200 (186.62 ms)
+2026-08-26 16:43:25 | INFO | fastapi_app | POST /auth/login -> 401 (211.23 ms)
+2026-08-31 13:43:45 | INFO | fastapi_app | Application Started
+2026-08-31 13:45:04 | INFO | fastapi_app | POST /auth/refresh -> 200 (1391.27 ms)
+2026-08-31 13:45:04 | INFO | fastapi_app | POST /auth/refresh -> 200 (1379.75 ms)
+2026-08-31 13:45:04 | INFO | fastapi_app | POST /auth/refresh -> 200 (946.88 ms)
+2026-08-31 13:45:04 | INFO | fastapi_app | POST /auth/refresh -> 200 (949.03 ms)
+2026-08-31 13:45:04 | INFO | fastapi_app | GET /user/profile -> 200 (583.60 ms)
+2026-08-31 13:45:05 | INFO | fastapi_app | GET /user/profile -> 200 (168.76 ms)
+2026-08-31 13:45:05 | INFO | fastapi_app | GET /user/profile -> 200 (168.75 ms)
+2026-08-31 13:45:05 | INFO | fastapi_app | GET /user/profile -> 200 (170.24 ms)
+2026-08-31 13:45:05 | INFO | fastapi_app | GET /user/dashboard -> 200 (118.54 ms)
+2026-08-31 13:45:05 | INFO | fastapi_app | GET /user/dashboard -> 200 (112.37 ms)
+2026-08-31 13:46:09 | INFO | fastapi_app | POST /auth/login -> 200 (498.83 ms)
+2026-08-31 13:46:09 | INFO | fastapi_app | GET /user/profile -> 200 (171.90 ms)
+2026-08-31 13:46:09 | INFO | fastapi_app | GET /cart -> 200 (204.57 ms)
+2026-08-31 13:46:09 | INFO | fastapi_app | GET /cart -> 200 (173.37 ms)
+2026-08-31 13:46:09 | INFO | fastapi_app | GET /products -> 200 (411.08 ms)
+2026-08-31 13:46:09 | INFO | fastapi_app | GET /products -> 200 (335.54 ms)
+2026-08-31 13:46:22 | INFO | fastapi_app | POST /products/1/favorite -> 200 (431.02 ms)
+2026-08-31 13:46:22 | INFO | fastapi_app | GET /products -> 200 (371.81 ms)
+2026-08-31 13:46:25 | INFO | fastapi_app | GET /products/favorites -> 200 (289.11 ms)
+2026-08-31 13:46:29 | INFO | fastapi_app | DELETE /products/1/favorite -> 200 (407.87 ms)
+2026-08-31 13:46:29 | INFO | fastapi_app | GET /products/favorites -> 200 (228.66 ms)
+2026-08-31 13:46:31 | INFO | fastapi_app | GET /products -> 200 (348.05 ms)
+2026-08-31 13:46:46 | INFO | fastapi_app | POST /auth/refresh -> 401 (12.60 ms)
+2026-08-31 13:46:46 | INFO | fastapi_app | POST /auth/refresh -> 401 (15.25 ms)
+2026-08-31 13:46:46 | INFO | fastapi_app | GET /user/profile -> 401 (0.58 ms)
+2026-08-31 13:46:46 | INFO | fastapi_app | GET /user/profile -> 401 (0.92 ms)
+2026-08-31 13:54:28 | INFO | fastapi_app | GET /user/dashboard -> 200 (122.43 ms)
+2026-08-31 13:54:28 | INFO | fastapi_app | GET /user/dashboard -> 200 (127.94 ms)
+2026-08-31 13:54:30 | INFO | fastapi_app | GET /cart -> 200 (180.88 ms)
+2026-08-31 13:54:30 | INFO | fastapi_app | GET /products -> 200 (348.85 ms)
+2026-08-31 13:54:30 | INFO | fastapi_app | GET /cart -> 200 (175.13 ms)
+2026-08-31 13:54:31 | INFO | fastapi_app | GET /products -> 200 (367.48 ms)
+2026-08-31 13:54:34 | INFO | fastapi_app | GET /admin/users -> 200 (374.61 ms)
+2026-08-31 13:54:34 | INFO | fastapi_app | GET /admin/users -> 200 (353.48 ms)

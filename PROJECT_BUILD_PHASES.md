@@ -872,8 +872,39 @@ frontend/vercel.json       # SPA rewrite + asset caching headers
 
 ---
 
+# PHASE 24 — Dark / Light Mode (Context API + CSS Custom Properties)
+
+**Goal:** Add a toggleable dark/light theme that persists across sessions, using React Context API and CSS custom properties wired into the existing Tailwind v4 design tokens.
+
+**What you learn:**
+- React Context + hooks for global theme state (`ThemeContext`)
+- CSS custom properties (`:root` / `.dark` selector) so all Tailwind utilities adapt automatically
+- Tailwind v4's `@custom-variant` directive for class-based `dark:` prefix support
+- `localStorage` persistence + OS `prefers-color-scheme` detection
+- Smooth transitions between themes
+
+**Files created / changed (frontend only):**
+```
+frontend/src/context/ThemeContext.tsx   # NEW: theme state, toggle/setTheme, localStorage + OS detection
+frontend/src/index.css                 # CSS variables on :root + .dark, @custom-variant dark, smooth body transition
+frontend/src/main.tsx                  # wrapped app in <ThemeProvider>
+frontend/src/App.tsx                   # Sun/Moon toggle button in navbar + useTheme hook
+frontend/src/components/Badge.tsx      # fixed hardcoded bg-white → bg-surface for dark mode
+```
+
+**How it works:**
+1. **ThemeContext** holds `theme` (`'light'` | `'dark'`), `toggleTheme()`, and `setTheme()`. On mount it reads from `localStorage`; if nothing is stored it checks `matchMedia('(prefers-color-scheme: dark)')`.
+2. **CSS variables** — `:root` defines light-mode values, `.dark` overrides them. The `@theme` block references these variables so every Tailwind utility (`bg-surface`, `text-ink`, `border-line`, etc.) adapts automatically without changing any component code.
+3. **`@custom-variant dark`** — enables the `dark:` Tailwind prefix for explicit overrides when needed (e.g. `dark:shadow-md`).
+4. **Persistence** — the selected theme is saved to `localStorage('theme')` and restored on reload.
+5. **OS listener** — a `matchMedia('change')` listener updates the theme when the OS preference changes, but only if the user hasn't manually set a preference.
+
+**Verify:** `npm run build` in `frontend/` passes (tsc + vite); clicking the Moon/Sun icon in the navbar toggles between light and dark modes; refreshing the page preserves the choice; on first visit the OS preference is respected.
+
+---
+
 ## Suggested Learning Order (if rebuilding)
 
-1. Setup → 2. DB connection → 3. Schema → 4. Schemas → 5. Security → 6. Auth → 7. CRUD → 8. JWT/RBAC → 9. Admin → 10. Products → 11. Favorites → 12. Cart → 13. Orders → 14. Cross-cutting → 15. Tests → 16. Frontend setup → 17. Frontend auth/routing → 18. Frontend pages → 19. Design system → 20. Tailwind CSS → 21. Confirmation dialog → 22. Backend deployment → 23. Frontend deployment.
+1. Setup → 2. DB connection → 3. Schema → 4. Schemas → 5. Security → 6. Auth → 7. CRUD → 8. JWT/RBAC → 9. Admin → 10. Products → 11. Favorites → 12. Cart → 13. Orders → 14. Cross-cutting → 15. Tests → 16. Frontend setup → 17. Frontend auth/routing → 18. Frontend pages → 19. Design system → 20. Tailwind CSS → 21. Confirmation dialog → 22. Backend deployment → 23. Frontend deployment → 24. Dark/Light mode.
 
 Each phase builds on the previous one, and each phase is independently testable before moving on.

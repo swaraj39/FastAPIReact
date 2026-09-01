@@ -19,6 +19,12 @@ def create_order(data: OrderCreate, db: Session, current_user: User) -> dict:
     product = ProductRepository(db).get_by_id(data.product_id)
     if product is None:
         raise ResourceNotFoundError("Product not found")
+    if product.quantity < data.quantity or product.quantity == 0:
+        raise Exception("Not enough stock available")
+
+    # Reserve the stock for this order.
+    product.quantity -= data.quantity
+    db.commit()
 
     order = Orders(
         product=product.id,

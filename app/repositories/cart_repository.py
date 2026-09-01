@@ -1,6 +1,9 @@
 from sqlalchemy.orm import Session
 
 from app.models.cart import CartItem
+from app.models.product import Product
+from app.repositories.product_repository import ProductRepository
+from app.schemas.cart import CartItemCreate
 
 
 class CartRepository:
@@ -16,8 +19,10 @@ class CartRepository:
         # Keep a reference to the database session for every method.
         self.db = db
 
-    def add(self, item: CartItem) -> CartItem:
+    def add(self, item: CartItem, data: CartItemCreate) -> CartItem:
         """Insert a new cart line and commit immediately."""
+        product = ProductRepository(self.db).get_by_id(data.product_id)
+        product.quantity -= data.quantity
         self.db.add(item)
         self.db.commit()
         self.db.refresh(item)

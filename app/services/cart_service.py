@@ -34,13 +34,15 @@ def add_to_cart(
     product = ProductRepository(db).get_by_id(data.product_id)
     if product is None:
         raise ResourceNotFoundError("Product not found")
-
+    if product.quantity < data.quantity or product.quantity == 0 :
+        raise Exception("Out of quantity")
     repo = CartRepository(db)
     existing = repo.find_by_user_and_product(current_user.id, data.product_id)
     if existing is not None:
         # Already in the cart: bump the quantity instead of duplicating.
         existing.quantity += data.quantity
-        db.commit()
+        product.quantity -= data.quantity
+        db.commit() 
         db.refresh(existing)
         return _serialize(existing)
 
@@ -49,7 +51,8 @@ def add_to_cart(
         product_id=data.product_id,
         quantity=data.quantity,
     )
-    return _serialize(repo.add(item))
+
+    return _serialize(repo.add(item, data))
 
 
 def list_cart(db: Session, current_user: User):
@@ -67,6 +70,16 @@ def update_quantity(
     if item is None or item.user_id != current_user.id:
         raise ResourceNotFoundError("Cart item not found")
 
+    # Adjust the product stock by the difference between new and old quantity.
+    diff = quantity - item.quantity
+    product_repo = ProductRepository(db)
+    product = product_repo.get_by_id(item.product_id)
+    if product is not None:
+        if diff > 0 and product.quantity < diff:
+            raise Exception("Not enough stock available")
+        product.quantity -= diff
+        db.commit()
+
     item.quantity = quantity
     db.commit()
     db.refresh(item)
@@ -78,6 +91,13 @@ def remove_from_cart(item_id: int, db: Session, current_user: User) -> None:
     item = repo.get_by_id(item_id)
     if item is None or item.user_id != current_user.id:
         raise ResourceNotFoundError("Cart item not found")
+
+    # Restore the product stock that was reserved when the item was added.
+    product_repo = ProductRepository(db)
+    product = product_repo.get_by_id(item.product_id)
+    if product is not None:
+        product.quantity += item.quantity
+        db.commit()
 
     repo.delete(item)
 

@@ -5,8 +5,8 @@ import type { Role } from '../api/types'
 // outlined badge, USER is a muted gray badge.
 const ROLE_STYLES: Record<Role, string> = {
   ADMIN: 'border-ink bg-ink text-white',
-  REVIEWER: 'border-ink bg-white text-ink',
-  USER: 'border-line-strong bg-surface-2 text-[#5c5c57]',
+  REVIEWER: 'border-ink bg-surface text-ink',
+  USER: 'border-line-strong bg-surface-2 text-muted',
 }
 
 export default function Badge({ role }: { role: Role }) {
