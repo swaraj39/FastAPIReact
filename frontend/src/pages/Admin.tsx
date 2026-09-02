@@ -22,11 +22,9 @@ import ConfirmDialog from '../components/ConfirmDialog'
 // Shared stat-grid layout (the old `.stat-grid` class, as utilities).
 const STAT_GRID_CLS = 'mb-4 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4'
 
-// Shared button variants (the old `button.secondary` / `button.danger`).
-const BTN_SECONDARY_CLS =
-  'border-line-strong bg-surface text-ink hover:border-line-strong hover:bg-surface-2 hover:shadow-none'
-const BTN_DANGER_CLS =
-  'border-line-strong bg-surface text-ink hover:border-ink hover:bg-ink hover:text-white hover:shadow-none'
+// Shared button variants
+const BTN_SECONDARY_CLS = 'btn-secondary'
+const BTN_DANGER_CLS = 'btn-danger'
 
 export default function Admin() {
   const [users, setUsers] = useState<User[]>([])

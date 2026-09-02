@@ -1,7 +1,4 @@
-// ============================================================
-// Dashboard: a formal overview page showing the logged-in user's
-// account summary and quick links into the rest of the app.
-// ============================================================
+// Dashboard: compact overview page.
 
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
@@ -14,21 +11,14 @@ import Badge from '../components/Badge'
 import Avatar from '../components/Avatar'
 import Skeleton from '../components/Skeleton'
 
-// Shared stat-grid layout (the old `.stat-grid` class, as utilities).
-const STAT_GRID_CLS = 'mb-4 grid grid-cols-[repeat(auto-fit,minmax(200px,1fr))] gap-4'
-
-// Shared secondary-button variant (the old `button.secondary`).
-const BTN_SECONDARY_CLS =
-  'border-line-strong bg-surface text-ink hover:border-line-strong hover:bg-surface-2 hover:shadow-none'
+const STAT_GRID_CLS = 'mb-3 grid grid-cols-3 gap-3 max-[640px]:grid-cols-1'
 
 export default function Dashboard() {
-  // `user` comes from AuthContext (set at login / session restore).
   const { user, logout } = useAuth()
   const [info, setInfo] = useState<DashboardInfo | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
 
-  // Fetch /user/dashboard once on mount.
   useEffect(() => {
     api
       .getDashboard()
@@ -41,23 +31,20 @@ export default function Dashboard() {
     <div className="animate-page-in">
       <PageHeader
         title="Dashboard"
-        subtitle={
-          info ? info.message : loading ? 'Loading your account summary…' : 'Welcome'
-        }
+        subtitle={info ? info.message : loading ? 'Loading…' : 'Welcome'}
       />
 
       {error && <p className="error">{error}</p>}
 
       {user ? (
-        <div className="panel flex items-center gap-4">
-          <Avatar name={user.profile?.full_name ?? user.username} size="lg" />
-          {/* min-w-0 lets this flex item shrink around long emails. */}
+        <div className="panel flex items-center gap-3">
+          <Avatar name={user.profile?.full_name ?? user.username} size="md" />
           <div className="min-w-0">
-            <div className="flex flex-wrap items-center gap-2">
-              <strong className="text-[1.1rem]">{user.profile?.full_name || user.username}</strong>
+            <div className="flex flex-wrap items-center gap-1.5">
+              <strong className="text-[0.95rem]">{user.profile?.full_name || user.username}</strong>
               <Badge role={user.role} />
             </div>
-            <p className="mt-[0.2rem] break-words text-muted">{user.email}</p>
+            <p className="mt-0.5 break-words text-[0.82rem] text-muted">{user.email}</p>
           </div>
         </div>
       ) : (
@@ -68,64 +55,50 @@ export default function Dashboard() {
         </div>
       )}
 
-      {/* Account summary stat cards */}
       <div className={STAT_GRID_CLS}>
-        <div className="flex items-center gap-4 rounded-lg border border-line bg-surface p-5 shadow-sm">
-          <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-ink text-white" aria-hidden="true">
-            <Shield size={20} />
+        <div className="flex items-center gap-3 rounded-lg border border-line bg-surface p-3 shadow-sm">
+          <span className="stat-card-icon h-9 w-9" aria-hidden="true">
+            <Shield size={16} />
           </span>
-          {/* min-w-0 lets the card shrink around long values (emails) on
-              narrow grids; break-words then wraps them inside the card. */}
           <div className="min-w-0">
-            <div className="break-words text-[1.15rem] font-bold leading-tight text-ink">
-              {info?.role ?? (user?.role ?? '—')}
-            </div>
-            <div className="text-[0.8rem] uppercase tracking-[0.06em] text-muted">Role</div>
+            <div className="text-[0.95rem] font-bold text-ink">{info?.role ?? (user?.role ?? '—')}</div>
+            <div className="text-[0.7rem] uppercase tracking-wider text-muted">Role</div>
           </div>
         </div>
-        <div className="flex items-center gap-4 rounded-lg border border-line bg-surface p-5 shadow-sm">
-          <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-ink text-white" aria-hidden="true">
-            <UserRound size={20} />
+        <div className="flex items-center gap-3 rounded-lg border border-line bg-surface p-3 shadow-sm">
+          <span className="stat-card-icon h-9 w-9" aria-hidden="true">
+            <UserRound size={16} />
           </span>
           <div className="min-w-0">
-            <div className="break-words text-[1.15rem] font-bold leading-tight text-ink">
-              {user?.username ?? '—'}
-            </div>
-            <div className="text-[0.8rem] uppercase tracking-[0.06em] text-muted">Username</div>
+            <div className="text-[0.95rem] font-bold text-ink">{user?.username ?? '—'}</div>
+            <div className="text-[0.7rem] uppercase tracking-wider text-muted">Username</div>
           </div>
         </div>
-        <div className="flex items-center gap-4 rounded-lg border border-line bg-surface p-5 shadow-sm">
-          <span className="inline-flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-ink text-white" aria-hidden="true">
-            <Mail size={20} />
+        <div className="flex items-center gap-3 rounded-lg border border-line bg-surface p-3 shadow-sm">
+          <span className="stat-card-icon h-9 w-9" aria-hidden="true">
+            <Mail size={16} />
           </span>
           <div className="min-w-0">
-            <div className="break-words text-[0.95rem] font-bold leading-tight text-ink">
-              {user?.email ?? '—'}
-            </div>
-            <div className="text-[0.8rem] uppercase tracking-[0.06em] text-muted">Email</div>
+            <div className="break-words text-[0.88rem] font-bold text-ink">{user?.email ?? '—'}</div>
+            <div className="text-[0.7rem] uppercase tracking-wider text-muted">Email</div>
           </div>
         </div>
       </div>
 
-      {/* Quick actions */}
       <div className="panel">
         <h2 className="mt-0">Quick actions</h2>
         <div className="row">
           <Link to="/products">
-            <button type="button" className={BTN_SECONDARY_CLS}>
-              <Store size={16} aria-hidden="true" /> Browse products
+            <button type="button" className="btn-secondary">
+              <Store size={14} /> Products
             </button>
           </Link>
           <Link to="/profile">
-            <button type="button" className={BTN_SECONDARY_CLS}>
-              <UserRound size={16} aria-hidden="true" /> Edit profile
+            <button type="button" className="btn-secondary">
+              <UserRound size={14} /> Profile
             </button>
           </Link>
-          <button
-            type="button"
-            className="border-line-strong bg-surface text-ink hover:border-ink hover:bg-ink hover:text-white hover:shadow-none"
-            onClick={logout}
-          >
+          <button type="button" className="btn-danger" onClick={logout}>
             Sign out
           </button>
         </div>

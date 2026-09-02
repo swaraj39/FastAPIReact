@@ -1,8 +1,6 @@
-// Avatar: a circle with the person's initials. The background tone
-// is derived deterministically from the name, so the same name always
-// gets the same grayscale shade without needing an image or a table.
+// Avatar: initials-based circle with pure black & red palette.
 
-const PALETTE = ['#111111', '#2b2b2b', '#404040', '#555555', '#6b6b6b', '#7d7d7d']
+const PALETTE = ['#0a0a0a', '#1a1a1a', '#2a2a2a', '#3a3a3a', '#dc2626', '#b91c1c', '#991b1b']
 
 function initials(name: string): string {
   const parts = name.trim().split(/\s+/).filter(Boolean)
@@ -26,7 +24,6 @@ interface AvatarProps {
 }
 
 export default function Avatar({ name, size = 'md' }: AvatarProps) {
-  // Size variants (the shared circle styling sits on the base class).
   const sizeCls =
     size === 'lg' ? 'h-16 w-16 text-[1.4rem]' : size === 'sm' ? 'h-7 w-7 text-[0.7rem]' : 'h-9 w-9 text-[0.85rem]'
   return (

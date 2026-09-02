@@ -1,9 +1,4 @@
-// ============================================================
-// Login page: a controlled form that signs the user in.
-//
-// On success it navigates back to the page the user tried to open
-// (stored in location.state by ProtectedRoute), else to /dashboard.
-// ============================================================
+// Login page: compact professional form.
 
 import { useState } from 'react'
 import type { FormEvent } from 'react'
@@ -11,37 +6,25 @@ import { Link, useLocation, useNavigate } from 'react-router-dom'
 import { Lock, UserRound } from 'lucide-react'
 import { useAuth } from '../context/AuthContext'
 
-// Shared auth-card styling (the old `.auth-card` class, as utilities).
-const AUTH_CARD_CLS =
-  'mx-auto my-[clamp(2rem,8vh,5rem)] w-full max-w-[420px] animate-page-in rounded-lg border border-line bg-surface p-9 shadow-sm'
-
-// Icon-inside-input wrapper (the old `.input-icon` pattern).
-const INPUT_ICON_CLS =
-  'pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted peer-focus:text-ink'
-
 export default function Login() {
   const { login } = useAuth()
   const navigate = useNavigate()
   const location = useLocation()
 
-  // Controlled inputs: React state is the single source of truth for
-  // the form's values.
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [submitting, setSubmitting] = useState(false)
 
   async function handleSubmit(e: FormEvent) {
-    e.preventDefault() // stop the browser's default form reload
+    e.preventDefault()
     setError('')
     setSubmitting(true)
     try {
       await login(username, password)
-      // Read where the user originally wanted to go (if any) and go there.
       const from = (location.state as { from?: { pathname: string } } | null)?.from?.pathname
       navigate(from ?? '/dashboard', { replace: true })
     } catch (err) {
-      // Show the backend's error message (e.g. "Invalid username or password").
       setError(err instanceof Error ? err.message : 'Login failed')
     } finally {
       setSubmitting(false)
@@ -49,46 +32,51 @@ export default function Login() {
   }
 
   return (
-    <div className={AUTH_CARD_CLS}>
-      <h1 className="text-center">Sign in</h1>
-      <p className="mb-6 text-center text-[0.92rem] text-muted">Access your account securely</p>
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className="mx-auto my-12 w-full max-w-[360px] animate-page-in rounded-lg border border-line bg-surface p-6 shadow-sm">
+      <div className="mb-4 flex flex-col items-center gap-2">
+        <span className="inline-flex h-10 w-10 items-center justify-center rounded-lg text-lg font-bold text-white" style={{ background: 'var(--color-accent)' }}>
+          F
+        </span>
+        <h1 className="m-0 text-center text-[1.2rem]">Sign in</h1>
+        <p className="m-0 text-center text-[0.82rem] text-muted">Access your account</p>
+      </div>
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <label className="m-0">
           Username
           <span className="relative block">
             <input
-              className="peer pl-[2.4rem]"
+              className="peer pl-8"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              placeholder="e.g. jane.doe"
+              placeholder="username"
               autoComplete="username"
               required
             />
-            <UserRound size={16} aria-hidden="true" className={INPUT_ICON_CLS} />
+            <UserRound size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted peer-focus:text-accent" />
           </span>
         </label>
-        <label>
+        <label className="m-0">
           Password
           <span className="relative block">
             <input
-              className="peer pl-[2.4rem]"
-              type="password" // hides the text with dots
+              className="peer pl-8"
+              type="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               placeholder="••••••••"
               autoComplete="current-password"
               required
             />
-            <Lock size={16} aria-hidden="true" className={INPUT_ICON_CLS} />
+            <Lock size={14} className="pointer-events-none absolute left-2.5 top-1/2 -translate-y-1/2 text-muted peer-focus:text-accent" />
           </span>
         </label>
         {error && <p className="error">{error}</p>}
-        <button type="submit" disabled={submitting}>
+        <button type="submit" disabled={submitting} className="w-full">
           {submitting ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
-      <p className="text-muted">
-        No account? <Link to="/register">Register</Link>
+      <p className="mt-4 text-center text-[0.8rem] text-muted">
+        No account? <Link to="/register" className="link">Register</Link>
       </p>
     </div>
   )

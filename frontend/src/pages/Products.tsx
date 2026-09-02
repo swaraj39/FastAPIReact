@@ -8,6 +8,7 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
+import { useLocation } from 'react-router-dom'
 import {
   ChevronLeft,
   ChevronRight,
@@ -30,19 +31,24 @@ import EmptyState from '../components/EmptyState'
 import Skeleton from '../components/Skeleton'
 import ConfirmDialog from '../components/ConfirmDialog'
 
-// Shared button variants (the old `button.secondary` / `button.danger`
-// / `button.favorite`).
-const BTN_SECONDARY_CLS =
-  'border-line-strong bg-surface text-ink hover:border-line-strong hover:bg-surface-2 hover:shadow-none'
-const BTN_DANGER_CLS =
-  'border-line-strong bg-surface text-ink hover:border-ink hover:bg-ink hover:text-white hover:shadow-none'
-const FAVORITE_CLS =
-  'border-line-strong bg-surface px-3 py-[0.35rem] text-[0.85rem] text-muted shadow-none hover:border-ink hover:bg-favorite-soft hover:text-ink hover:shadow-none'
+// Shared button variants
+const BTN_SECONDARY_CLS = 'btn-secondary'
+const BTN_DANGER_CLS = 'btn-danger'
+const FAVORITE_CLS = 'favorite-btn'
 
 export default function Products() {
   // `user` comes from AuthContext; used to decide Edit/Delete rights.
   const { user } = useAuth()
   const toast = useToast()
+  const location = useLocation()
+
+  // Auto-open cart when navigated from CartButton
+  useEffect(() => {
+    if ((location.state as { openCart?: boolean })?.openCart) {
+      setCartOpen(true)
+      loadCart()
+    }
+  }, [])
 
   // Server data + UI state.
   const [products, setProducts] = useState<Product[]>([])
@@ -127,14 +133,6 @@ export default function Products() {
   // reload so the backend re-stamps is_favorited on every product.
   async function toggleFavorite(p: Product) {
     setError('')
-
-    // Optimistic update: flip the heart instantly
-    setProducts((prev) =>
-      prev.map((item) =>
-        item.id === p.id ? { ...item, is_favorited: !item.is_favorited } : item,
-      ),
-    )
-
     try {
       if (p.is_favorited) {
         await api.unfavoriteProduct(p.id)
@@ -145,12 +143,6 @@ export default function Products() {
       }
       await load(page)
     } catch (err) {
-      // Revert: flip the heart back on failure
-      setProducts((prev) =>
-        prev.map((item) =>
-          item.id === p.id ? { ...item, is_favorited: p.is_favorited } : item,
-        ),
-      )
       setError(err instanceof Error ? err.message : 'Failed to update favorite')
     }
   }
@@ -350,15 +342,6 @@ export default function Products() {
             >
               <Heart size={16} aria-hidden="true" />
               {onlyFavorites ? 'All products' : 'Favorites'}
-            </button>
-            <button
-              type="button"
-              className={BTN_SECONDARY_CLS}
-              onClick={toggleCart}
-              disabled={cartLoading}
-            >
-              <ShoppingCart size={16} aria-hidden="true" />
-              {cartOpen ? 'Hide cart' : `My cart (${cart.length})`}
             </button>
             <button
               type="button"
@@ -611,7 +594,7 @@ export default function Products() {
                   Owner: <strong>{p.owner?.username ?? `#${p.owner_id}`}</strong>
                   <span className="ml-3 inline-flex items-center gap-1">
                     <span
-                      className={`inline-block h-2 w-2 rounded-full ${p.quantity > 0 ? 'bg-green-600' : 'bg-red-500'}`}
+                      className={`inline-block h-2 w-2 rounded-full ${p.quantity > 0 ? 'bg-success' : 'bg-danger'}`}
                       aria-hidden="true"
                     />
                     {p.quantity > 0 ? `${p.quantity} in stock` : 'Out of stock'}
@@ -626,8 +609,7 @@ export default function Products() {
                   <button
                     type="button"
                     onClick={() => toggleFavorite(p)}
-                    className={`${FAVORITE_CLS} max-[640px]:flex-1 ${p.is_favorited ? 'border-ink bg-ink text-white hover:bg-ink' : ''
-                      }`}
+                    className={`${FAVORITE_CLS} max-[640px]:flex-1 ${p.is_favorited ? 'active' : ''}`}
                     title={p.is_favorited ? 'Remove from favorites' : 'Add to favorites'}
                   >
                     <Heart size={16} fill={p.is_favorited ? 'currentColor' : 'none'} />
@@ -657,7 +639,7 @@ export default function Products() {
             </li>
           ))}
         </ul>
-
+<br></br>
           {/* Page controls */}
           <div className="row justify-center">
             <button
