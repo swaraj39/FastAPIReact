@@ -903,8 +903,63 @@ frontend/src/components/Badge.tsx      # fixed hardcoded bg-white → bg-surface
 
 ---
 
+# PHASE 25 — CartContext (Global Cart State)
+
+**Goal:** Share cart state across all pages (navbar badge, products page, future checkout page) via React Context.
+
+**What you learn:**
+- Extracting page-local state into a global context provider
+- Derived values (`cartCount`, `cartTotal`) computed from context state
+- Auto-fetching data on mount + clearing on logout
+- Thin wrapper pattern: context handles API + state, page handles UI side effects (toasts, product list refresh)
+
+**Problem solved:**
+- Cart state was local `useState` in `Products.tsx` — the floating `CartButton` independently fetched cart count, so they could get out of sync.
+- No way for other pages (future checkout, etc.) to access cart data.
+
+**Files created / changed (frontend only):**
+```
+frontend/src/context/CartContext.tsx    # NEW: CartProvider + useCart hook
+frontend/src/main.tsx                  # +<CartProvider> in provider tree (inside AuthProvider)
+frontend/src/components/CartButton.tsx  # simplified: uses useCart() instead of own API call
+frontend/src/pages/Products.tsx         # local cart state replaced with useCart() hook
+frontend/src/App.tsx                    # removed unused ShoppingCart import
+```
+
+**Context shape:**
+```tsx
+interface CartContextValue {
+  cart: CartItem[]
+  loading: boolean
+  error: string
+  cartCount: number          // derived: cart.length
+  cartTotal: number          // derived: sum of price * quantity
+  loadCart: () => Promise<void>
+  addToCart: (productId: number) => Promise<void>
+  removeFromCart: (id: number) => Promise<void>
+  updateQuantity: (id: number, quantity: number) => Promise<void>
+  checkout: () => Promise<{ orders: number }>
+  clearError: () => void
+}
+```
+
+**Provider tree (after):**
+```
+ThemeProvider → AuthProvider → CartProvider → ToastProvider → App
+```
+
+**Key decisions:**
+- `CartProvider` sits inside `AuthProvider` so it can read `user` state and auto-fetch/clear the cart.
+- `cartOpen` (panel visibility) stays as local state in `Products.tsx` — it's UI state, not shared data.
+- Context methods throw on error so the calling page can handle toasts/product-list refresh; the context itself only stores the error string for display.
+- `CartButton` now reads `cartCount` from context — always in sync with the cart panel.
+
+**Verify:** `npx tsc --noEmit` passes; `npx vite build` succeeds; adding/removing/updating cart items on the Products page immediately updates the CartButton badge count; checkout empties the cart and updates the badge.
+
+---
+
 ## Suggested Learning Order (if rebuilding)
 
-1. Setup → 2. DB connection → 3. Schema → 4. Schemas → 5. Security → 6. Auth → 7. CRUD → 8. JWT/RBAC → 9. Admin → 10. Products → 11. Favorites → 12. Cart → 13. Orders → 14. Cross-cutting → 15. Tests → 16. Frontend setup → 17. Frontend auth/routing → 18. Frontend pages → 19. Design system → 20. Tailwind CSS → 21. Confirmation dialog → 22. Backend deployment → 23. Frontend deployment → 24. Dark/Light mode.
+1. Setup → 2. DB connection → 3. Schema → 4. Schemas → 5. Security → 6. Auth → 7. CRUD → 8. JWT/RBAC → 9. Admin → 10. Products → 11. Favorites → 12. Cart → 13. Orders → 14. Cross-cutting → 15. Tests → 16. Frontend setup → 17. Frontend auth/routing → 18. Frontend pages → 19. Design system → 20. Tailwind CSS → 21. Confirmation dialog → 22. Backend deployment → 23. Frontend deployment → 24. Dark/Light mode → 25. CartContext (global cart state).
 
 Each phase builds on the previous one, and each phase is independently testable before moving on.

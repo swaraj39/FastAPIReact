@@ -8,12 +8,10 @@
 
 import { useCallback, useEffect, useState } from 'react'
 import type { FormEvent } from 'react'
-import { useLocation } from 'react-router-dom'
 import {
   ChevronLeft,
   ChevronRight,
   Heart,
-  Minus,
   Package,
   Pencil,
   Plus,
@@ -23,8 +21,9 @@ import {
   Trash2,
 } from 'lucide-react'
 import { api } from '../api/client'
-import type { CartItem, Order, Product } from '../api/types'
+import type { Order, Product } from '../api/types'
 import { useAuth } from '../context/AuthContext'
+import { useCart } from '../context/CartContext'
 import { useToast } from '../components/Toast'
 import PageHeader from '../components/PageHeader'
 import EmptyState from '../components/EmptyState'
@@ -39,16 +38,8 @@ const FAVORITE_CLS = 'favorite-btn'
 export default function Products() {
   // `user` comes from AuthContext; used to decide Edit/Delete rights.
   const { user } = useAuth()
+  const { addToCart: addtoCartCtx, openCart } = useCart()
   const toast = useToast()
-  const location = useLocation()
-
-  // Auto-open cart when navigated from CartButton
-  useEffect(() => {
-    if ((location.state as { openCart?: boolean })?.openCart) {
-      setCartOpen(true)
-      loadCart()
-    }
-  }, [])
 
   // Server data + UI state.
   const [products, setProducts] = useState<Product[]>([])
@@ -67,13 +58,6 @@ export default function Products() {
   const [ordersOpen, setOrdersOpen] = useState(false)
   const [ordersLoading, setOrdersLoading] = useState(false)
   const [ordersError, setOrdersError] = useState('')
-
-  // Cart lines (PENDING items, GET /cart). Checkout approves them into
-  // orders.
-  const [cart, setCart] = useState<CartItem[]>([])
-  const [cartOpen, setCartOpen] = useState(false)
-  const [cartLoading, setCartLoading] = useState(false)
-  const [cartError, setCartError] = useState('')
 
   // Form state. `editing` is null for "create" mode, or a Product while
   // editing that product.
@@ -115,11 +99,6 @@ export default function Products() {
   useEffect(() => {
     load(page)
   }, [load, page])
-
-  // Mount only: fetch the cart once so the badge shows the right count.
-  useEffect(() => {
-    loadCart()
-  }, [])   // ← empty deps = runs once on mount
   // Flip the favorites filter: jump back to page 1 and reload.
   function toggleFilter() {
     const next = !onlyFavorites
@@ -208,78 +187,13 @@ export default function Products() {
 
   // "Buy" now adds to the CART (pending); it only becomes an order after
   // the user approves via checkout.
-  async function addToCart(p: Product) {
-    setError('')
+  async function handleAddToCart(p: Product) {
     try {
-      await api.addToCart({ product_id: p.id, quantity: 1 })
+      await addtoCartCtx(p.id)
       toast.success(`Added "${p.name}" to cart`)
-      // Refresh the cart panel if it is open so the new line shows up.
-      await loadCart()
-    } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to add to cart')
-    }
-  }
-
-  async function loadCart() {
-    setCartError('')
-    setCartLoading(true)
-    try {
-      const newCart = await api.listCart()
-      setCart(newCart)
-    } catch (err) {
-      setCartError(err instanceof Error ? err.message : 'Failed to load cart')
-    } finally {
-      setCartLoading(false)
-    }
-  }
-
-  // Toggle the "My Cart" panel: opening it fetches the cart (GET /cart),
-  // closing it hides the panel.
-  async function toggleCart() {
-    if (cartOpen) {
-      setCartOpen(false)
-      return
-    }
-    await loadCart()
-    setCartOpen(true)
-  }
-
-  async function removeFromCart(id: number) {
-    try {
-      await api.removeCartItem(id)
-      await loadCart()
       await load(page) // refresh product stock display
-    } catch (err) {
-      setCartError(err instanceof Error ? err.message : 'Failed to remove item')
-    }
-  }
-
-  // Increment or decrement the quantity of a cart line.
-  async function updateCartQuantity(cartItem: CartItem, delta: number) {
-    const newQty = cartItem.quantity + delta
-    if (newQty < 1) return
-    setCartError('')
-    try {
-      await api.updateCartItem(cartItem.id, newQty)
-      await loadCart()
-      await load(page) // refresh product stock display
-    } catch (err) {
-      setCartError(err instanceof Error ? err.message : 'Failed to update quantity')
-    }
-  }
-
-  // Approve: convert every cart line into an order, then refresh both the
-  // cart (now empty) and the orders panel.
-  async function checkout() {
-    setCartError('')
-    try {
-      const res = await api.checkoutCart()
-      toast.success(`${res.orders} order${res.orders === 1 ? '' : 's'} placed`)
-      await loadCart()
-      setOrders(await api.listOrders())
-      if (!ordersOpen) setOrdersOpen(true)
-    } catch (err) {
-      setCartError(err instanceof Error ? err.message : 'Checkout failed')
+    } catch {
+      toast.error('Failed to add to cart')
     }
   }
 
@@ -305,7 +219,6 @@ export default function Products() {
     }
   }
 
-  const cartSubtotal = cart.reduce((sum, c) => sum + c.product.price * c.quantity, 0)
   const ordersTotal = orders.reduce((sum, o) => sum + o.product.price * o.quantity, 0)
 
   // Filter products by search term (client-side)
@@ -342,6 +255,14 @@ export default function Products() {
             >
               <Heart size={16} aria-hidden="true" />
               {onlyFavorites ? 'All products' : 'Favorites'}
+            </button>
+            <button
+              type="button"
+              className={BTN_SECONDARY_CLS}
+              onClick={openCart}
+            >
+              <ShoppingCart size={16} aria-hidden="true" />
+              My cart
             </button>
             <button
               type="button"
@@ -412,92 +333,6 @@ export default function Products() {
         </>
       )}
       
-      {/* My Cart panel: PENDING items. Checkout approves them -> orders. */}
-      {cartError && <p className="error">{cartError}</p>}
-      {cartOpen && (
-        <div className="panel">
-          <div className="row justify-between">
-            <h2 className="m-0">
-              <ShoppingCart size={18} aria-hidden="true" /> My Cart
-              <span className="ml-2 text-[0.85rem] font-normal text-muted">
-                ({cart.length} item{cart.length === 1 ? '' : 's'})
-              </span>
-            </h2>
-            <button
-              type="button"
-              onClick={checkout}
-              disabled={cart.length === 0 || cartLoading}
-            >
-              Checkout ({cartSubtotal.toFixed(2)})
-            </button>
-          </div>
-          {cart.length === 0 ? (
-            <p className="text-muted">Your cart is empty.</p>
-          ) : (
-            <>
-              <ul className="m-0 flex list-none flex-col gap-[0.85rem] p-0">
-                {cart.map((c) => (
-                  <li
-                    key={c.id}
-                    className="panel mb-0 flex items-center justify-between gap-4 max-[640px]:flex-col max-[640px]:items-start"
-                  >
-                    <div className="min-w-0 flex-1">
-                      <strong>{c.product.name}</strong>
-                      <p className="text-muted">
-                        ${c.product.price.toFixed(2)} each
-                      </p>
-                    </div>
-                    {/* Quantity controls */}
-                    <div className="flex shrink-0 items-center gap-2">
-                      <button
-                        type="button"
-                        className={BTN_SECONDARY_CLS}
-                        onClick={() => updateCartQuantity(c, -1)}
-                        disabled={c.quantity <= 1}
-                        aria-label="Decrease quantity"
-                      >
-                        <Minus size={14} />
-                      </button>
-                      <span className="w-8 text-center text-[0.95rem] font-semibold">
-                        {c.quantity}
-                      </span>
-                      <button
-                        type="button"
-                        className={BTN_SECONDARY_CLS}
-                        onClick={() => updateCartQuantity(c, 1)}
-                        aria-label="Increase quantity"
-                      >
-                        <Plus size={14} />
-                      </button>
-                    </div>
-                    {/* Line total */}
-                    <span className="w-20 text-right font-mono text-[0.95rem] font-semibold max-[640px]:w-full max-[640px]:text-left">
-                      ${(c.product.price * c.quantity).toFixed(2)}
-                    </span>
-                    <button
-                      className={BTN_SECONDARY_CLS}
-                      type="button"
-                      onClick={() => removeFromCart(c.id)}
-                    >
-                      <Trash2 size={14} aria-hidden="true" />
-                    </button>
-                  </li>
-                ))}
-              </ul>
-              {/* Cart summary */}
-              <div className="mt-3 flex items-center justify-between border-t border-line pt-3">
-                <span className="text-muted">
-                  {cart.reduce((sum, c) => sum + c.quantity, 0)} item{cart.reduce((sum, c) => sum + c.quantity, 0) === 1 ? '' : 's'} in cart
-                </span>
-                <span className="text-[1.05rem] font-semibold">
-                  Subtotal: <strong>${cartSubtotal.toFixed(2)}</strong>
-                </span>
-              </div>
-            </>
-          )}
-        </div>
-      )}
-
       {/* My Orders panel: every order placed by the logged-in user. */}
       {ordersError && <p className="error">{ordersError}</p>}
       {ordersOpen && (
@@ -618,7 +453,7 @@ export default function Products() {
                   <button
                     type="button"
                     className="max-[640px]:flex-1"
-                    onClick={() => addToCart(p)}
+                    onClick={() => handleAddToCart(p)}
                     disabled={p.quantity <= 0}
                   >
                     <ShoppingCart size={16} aria-hidden="true" />

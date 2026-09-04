@@ -28,7 +28,7 @@ class Settings(BaseSettings):
 
     ACCESS_TOKEN_EXPIRE_MINUTES: int = 1
 
-    REFRESH_TOKEN_EXPIRE_DAYS: int = 7
+    REFRESH_TOKEN_EXPIRE_DAYS: int = 30
 
     # Runtime mode: "dev" enables Swagger docs, "prod" hides them.
     # Set via ENVIRONMENT in .env so the SAME image/code runs in both.

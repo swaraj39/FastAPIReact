@@ -5,7 +5,7 @@
 
 import { useState } from 'react'
 import { NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
-import { KeyRound, LayoutDashboard, LogOut, Menu, Moon, Shield, ShoppingCart, Store, Sun, UserRound, X } from 'lucide-react'
+import { KeyRound, LayoutDashboard, LogOut, Menu, Moon, Shield, Store, Sun, UserRound, X } from 'lucide-react'
 import { useAuth } from './context/AuthContext'
 import { useTheme } from './context/ThemeContext'
 import ProtectedRoute from './components/ProtectedRoute'
@@ -14,6 +14,7 @@ import Avatar from './components/Avatar'
 import Loading from './components/Spinner'
 import LoadingOverlay from './components/LoadingOverlay'
 import CartButton from './components/CartButton'
+import CartPopup from './components/CartPopup'
 import ForgotPassword from './pages/ForgotPassword'
 import Login from './pages/Login'
 import Register from './pages/Register'
@@ -57,6 +58,7 @@ export default function App() {
     <div className="flex min-h-screen flex-col">
       <LoadingOverlay />
       <CartButton />
+      <CartPopup />
       <nav className="navbar">
         <button
           type="button"

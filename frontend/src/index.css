@@ -2,13 +2,16 @@
    FastAPI App — Professional Black & Red Design System
    
    Clean, formal, corporate look. Compact buttons & spacing.
-   ============================================================ */
+   ============================================================
+*/
 
 @import "tailwindcss";
 
 @custom-variant dark (&:where(.dark, .dark *));
 
-/* ---- Light theme ---- */
+/* 
+---- Light theme ---- 
+*/
 :root {
   --color-canvas: #f8f8f8;
   --color-surface: #ffffff;
